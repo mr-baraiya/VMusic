@@ -1,0 +1,267 @@
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { ListMusic, Plus, Play, Trash2, Edit3, Music2 } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
+import { usePlayer } from '../contexts/PlayerContext';
+import { collection, query, where, getDocs, addDoc, deleteDoc, doc, serverTimestamp } from 'firebase/firestore';
+import { db } from '../config/firebase';
+
+const Playlists = () => {
+  const { currentUser } = useAuth();
+  const { playTrack } = usePlayer();
+  const [playlists, setPlaylists] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [newPlaylistName, setNewPlaylistName] = useState('');
+  const [creating, setCreating] = useState(false);
+
+  useEffect(() => {
+    if (currentUser) {
+      loadPlaylists();
+    }
+  }, [currentUser]);
+
+  const loadPlaylists = async () => {
+    try {
+      const q = query(
+        collection(db, 'playlists'),
+        where('userId', '==', currentUser.uid)
+      );
+      const querySnapshot = await getDocs(q);
+      const playlistsData = [];
+      querySnapshot.forEach((doc) => {
+        playlistsData.push({ id: doc.id, ...doc.data() });
+      });
+      setPlaylists(playlistsData);
+    } catch (error) {
+      console.error('Error loading playlists:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const createPlaylist = async (e) => {
+    e.preventDefault();
+    if (!newPlaylistName.trim()) return;
+
+    setCreating(true);
+    try {
+      await addDoc(collection(db, 'playlists'), {
+        name: newPlaylistName,
+        description: '',
+        userId: currentUser.uid,
+        tracks: [],
+        isPublic: false,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+      });
+      
+      setNewPlaylistName('');
+      setShowCreateModal(false);
+      loadPlaylists();
+    } catch (error) {
+      console.error('Error creating playlist:', error);
+    } finally {
+      setCreating(false);
+    }
+  };
+
+  const deletePlaylist = async (playlistId) => {
+    if (!confirm('Are you sure you want to delete this playlist?')) return;
+
+    try {
+      await deleteDoc(doc(db, 'playlists', playlistId));
+      setPlaylists(prev => prev.filter(p => p.id !== playlistId));
+    } catch (error) {
+      console.error('Error deleting playlist:', error);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-900 to-black pb-20">
+      {/* Header */}
+      <div className="relative overflow-hidden bg-gradient-to-r from-purple-900/40 via-indigo-900/40 to-blue-900/40 border-b border-white/10">
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDI1NSwgMjU1LCAyNTUsIDAuMDUpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-30"></div>
+        
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="flex items-center justify-between"
+          >
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-full flex items-center justify-center shadow-lg">
+                <ListMusic size={32} className="text-white" />
+              </div>
+              <div>
+                <h1 className="text-4xl md:text-5xl font-bold text-white">
+                  My Playlists
+                </h1>
+                <p className="text-gray-300 text-lg mt-1">
+                  {playlists.length} playlist{playlists.length !== 1 ? 's' : ''}
+                </p>
+              </div>
+            </div>
+
+            {/* Create Playlist Button */}
+            <button
+              onClick={() => setShowCreateModal(true)}
+              className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold rounded-full hover:from-purple-700 hover:to-indigo-700 transition-all shadow-lg"
+            >
+              <Plus size={20} />
+              <span className="hidden sm:inline">Create Playlist</span>
+            </button>
+          </motion.div>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {loading ? (
+          // Loading State
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {[...Array(8)].map((_, i) => (
+              <div key={i} className="bg-white/5 rounded-xl p-4 animate-pulse">
+                <div className="w-full aspect-square bg-white/10 rounded-lg mb-4"></div>
+                <div className="h-4 bg-white/10 rounded w-3/4 mb-2"></div>
+                <div className="h-3 bg-white/10 rounded w-1/2"></div>
+              </div>
+            ))}
+          </div>
+        ) : playlists.length > 0 ? (
+          // Playlists Grid
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+          >
+            {playlists.map((playlist, index) => (
+              <motion.div
+                key={playlist.id}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3, delay: index * 0.05 }}
+                className="group bg-white/5 hover:bg-white/10 rounded-xl p-4 transition-all border border-white/10 hover:border-white/20"
+              >
+                {/* Playlist Cover */}
+                <div className="relative mb-4 overflow-hidden rounded-lg bg-gradient-to-br from-purple-600/20 to-indigo-600/20 aspect-square flex items-center justify-center">
+                  <ListMusic size={64} className="text-purple-400" />
+                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <button 
+                      onClick={() => {
+                        // Play all tracks in playlist when tracks are implemented
+                        if (playlist.tracks && playlist.tracks.length > 0) {
+                          playTrack(playlist.tracks[0], playlist.tracks);
+                        }
+                      }}
+                      className="w-14 h-14 bg-green-500 rounded-full flex items-center justify-center hover:bg-green-600 hover:scale-110 transition-all shadow-lg"
+                    >
+                      <Play size={24} className="text-white ml-1" fill="white" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Playlist Info */}
+                <h3 className="text-white font-semibold mb-1 truncate group-hover:text-purple-400 transition-colors">
+                  {playlist.name}
+                </h3>
+                <p className="text-gray-400 text-sm mb-4">
+                  {playlist.tracks?.length || 0} track{playlist.tracks?.length !== 1 ? 's' : ''}
+                </p>
+
+                {/* Actions */}
+                <div className="flex items-center gap-2">
+                  <button
+                    className="flex-1 p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-all text-sm flex items-center justify-center gap-1"
+                    title="Edit playlist"
+                  >
+                    <Edit3 size={14} />
+                    <span>Edit</span>
+                  </button>
+                  <button
+                    onClick={() => deletePlaylist(playlist.id)}
+                    className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all"
+                    title="Delete playlist"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        ) : (
+          // Empty State
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-center py-20"
+          >
+            <div className="inline-flex items-center justify-center w-24 h-24 bg-white/5 rounded-full mb-6">
+              <ListMusic size={48} className="text-gray-600" />
+            </div>
+            <h3 className="text-2xl font-semibold text-white mb-2">
+              No playlists yet
+            </h3>
+            <p className="text-gray-400 mb-8 max-w-md mx-auto">
+              Create your first playlist to organize your favorite tracks
+            </p>
+            <button
+              onClick={() => setShowCreateModal(true)}
+              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold rounded-full hover:from-purple-700 hover:to-indigo-700 transition-all shadow-lg shadow-purple-900/50"
+            >
+              <Plus size={20} />
+              Create Your First Playlist
+            </button>
+          </motion.div>
+        )}
+      </div>
+
+      {/* Create Playlist Modal */}
+      {showCreateModal && (
+        <div
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          onClick={() => setShowCreateModal(false)}
+        >
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            onClick={(e) => e.stopPropagation()}
+            className="bg-gray-800 rounded-2xl p-6 max-w-md w-full"
+          >
+            <h2 className="text-2xl font-bold text-white mb-4">Create New Playlist</h2>
+            <form onSubmit={createPlaylist}>
+              <input
+                type="text"
+                value={newPlaylistName}
+                onChange={(e) => setNewPlaylistName(e.target.value)}
+                placeholder="Playlist name"
+                autoFocus
+                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent mb-4"
+              />
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => setShowCreateModal(false)}
+                  className="flex-1 px-4 py-3 bg-white/5 text-white rounded-lg hover:bg-white/10 transition-all"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={creating || !newPlaylistName.trim()}
+                  className="flex-1 px-4 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg hover:from-purple-700 hover:to-indigo-700 transition-all disabled:opacity-50"
+                >
+                  {creating ? 'Creating...' : 'Create'}
+                </button>
+              </div>
+            </form>
+          </motion.div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default Playlists;
