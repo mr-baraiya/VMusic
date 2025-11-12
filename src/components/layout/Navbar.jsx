@@ -48,7 +48,6 @@ const Navbar = () => {
     { name: 'Home', path: '/', icon: Home },
     { name: 'Explore', path: '/explore', icon: Compass },
     { name: 'Artists', path: '/artists', icon: Users },
-    { name: 'By Location', path: '/artists-by-location', icon: MapPin },
     { name: 'About', path: '/about', icon: Music2 },
     { name: 'Contact', path: '/contact', icon: Mail },
   ];
@@ -57,7 +56,6 @@ const Navbar = () => {
     { name: 'Dashboard', path: '/dashboard', icon: Home },
     { name: 'Explore', path: '/explore', icon: Compass },
     { name: 'Artists', path: '/artists', icon: Users },
-    { name: 'By Location', path: '/artists-by-location', icon: MapPin },
     { name: 'Favorites', path: '/favorites', icon: Heart },
     { name: 'Playlists', path: '/playlists', icon: ListMusic },
     { name: 'Contact', path: '/contact', icon: Mail },
@@ -71,15 +69,15 @@ const Navbar = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
-            <Link to="/" className="flex items-center gap-2 group">
+            <Link to="/" className="flex items-center gap-3 group">
               <motion.div
                 whileHover={{ rotate: 360 }}
                 transition={{ duration: 0.5 }}
-                className="w-10 h-10 flex items-center justify-center"
+                className="w-14 h-14 flex items-center justify-center"
               >
                 <img src="/logo.png" alt="VMusic Logo" className="w-full h-full object-contain" />
               </motion.div>
-              <span className="text-2xl font-bold text-white hidden sm:block">
+              <span className="text-3xl font-bold text-white hidden sm:block">
                 V<span className="text-purple-400">Music</span>
               </span>
             </Link>

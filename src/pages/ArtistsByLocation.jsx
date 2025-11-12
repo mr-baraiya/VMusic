@@ -37,7 +37,7 @@ const ArtistsByLocation = () => {
   const searchArtistsByLocation = async () => {
     setLoading(true);
     try {
-      const data = await jamendoAPI.getArtistsByLocation({
+      const data = await jamendoAPI.getArtistsByLocationWithAlbums({
         country: selectedCountry,
         city: selectedCity,
         limit: 50,
@@ -202,52 +202,111 @@ const ArtistsByLocation = () => {
               </h2>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {artists.map((artist) => (
                 <motion.div
                   key={artist.id}
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  whileHover={{ scale: 1.05 }}
-                  className="group bg-white/5 hover:bg-white/10 rounded-xl p-4 transition-all cursor-pointer border border-white/10 hover:border-white/20"
-                  onClick={() => navigate(`/artist/${artist.id}`)}
+                  className="group bg-white/5 hover:bg-white/10 rounded-xl overflow-hidden transition-all border border-white/10 hover:border-white/20"
                 >
-                  {/* Artist Image */}
-                  <div className="relative mb-3">
-                    <div className="aspect-square rounded-full overflow-hidden bg-gradient-to-br from-green-600 to-teal-600">
-                      {artist.image ? (
-                        <img
-                          src={artist.image}
-                          alt={artist.name}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center">
-                          <Users size={48} className="text-white/50" />
+                  {/* Artist Header */}
+                  <div 
+                    className="p-4 cursor-pointer flex items-center gap-4 hover:bg-white/5 transition-all"
+                    onClick={() => navigate(`/artist/${artist.id}`)}
+                  >
+                    {/* Artist Image */}
+                    <div className="relative flex-shrink-0">
+                      <div className="w-16 h-16 rounded-full overflow-hidden bg-gradient-to-br from-green-600 to-teal-600">
+                        {artist.image ? (
+                          <img
+                            src={artist.image}
+                            alt={artist.name}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <Users size={24} className="text-white/50" />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Artist Info */}
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-white font-semibold mb-1 truncate group-hover:text-green-400 transition-colors">
+                        {artist.name}
+                      </h3>
+                      
+                      {/* Location */}
+                      {artist.locations && artist.locations.length > 0 && (
+                        <div className="flex items-center gap-1 text-gray-400 text-sm mb-1">
+                          <MapPin size={14} />
+                          <span className="truncate">
+                            {artist.locations[0].city}, {artist.locations[0].country}
+                          </span>
                         </div>
                       )}
+                      
+                      {/* Albums count */}
+                      <div className="flex items-center gap-3 text-gray-400 text-sm">
+                        {artist.albums && artist.albums.length > 0 && (
+                          <div className="flex items-center gap-1">
+                            <Music2 size={14} />
+                            <span>{artist.albums.length} album{artist.albums.length !== 1 ? 's' : ''}</span>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
 
-                  {/* Artist Name */}
-                  <h3 className="text-white font-semibold mb-1 truncate group-hover:text-green-400 transition-colors">
-                    {artist.name}
-                  </h3>
+                  {/* Albums List */}
+                  {artist.albums && artist.albums.length > 0 && (
+                    <div className="px-4 pb-4 space-y-2 max-h-48 overflow-y-auto custom-scrollbar">
+                      {artist.albums.slice(0, 5).map((album) => (
+                        <motion.div
+                          key={album.id}
+                          whileHover={{ x: 4 }}
+                          className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-all cursor-pointer"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(`/album/${album.id}`);
+                          }}
+                        >
+                          {/* Album Cover */}
+                          <div className="w-12 h-12 rounded-md overflow-hidden bg-white/5 flex-shrink-0">
+                            {album.image ? (
+                              <img
+                                src={album.image}
+                                alt={album.name}
+                                className="w-full h-full object-cover"
+                              />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center">
+                                <Music2 size={16} className="text-white/30" />
+                              </div>
+                            )}
+                          </div>
 
-                  {/* Location */}
-                  {artist.locations && artist.locations.length > 0 && (
-                    <div className="flex items-center gap-1 text-gray-400 text-xs mb-2">
-                      <MapPin size={12} />
-                      <span className="truncate">
-                        {artist.locations[0].city}, {artist.locations[0].country}
-                      </span>
+                          {/* Album Info */}
+                          <div className="flex-1 min-w-0">
+                            <p className="text-white text-sm font-medium truncate hover:text-green-400 transition-colors">
+                              {album.name}
+                            </p>
+                            <p className="text-gray-400 text-xs">
+                              {new Date(album.releasedate).getFullYear()}
+                            </p>
+                          </div>
+                        </motion.div>
+                      ))}
+                      
+                      {artist.albums.length > 5 && (
+                        <p className="text-gray-400 text-xs text-center pt-2">
+                          +{artist.albums.length - 5} more album{artist.albums.length - 5 !== 1 ? 's' : ''}
+                        </p>
+                      )}
                     </div>
                   )}
-
-                  {/* Join Date */}
-                  <p className="text-gray-500 text-xs">
-                    Joined {new Date(artist.joindate).getFullYear()}
-                  </p>
                 </motion.div>
               ))}
             </div>

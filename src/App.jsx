@@ -9,8 +9,8 @@ import TrackDetails from './pages/TrackDetails';
 import SpotifyCallback from './pages/SpotifyCallback';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
-import ArtistsByLocation from './pages/ArtistsByLocation';
 import Artists from './pages/Artists';
+import Album from './pages/Album';
 import {
   Dashboard,
   Favorites,
@@ -37,7 +37,7 @@ function App() {
           <Route path="/artists" element={<Artists />} />
           <Route path="/search" element={<Search />} />
           <Route path="/artist/:id" element={<Artist />} />
-          <Route path="/artists-by-location" element={<ArtistsByLocation />} />
+          <Route path="/album/:id" element={<Album />} />
           <Route path="/track/:trackId" element={<TrackDetails />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
