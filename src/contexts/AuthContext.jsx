@@ -28,29 +28,39 @@ export const AuthProvider = ({ children }) => {
   const createUserDocument = async (user, additionalData = {}) => {
     if (!user) return;
 
-    const userRef = doc(db, 'users', user.uid);
-    const userSnap = await getDoc(userRef);
+    try {
+      const userRef = doc(db, 'users', user.uid);
+      const userSnap = await getDoc(userRef);
 
-    if (!userSnap.exists()) {
-      const { email, displayName, photoURL } = user;
-      const createdAt = new Date();
+      if (!userSnap.exists()) {
+        const { email, displayName, photoURL } = user;
+        const createdAt = new Date();
 
-      try {
-        await setDoc(userRef, {
-          email,
-          displayName,
-          photoURL,
-          createdAt,
-          likedTracks: [],
-          playlists: [],
-          ...additionalData,
-        });
-      } catch (error) {
-        console.error('Error creating user document:', error);
+        try {
+          await setDoc(userRef, {
+            email,
+            displayName,
+            photoURL,
+            createdAt,
+            likedTracks: [],
+            playlists: [],
+            ...additionalData,
+          });
+        } catch (error) {
+          console.error('Error creating user document:', error);
+        }
       }
-    }
 
-    return userRef;
+      return userRef;
+    } catch (error) {
+      // Handle offline or network errors gracefully
+      if (error.code === 'unavailable' || error.message?.includes('offline')) {
+        console.warn('Firestore is offline, user document will be created when connection is restored');
+      } else {
+        console.error('Error accessing user document:', error);
+      }
+      return null;
+    }
   };
 
   // Sign up with email and password

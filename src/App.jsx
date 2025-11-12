@@ -6,6 +6,7 @@ import Landing from './pages/Landing';
 import About from './pages/About';
 import TrackDetails from './pages/TrackDetails';
 import SpotifyCallback from './pages/SpotifyCallback';
+import ForgotPassword from './pages/ForgotPassword';
 import {
   Dashboard,
   Favorites,
@@ -37,6 +38,7 @@ function App() {
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-of-service" element={<TermsOfService />} />
           <Route path="/callback" element={<SpotifyCallback />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
 
           {/* Protected Routes */}
           <Route

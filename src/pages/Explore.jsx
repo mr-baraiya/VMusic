@@ -59,8 +59,12 @@ const Explore = () => {
         data = await jamendoAPI.getTrendingTracks(limit);
       }
       
-      setTracks(data.results || []);
-      setHasMore((data.results || []).length >= limit);
+      // Remove duplicates by track id
+      const uniqueTracks = Array.from(
+        new Map((data.results || []).map(track => [track.id, track])).values()
+      );
+      setTracks(uniqueTracks);
+      setHasMore(uniqueTracks.length >= limit);
     } catch (error) {
       console.error('Error fetching tracks:', error);
       setTracks([]);
@@ -92,9 +96,13 @@ const Explore = () => {
         data = await jamendoAPI.getTrendingTracks(newLimit);
       }
       
-      setTracks(data.results || []);
+      // Remove duplicates by track id
+      const uniqueTracks = Array.from(
+        new Map((data.results || []).map(track => [track.id, track])).values()
+      );
+      setTracks(uniqueTracks);
       setLimit(newLimit);
-      setHasMore((data.results || []).length >= newLimit);
+      setHasMore(uniqueTracks.length >= newLimit);
     } catch (error) {
       console.error('Error loading more tracks:', error);
     } finally {
@@ -205,7 +213,7 @@ const Explore = () => {
           >
             {tracks.map((track, index) => (
               <motion.div
-                key={track.id}
+                key={`${track.id}-${index}`}
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.3, delay: index * 0.02 }}

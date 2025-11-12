@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Lock, User, Chrome, X } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 
 const SignUp = ({ onClose, onSwitchToSignIn }) => {
@@ -10,6 +11,7 @@ const SignUp = ({ onClose, onSwitchToSignIn }) => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { signUp, signInWithGoogle } = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,6 +28,7 @@ const SignUp = ({ onClose, onSwitchToSignIn }) => {
     try {
       await signUp(email, password, displayName);
       onClose();
+      navigate('/dashboard');
     } catch (err) {
       setError(err.message || 'Failed to create account. Please try again.');
     } finally {
@@ -40,6 +43,7 @@ const SignUp = ({ onClose, onSwitchToSignIn }) => {
     try {
       await signInWithGoogle();
       onClose();
+      navigate('/dashboard');
     } catch (err) {
       setError(err.message || 'Failed to sign up with Google.');
     } finally {
@@ -98,6 +102,7 @@ const SignUp = ({ onClose, onSwitchToSignIn }) => {
                 onChange={(e) => setDisplayName(e.target.value)}
                 placeholder="John Doe"
                 required
+                autoComplete="name"
                 className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
               />
             </div>
@@ -116,6 +121,7 @@ const SignUp = ({ onClose, onSwitchToSignIn }) => {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="your@email.com"
                 required
+                autoComplete="email"
                 className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
               />
             </div>
@@ -135,6 +141,7 @@ const SignUp = ({ onClose, onSwitchToSignIn }) => {
                 placeholder="••••••••"
                 required
                 minLength={6}
+                autoComplete="new-password"
                 className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
               />
             </div>

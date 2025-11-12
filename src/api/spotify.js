@@ -1,200 +1,147 @@
 /**
  * Spotify Web API Service
  * Handles authentication and API calls to Spotify
- * Uses Client Credentials Flow for guest access and Authorization Code Flow for logged-in users
+ * Uses Implicit Grant Flow for client-side authentication (no backend needed)
  */
 
 const CLIENT_ID = import.meta.env.VITE_SPOTIFY_CLIENT_ID || '';
-const CLIENT_SECRET = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET || '';
 const REDIRECT_URI = import.meta.env.VITE_SPOTIFY_REDIRECT_URI || 'http://localhost:5173/callback';
 
 const BASE_URL = 'https://api.spotify.com/v1';
 const AUTH_URL = 'https://accounts.spotify.com/authorize';
-const TOKEN_URL = 'https://accounts.spotify.com/api/token';
 
 class SpotifyAPI {
   constructor() {
     this.accessToken = null;
     this.tokenExpiry = null;
     this.isAuthenticated = false;
+    this.loadTokenFromStorage();
   }
 
   /**
-   * Get Client Credentials access token (for guest users)
-   * This allows 30-second previews without user login
+   * Load token from localStorage if available
    */
-  async getClientCredentialsToken() {
-    try {
-      const response = await fetch(TOKEN_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Authorization': 'Basic ' + btoa(CLIENT_ID + ':' + CLIENT_SECRET)
-        },
-        body: 'grant_type=client_credentials'
-      });
-
-      const data = await response.json();
-      this.accessToken = data.access_token;
-      this.tokenExpiry = Date.now() + (data.expires_in * 1000);
-      return data.access_token;
-    } catch (error) {
-      console.error('Error getting client credentials token:', error);
-      throw error;
+  loadTokenFromStorage() {
+    const token = localStorage.getItem('spotify_access_token');
+    const expiry = localStorage.getItem('spotify_token_expiry');
+    
+    if (token && expiry && Date.now() < parseInt(expiry)) {
+      this.accessToken = token;
+      this.tokenExpiry = parseInt(expiry);
+      this.isAuthenticated = true;
     }
   }
 
   /**
+   * Save token to localStorage
+   */
+  saveTokenToStorage(token, expiresIn) {
+    const expiry = Date.now() + (expiresIn * 1000);
+    localStorage.setItem('spotify_access_token', token);
+    localStorage.setItem('spotify_token_expiry', expiry.toString());
+    this.accessToken = token;
+    this.tokenExpiry = expiry;
+    this.isAuthenticated = true;
+  }
+
+  /**
    * Get authorization URL for user login
-   * This enables full playback control (premium users only)
+   * Uses Implicit Grant Flow - no backend needed
    */
   getAuthUrl() {
     const scopes = [
       'user-read-private',
       'user-read-email',
       'user-library-read',
-      'user-library-modify',
       'user-top-read',
       'playlist-read-private',
-      'playlist-modify-public',
-      'playlist-modify-private',
       'streaming',
       'user-read-playback-state',
-      'user-modify-playback-state',
       'user-read-currently-playing'
     ];
 
     const params = new URLSearchParams({
       client_id: CLIENT_ID,
-      response_type: 'code',
+      response_type: 'token',
       redirect_uri: REDIRECT_URI,
       scope: scopes.join(' '),
-      show_dialog: 'true'
+      show_dialog: 'false'
     });
 
     return `${AUTH_URL}?${params.toString()}`;
   }
 
   /**
-   * Exchange authorization code for access token
+   * Handle OAuth callback and extract access token from URL hash
    */
-  async getAccessTokenFromCode(code) {
-    try {
-      const response = await fetch(TOKEN_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Authorization': 'Basic ' + btoa(CLIENT_ID + ':' + CLIENT_SECRET)
-        },
-        body: new URLSearchParams({
-          grant_type: 'authorization_code',
-          code: code,
-          redirect_uri: REDIRECT_URI
-        })
-      });
-
-      const data = await response.json();
-      this.accessToken = data.access_token;
-      this.tokenExpiry = Date.now() + (data.expires_in * 1000);
-      this.isAuthenticated = true;
-
-      // Store tokens
-      localStorage.setItem('spotify_access_token', data.access_token);
-      localStorage.setItem('spotify_refresh_token', data.refresh_token);
-      localStorage.setItem('spotify_token_expiry', this.tokenExpiry.toString());
-
-      return data;
-    } catch (error) {
-      console.error('Error exchanging code for token:', error);
-      throw error;
+  handleCallback() {
+    const hash = window.location.hash.substring(1);
+    const params = new URLSearchParams(hash);
+    
+    const accessToken = params.get('access_token');
+    const expiresIn = params.get('expires_in');
+    
+    if (accessToken && expiresIn) {
+      this.saveTokenToStorage(accessToken, parseInt(expiresIn));
+      // Clean up URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+      return true;
     }
+    
+    return false;
   }
 
   /**
-   * Refresh access token
+   * Check if token is valid and not expired
    */
-  async refreshAccessToken() {
-    const refreshToken = localStorage.getItem('spotify_refresh_token');
-    if (!refreshToken) {
-      throw new Error('No refresh token available');
-    }
-
-    try {
-      const response = await fetch(TOKEN_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Authorization': 'Basic ' + btoa(CLIENT_ID + ':' + CLIENT_SECRET)
-        },
-        body: new URLSearchParams({
-          grant_type: 'refresh_token',
-          refresh_token: refreshToken
-        })
-      });
-
-      const data = await response.json();
-      this.accessToken = data.access_token;
-      this.tokenExpiry = Date.now() + (data.expires_in * 1000);
-
-      localStorage.setItem('spotify_access_token', data.access_token);
-      localStorage.setItem('spotify_token_expiry', this.tokenExpiry.toString());
-
-      return data.access_token;
-    } catch (error) {
-      console.error('Error refreshing token:', error);
-      throw error;
-    }
+  isTokenValid() {
+    return this.accessToken && this.tokenExpiry && Date.now() < this.tokenExpiry;
   }
 
   /**
-   * Ensure valid access token
+   * Logout and clear tokens
    */
-  async ensureValidToken() {
-    // Check if we have a stored token
-    const storedToken = localStorage.getItem('spotify_access_token');
-    const storedExpiry = localStorage.getItem('spotify_token_expiry');
+  logout() {
+    localStorage.removeItem('spotify_access_token');
+    localStorage.removeItem('spotify_token_expiry');
+    this.accessToken = null;
+    this.tokenExpiry = null;
+    this.isAuthenticated = false;
+  }
 
-    if (storedToken && storedExpiry) {
-      const expiry = parseInt(storedExpiry);
-      if (Date.now() < expiry - 60000) { // Refresh 1 minute before expiry
-        this.accessToken = storedToken;
-        this.tokenExpiry = expiry;
-        this.isAuthenticated = true;
-        return this.accessToken;
-      } else {
-        // Token expired, try to refresh
-        try {
-          return await this.refreshAccessToken();
-        } catch (error) {
-          // Refresh failed, get new client credentials token
-          return await this.getClientCredentialsToken();
-        }
-      }
+  /**
+   * Get access token (returns null if not authenticated)
+   */
+  async getAccessToken() {
+    if (this.isTokenValid()) {
+      return this.accessToken;
     }
-
-    // No stored token, get client credentials token for guest access
-    return await this.getClientCredentialsToken();
+    return null;
   }
 
   /**
    * Make authenticated API request
    */
   async request(endpoint, options = {}) {
-    await this.ensureValidToken();
+    const token = await this.getAccessToken();
+    
+    if (!token) {
+      throw new Error('Not authenticated. Please login with Spotify.');
+    }
 
     const response = await fetch(`${BASE_URL}${endpoint}`, {
       ...options,
       headers: {
-        'Authorization': `Bearer ${this.accessToken}`,
+        'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
         ...options.headers
       }
     });
 
     if (response.status === 401) {
-      // Token expired, refresh and retry
-      await this.refreshAccessToken();
-      return this.request(endpoint, options);
+      // Token expired, logout
+      this.logout();
+      throw new Error('Token expired. Please login again.');
     }
 
     if (!response.ok) {

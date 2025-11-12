@@ -170,8 +170,8 @@ const Explore = () => {
               {loadingPopular ? (
                 [...Array(6)].map((_, i) => <LoadingSkeleton key={i} />)
               ) : popularTracks.length > 0 ? (
-                popularTracks.map((track) => (
-                  <TrackCard key={track.id} track={track} tracks={popularTracks} />
+                popularTracks.map((track, index) => (
+                  <TrackCard key={`popular-${track.id}-${index}`} track={track} tracks={popularTracks} />
                 ))
               ) : (
                 <div className="w-full text-center py-8 text-gray-400">
@@ -215,8 +215,8 @@ const Explore = () => {
               {loadingLatest ? (
                 [...Array(6)].map((_, i) => <LoadingSkeleton key={i} />)
               ) : latestTracks.length > 0 ? (
-                latestTracks.map((track) => (
-                  <TrackCard key={track.id} track={track} tracks={latestTracks} />
+                latestTracks.map((track, index) => (
+                  <TrackCard key={`latest-${track.id}-${index}`} track={track} tracks={latestTracks} />
                 ))
               ) : (
                 <div className="w-full text-center py-8 text-gray-400">
