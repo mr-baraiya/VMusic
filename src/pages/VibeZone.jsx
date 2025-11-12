@@ -24,7 +24,9 @@ import { toast } from '../components/Toast';
  * 
  * Token Management:
  * - Development: Calls Spotify API directly with Client Credentials
+ *   - Uses VITE_SPOTIFY_CLIENT_SECRET from .env file
  * - Production: Uses secure backend API at /api/spotify-token (Vercel serverless function)
+ *   - Uses SPOTIFY_CLIENT_SECRET from Vercel environment variables
  * - Token cached for 55 minutes in localStorage
  * 
  * Features:
@@ -40,7 +42,7 @@ const VibeZone = () => {
   const [tracks, setTracks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('hindi');
+  const [selectedCategory, setSelectedCategory] = useState('bollywood');
   const [currentlyPlaying, setCurrentlyPlaying] = useState(null);
   const [favorites, setFavorites] = useState([]);
   const [volume, setVolume] = useState(0.7);
@@ -50,13 +52,13 @@ const VibeZone = () => {
   const [tokenExpiry, setTokenExpiry] = useState(null);
 
   const categories = [
-    { id: 'hindi', name: 'Hindi Vibes', icon: Music2, query: 'hindi songs' },
-    { id: 'bollywood', name: 'Bollywood', icon: Sparkles, query: 'bollywood latest' },
-    { id: 'romantic', name: 'Romantic', icon: Heart, query: 'hindi romantic' },
-    { id: 'trending', name: 'Trending', icon: TrendingUp, query: 'trending hindi' },
-    { id: 'lofi', name: 'Lo-Fi', icon: Disc3, query: 'lofi hindi' },
-    { id: 'party', name: 'Party', icon: Music2, query: 'hindi party songs' },
-    { id: 'chill', name: 'Chill', icon: Music2, query: 'hindi chill' },
+    { id: 'hindi', name: 'Hindi Vibes', icon: Music2, query: 'hindi' },
+    { id: 'bollywood', name: 'Bollywood', icon: Sparkles, query: 'bollywood' },
+    { id: 'romantic', name: 'Romantic', icon: Heart, query: 'romantic hindi' },
+    { id: 'trending', name: 'Trending', icon: TrendingUp, query: 'trending india' },
+    { id: 'lofi', name: 'Lo-Fi', icon: Disc3, query: 'lofi' },
+    { id: 'party', name: 'Party', icon: Music2, query: 'party' },
+    { id: 'chill', name: 'Chill', icon: Music2, query: 'chill' },
   ];
 
   useEffect(() => {
@@ -111,6 +113,7 @@ const VibeZone = () => {
         });
         
         if (!response.ok) {
+          const errorText = await response.text();
           throw new Error('Failed to get Spotify token from API');
         }
         
@@ -153,14 +156,13 @@ const VibeZone = () => {
       const category = categories.find(c => c.id === selectedCategory);
       const searchTerm = searchQuery || category.query;
       
-      const response = await fetch(
-        `https://api.spotify.com/v1/search?q=${encodeURIComponent(searchTerm)}&type=track&limit=20&market=IN`,
-        {
-          headers: {
-            'Authorization': `Bearer ${accessToken}`
-          }
+      const url = `https://api.spotify.com/v1/search?q=${encodeURIComponent(searchTerm)}&type=track&limit=20&market=IN`;
+      
+      const response = await fetch(url, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
         }
-      );
+      });
 
       if (response.status === 401) {
         // Token expired, get new one
@@ -171,17 +173,20 @@ const VibeZone = () => {
       }
 
       if (!response.ok) {
+        const errorText = await response.text();
         throw new Error('Failed to fetch tracks');
       }
 
       const data = await response.json();
       
-      // Filter tracks that have preview URLs
-      const tracksWithPreview = data.tracks.items.filter(track => track.preview_url);
-      setTracks(tracksWithPreview);
+      // Show all tracks, not just those with previews
+      setTracks(data.tracks.items);
       
-      if (tracksWithPreview.length === 0) {
-        toast.show('No preview available for these tracks', 'info');
+      // Count tracks with previews
+      const tracksWithPreview = data.tracks.items.filter(track => track.preview_url);
+      
+      if (tracksWithPreview.length === 0 && data.tracks.items.length > 0) {
+        toast.show('Tracks loaded, but previews may not be available', 'info');
       }
     } catch (error) {
       console.error('Error fetching tracks:', error);
