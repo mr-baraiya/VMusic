@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { 
   Play, 
   Pause, 
@@ -11,7 +12,8 @@ import {
   ListMusic,
   Shuffle,
   Repeat,
-  X
+  X,
+  ExternalLink
 } from 'lucide-react';
 import { usePlayer } from '../../contexts/PlayerContext';
 import jamendoAPI from '../../api/jamendo';
@@ -30,6 +32,7 @@ const FloatingPlayer = () => {
     changeVolume,
   } = usePlayer();
 
+  const navigate = useNavigate();
   const [showVolume, setShowVolume] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [previousVolume, setPreviousVolume] = useState(volume);
@@ -100,29 +103,50 @@ const FloatingPlayer = () => {
           <div className="flex items-center justify-between gap-4">
             {/* Track Info */}
             <div className="flex items-center gap-4 min-w-0 flex-1">
-              {/* Album Art - Increased Size */}
-              <div className="relative w-16 h-16 md:w-20 md:h-20 shrink-0 bg-gradient-to-br from-purple-600/20 to-blue-600/20 rounded-lg overflow-hidden shadow-xl">
+              {/* Album Art - Increased Size - Clickable */}
+              <motion.div 
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => navigate(`/track/${currentTrack.id}`)}
+                className="relative w-16 h-16 md:w-20 md:h-20 shrink-0 bg-gradient-to-br from-purple-600/20 to-blue-600/20 rounded-lg overflow-hidden shadow-xl cursor-pointer group"
+              >
                 {currentTrack.image ? (
                   <img
                     src={currentTrack.image}
                     alt={currentTrack.name}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">
                     <ListMusic size={28} className="text-purple-400" />
                   </div>
                 )}
-              </div>
+                {/* Hover Overlay */}
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <ExternalLink size={20} className="text-white" />
+                </div>
+              </motion.div>
 
-              {/* Track Details */}
+              {/* Track Details - Clickable */}
               <div className="min-w-0 flex-1">
-                <h4 className="text-white font-semibold truncate text-sm md:text-base">
+                <motion.h4 
+                  whileHover={{ x: 3 }}
+                  onClick={() => navigate(`/track/${currentTrack.id}`)}
+                  className="text-white font-semibold truncate text-sm md:text-base hover:text-green-400 transition-colors cursor-pointer flex items-center gap-2 w-fit group"
+                >
                   {currentTrack.name}
-                </h4>
-                <p className="text-gray-400 text-xs md:text-sm truncate">
+                  <ExternalLink size={14} className="opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
+                </motion.h4>
+                <motion.p 
+                  whileHover={{ x: 3 }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(`/artist/${currentTrack.artist_id}`);
+                  }}
+                  className="text-gray-400 text-xs md:text-sm truncate hover:text-purple-400 hover:underline transition-all cursor-pointer w-fit"
+                >
                   {currentTrack.artist_name}
-                </p>
+                </motion.p>
               </div>
 
               {/* Like Button (Desktop) */}

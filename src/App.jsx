@@ -12,6 +12,7 @@ import ResetPassword from './pages/ResetPassword';
 import Artists from './pages/Artists';
 import Album from './pages/Album';
 import VibeZone from './pages/VibeZone';
+import VibeTube from './pages/VibeTube';
 import {
   Dashboard,
   Favorites,
@@ -37,6 +38,7 @@ function App() {
           <Route path="/explore" element={<Explore />} />
           <Route path="/artists" element={<Artists />} />
           <Route path="/vibe-zone" element={<VibeZone />} />
+          <Route path="/vibe-tube" element={<VibeTube />} />
           <Route path="/search" element={<Search />} />
           <Route path="/artist/:id" element={<Artist />} />
           <Route path="/album/:id" element={<Album />} />

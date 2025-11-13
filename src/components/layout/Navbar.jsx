@@ -15,7 +15,8 @@ import {
   Mail,
   MapPin,
   Users,
-  Sparkles
+  Sparkles,
+  Youtube
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { SignIn, SignUp } from '../auth';
@@ -49,6 +50,7 @@ const Navbar = () => {
     { name: 'Explore', path: '/explore', icon: Compass },
     { name: 'Artists', path: '/artists', icon: Users },
     { name: 'Vibe Zone', path: '/vibe-zone', icon: Sparkles },
+    { name: 'VibeTube', path: '/vibe-tube', icon: Youtube },
   ];
 
   const userLinks = [
@@ -56,6 +58,7 @@ const Navbar = () => {
     { name: 'Explore', path: '/explore', icon: Compass },
     { name: 'Artists', path: '/artists', icon: Users },
     { name: 'Vibe Zone', path: '/vibe-zone', icon: Sparkles },
+    { name: 'VibeTube', path: '/vibe-tube', icon: Youtube },
     { name: 'Favorites', path: '/favorites', icon: Heart },
   ];
 

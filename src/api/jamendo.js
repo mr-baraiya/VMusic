@@ -25,6 +25,60 @@ export const jamendoAPI = {
   },
 
   /**
+   * Get popular tracks (alias for getTrendingTracks with different ordering)
+   * @param {number} limit - Number of tracks to fetch
+   * @returns {Promise<Object>} API response with tracks
+   */
+  getPopularTracks: async (limit = 20) => {
+    try {
+      const response = await fetch(
+        `${BASE_URL}/tracks/?client_id=${CLIENT_ID}&format=json&limit=${limit}&order=popularity_week&audioformat=mp32`
+      );
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error fetching popular tracks:', error);
+      return { headers: { status: 'error' }, results: [] };
+    }
+  },
+
+  /**
+   * Get top artists
+   * @param {number} limit - Number of artists to fetch
+   * @returns {Promise<Object>} API response with artists
+   */
+  getTopArtists: async (limit = 20) => {
+    try {
+      const response = await fetch(
+        `${BASE_URL}/artists/?client_id=${CLIENT_ID}&format=json&limit=${limit}&order=popularity_total&hasimage=true`
+      );
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error fetching top artists:', error);
+      return { headers: { status: 'error' }, results: [] };
+    }
+  },
+
+  /**
+   * Get latest albums
+   * @param {number} limit - Number of albums to fetch
+   * @returns {Promise<Object>} API response with albums
+   */
+  getLatestAlbums: async (limit = 20) => {
+    try {
+      const response = await fetch(
+        `${BASE_URL}/albums/?client_id=${CLIENT_ID}&format=json&limit=${limit}&order=releasedate_desc&imagesize=200&audioformat=mp32`
+      );
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error fetching latest albums:', error);
+      return { headers: { status: 'error' }, results: [] };
+    }
+  },
+
+  /**
    * Get new release tracks
    * @param {number} limit - Number of tracks to fetch
    * @returns {Promise<Object>} API response with tracks

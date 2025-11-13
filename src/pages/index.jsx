@@ -9,3 +9,5 @@ export { default as Profile } from './Profile';
 export { default as Artist } from './Artist';
 export { default as PrivacyPolicy } from './PrivacyPolicy';
 export { default as TermsOfService } from './TermsOfService';
+export { default as VibeTube } from './VibeTube';
+export { default as VibeZone } from './VibeZone';
