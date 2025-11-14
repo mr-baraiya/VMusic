@@ -27,6 +27,12 @@ export const analytics = getAnalytics(app);
 
 // Configure auth providers
 export const googleProvider = new GoogleAuthProvider();
+// Add YouTube readonly scope to access user's playlists
+googleProvider.addScope('https://www.googleapis.com/auth/youtube.readonly');
+googleProvider.setCustomParameters({
+  prompt: 'consent', // Force consent screen to get refresh token
+  access_type: 'offline' // Request offline access for refresh token
+});
 export const emailProvider = new EmailAuthProvider();
 
 // Export the app instance

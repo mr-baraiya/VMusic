@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Search as SearchIcon, Play, Heart, Music2, X } from 'lucide-react';
+import { Search as SearchIcon, Play, Heart, Music2, X, Youtube } from 'lucide-react';
 import jamendoAPI from '../api/jamendo';
 import { usePlayer } from '../contexts/PlayerContext';
 import { useAuth } from '../contexts/AuthContext';
@@ -179,7 +179,7 @@ const Search = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Results Header */}
+        {/* Results Header with VibeTube Button */}
         {hasSearched && !loading && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -187,16 +187,31 @@ const Search = () => {
             transition={{ duration: 0.5 }}
             className="mb-8"
           >
-            <h2 className="text-2xl font-bold text-white">
-              {tracks.length > 0
-                ? `Found ${tracks.length} result${tracks.length !== 1 ? 's' : ''} for "${searchQuery}"`
-                : `No results found for "${searchQuery}"`}
-            </h2>
-            {tracks.length === 0 && (
-              <p className="text-gray-400 mt-2">
-                Try different keywords or check your spelling
-              </p>
-            )}
+            <div className="flex items-center justify-between flex-wrap gap-4">
+              <div>
+                <h2 className="text-2xl font-bold text-white">
+                  {tracks.length > 0
+                    ? `Found ${tracks.length} result${tracks.length !== 1 ? 's' : ''} for "${searchQuery}"`
+                    : `No results found for "${searchQuery}"`}
+                </h2>
+                {tracks.length === 0 && (
+                  <p className="text-gray-400 mt-2">
+                    Try different keywords or check your spelling
+                  </p>
+                )}
+              </div>
+              
+              {/* VibeTube Search Button */}
+              {searchQuery.trim() && (
+                <button
+                  onClick={() => navigate(`/vibe-tube?search=${encodeURIComponent(searchQuery)}`)}
+                  className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-semibold rounded-full transition-all shadow-lg hover:shadow-red-500/50"
+                >
+                  <Youtube size={20} />
+                  Search on VibeTube
+                </button>
+              )}
+            </div>
           </motion.div>
         )}
 

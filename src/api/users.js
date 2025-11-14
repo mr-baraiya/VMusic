@@ -1,0 +1,127 @@
+// Use production API for now (local API requires Vercel CLI setup)
+const API_BASE_URL = 'https://v-music-gamma.vercel.app/api';
+
+export const usersAPI = {
+  // Sync user data with MongoDB after Firebase authentication
+  async syncUser(userId, userData) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/users`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId,
+          email: userData.email,
+          displayName: userData.displayName,
+          photoURL: userData.photoURL,
+          provider: userData.providerData?.[0]?.providerId || 'email'
+        })
+      });
+
+      if (!response.ok) throw new Error('Failed to sync user');
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error syncing user:', error);
+      throw error;
+    }
+  },
+
+  // Get user details from MongoDB
+  async getUser(userId) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/users?userId=${userId}`);
+      if (!response.ok) throw new Error('Failed to fetch user');
+      const data = await response.json();
+      return data.user;
+    } catch (error) {
+      console.error('Error fetching user:', error);
+      return null;
+    }
+  },
+
+  // Update user profile
+  async updateProfile(userId, profileData) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/users`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId,
+          ...profileData
+        })
+      });
+
+      if (!response.ok) throw new Error('Failed to update profile');
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      throw error;
+    }
+  }
+};
+
+export const searchHistoryAPI = {
+  // Get user's search history
+  async getSearchHistory(userId, limit = 20) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/search-history?userId=${userId}&limit=${limit}`);
+      if (!response.ok) throw new Error('Failed to fetch search history');
+      const data = await response.json();
+      return data.history || [];
+    } catch (error) {
+      console.error('Error fetching search history:', error);
+      return [];
+    }
+  },
+
+  // Add search query to history
+  async addToHistory(userId, query, resultsCount = 0) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/search-history`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId,
+          query,
+          results: resultsCount
+        })
+      });
+
+      if (!response.ok) throw new Error('Failed to add to search history');
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error adding to search history:', error);
+      throw error;
+    }
+  },
+
+  // Clear search history
+  async clearHistory(userId) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/search-history`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId
+        })
+      });
+
+      if (!response.ok) throw new Error('Failed to clear search history');
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error clearing search history:', error);
+      throw error;
+    }
+  }
+};

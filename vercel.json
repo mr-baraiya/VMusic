@@ -2,6 +2,18 @@
   "functions": {
     "api/spotify-token.js": {
       "maxDuration": 10
+    },
+    "api/users.js": {
+      "maxDuration": 10
+    },
+    "api/favorites.js": {
+      "maxDuration": 10
+    },
+    "api/search-history.js": {
+      "maxDuration": 10
+    },
+    "api/youtube-playlists.js": {
+      "maxDuration": 10
     }
   },
   "headers": [
@@ -14,11 +26,11 @@
         },
         {
           "key": "Access-Control-Allow-Methods",
-          "value": "GET, OPTIONS"
+          "value": "GET, POST, PUT, DELETE, OPTIONS"
         },
         {
           "key": "Access-Control-Allow-Headers",
-          "value": "Content-Type"
+          "value": "Content-Type, Authorization"
         },
         {
           "key": "Cache-Control",

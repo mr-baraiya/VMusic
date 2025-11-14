@@ -9,6 +9,7 @@ import {
 } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { auth, db, googleProvider } from '../config/firebase';
+import { usersAPI } from '../api/users';
 
 const AuthContext = createContext();
 
@@ -23,6 +24,7 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [googleAccessToken, setGoogleAccessToken] = useState(null); // Store Google OAuth token for YouTube API
 
   // Create user document in Firestore
   const createUserDocument = async (user, additionalData = {}) => {
@@ -49,6 +51,20 @@ export const AuthProvider = ({ children }) => {
         } catch (error) {
           console.error('Error creating user document:', error);
         }
+      }
+
+      // Sync user to MongoDB
+      try {
+        await usersAPI.syncUser(user.uid, {
+          email: user.email,
+          displayName: user.displayName,
+          photoURL: user.photoURL,
+          providerData: user.providerData
+        });
+        console.log('✅ User synced to MongoDB');
+      } catch (mongoError) {
+        console.error('MongoDB sync error:', mongoError);
+        // Continue even if MongoDB sync fails
       }
 
       return userRef;
@@ -85,6 +101,29 @@ export const AuthProvider = ({ children }) => {
   // Sign in with Google
   const signInWithGoogle = async () => {
     const result = await signInWithPopup(auth, googleProvider);
+    
+    // Get Google OAuth access token for YouTube API
+    const credential = result._tokenResponse;
+    if (credential?.oauthAccessToken) {
+      setGoogleAccessToken(credential.oauthAccessToken);
+      console.log('✅ Google access token obtained for YouTube API');
+      
+      // Store token in MongoDB for persistent access
+      try {
+        await usersAPI.syncUser(result.user.uid, {
+          email: result.user.email,
+          displayName: result.user.displayName,
+          photoURL: result.user.photoURL,
+          providerData: result.user.providerData,
+          googleAccessToken: credential.oauthAccessToken,
+          googleRefreshToken: credential.refreshToken || null
+        });
+        console.log('✅ Access token saved to MongoDB');
+      } catch (error) {
+        console.error('Failed to save access token:', error);
+      }
+    }
+    
     await createUserDocument(result.user);
     return result;
   };
@@ -120,6 +159,7 @@ export const AuthProvider = ({ children }) => {
     signInWithGoogle,
     logout,
     loading,
+    googleAccessToken, // Expose access token for YouTube API calls
   };
 
   return (
