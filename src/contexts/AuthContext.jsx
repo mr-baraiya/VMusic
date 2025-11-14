@@ -168,13 +168,24 @@ export const AuthProvider = ({ children }) => {
           
           // Try to restore Google access token from MongoDB
           try {
+            console.log('🔄 Attempting to restore token from MongoDB for user:', user.uid);
             const userData = await usersAPI.getUser(user.uid);
+            console.log('📦 User data from MongoDB:', {
+              hasUserData: !!userData,
+              hasToken: !!userData?.googleAccessToken,
+              tokenLength: userData?.googleAccessToken?.length || 0,
+              tokenPreview: userData?.googleAccessToken ? userData.googleAccessToken.substring(0, 30) + '...' : 'NULL',
+              allKeys: userData ? Object.keys(userData) : []
+            });
+            
             if (userData?.googleAccessToken) {
               setGoogleAccessToken(userData.googleAccessToken);
               console.log('✅ Google access token restored from MongoDB');
+            } else {
+              console.warn('⚠️ No token found in MongoDB - user needs to sign in with Google again');
             }
           } catch (error) {
-            console.error('Failed to restore access token:', error);
+            console.error('❌ Failed to restore access token:', error);
           }
         } else {
           setGoogleAccessToken(null);

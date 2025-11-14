@@ -20,7 +20,15 @@ export const youtubeAPI = {
    * @returns {Promise<Object>} { playlists: [], total: number }
    */
   async getUserPlaylists(userId, accessToken) {
+    console.log('📡 youtube.js getUserPlaylists called with:', {
+      hasUserId: !!userId,
+      hasAccessToken: !!accessToken,
+      tokenLength: accessToken?.length || 0,
+      tokenPreview: accessToken ? accessToken.substring(0, 30) + '...' : 'NULL'
+    });
+
     if (!userId || !accessToken) {
+      console.error('❌ Missing required parameters:', { userId: !!userId, accessToken: !!accessToken });
       throw new Error('userId and accessToken are required');
     }
 
@@ -29,12 +37,16 @@ export const youtubeAPI = {
       url.searchParams.append('userId', userId);
       url.searchParams.append('accessToken', accessToken);
 
+      console.log('🌐 Calling API:', url.toString().replace(accessToken, 'TOKEN_HIDDEN'));
+
       const response = await fetch(url.toString(), {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
         }
       });
+
+      console.log('📥 API Response Status:', response.status);
 
       if (!response.ok) {
         const error = await response.json();
