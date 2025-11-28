@@ -112,6 +112,66 @@ const VibeTube = () => {
     localStorage.setItem('vibetube_playlists', JSON.stringify(playlists));
   }, [playlists]);
 
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyPress = (e) => {
+      // Don't trigger shortcuts if user is typing in an input field
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+        return;
+      }
+
+      switch (e.key.toLowerCase()) {
+        case ' ': // Space - Play/Pause
+          e.preventDefault();
+          handlePlayPause();
+          console.log('⌨️ Keyboard: Space pressed - Play/Pause');
+          break;
+        case 'arrowright': // Right arrow - Next track
+          e.preventDefault();
+          handleNext();
+          console.log('⌨️ Keyboard: Right arrow pressed - Next track');
+          break;
+        case 'arrowleft': // Left arrow - Previous track
+          e.preventDefault();
+          handlePrevious();
+          console.log('⌨️ Keyboard: Left arrow pressed - Previous track');
+          break;
+        case 'arrowup': // Up arrow - Volume up
+          e.preventDefault();
+          handleVolumeChange(Math.min(volume + 10, 100));
+          console.log('⌨️ Keyboard: Up arrow pressed - Volume up');
+          break;
+        case 'arrowdown': // Down arrow - Volume down
+          e.preventDefault();
+          handleVolumeChange(Math.max(volume - 10, 0));
+          console.log('⌨️ Keyboard: Down arrow pressed - Volume down');
+          break;
+        case 'm': // M - Mute/Unmute
+          e.preventDefault();
+          handleToggleMute();
+          console.log('⌨️ Keyboard: M pressed - Mute/Unmute');
+          break;
+        case 's': // S - Shuffle
+          e.preventDefault();
+          const newShuffle = !isShuffle;
+          setIsShuffle(newShuffle);
+          console.log('⌨️ Keyboard: S pressed - Shuffle', newShuffle ? 'ON' : 'OFF');
+          break;
+        case 'r': // R - Repeat
+          e.preventDefault();
+          const newRepeat = !isRepeat;
+          setIsRepeat(newRepeat);
+          console.log('⌨️ Keyboard: R pressed - Repeat', newRepeat ? 'ON' : 'OFF');
+          break;
+        default:
+          break;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [isPlaying, volume, isMuted, isShuffle, isRepeat, currentIndex, playlist]);
+
   // Initialize YouTube Player
   useEffect(() => {
     // Load YouTube IFrame API
@@ -222,8 +282,10 @@ const VibeTube = () => {
   // Handle Video End
   const handleVideoEnd = () => {
     if (isRepeat) {
+      console.log('🔁 Repeat is ON - Replaying current video');
       playerRef.current?.playVideo();
     } else {
+      console.log('⏭️ Repeat is OFF - Playing next video');
       handleNext();
     }
   };
@@ -659,8 +721,10 @@ const VibeTube = () => {
     let nextIndex;
     if (isShuffle) {
       nextIndex = Math.floor(Math.random() * playlist.length);
+      console.log(`🔀 Shuffle is ON - Playing random track #${nextIndex}`);
     } else {
       nextIndex = (currentIndex + 1) % playlist.length;
+      console.log(`⏭️ Shuffle is OFF - Playing next track #${nextIndex}`);
     }
     
     playVideo(nextIndex);
@@ -673,8 +737,10 @@ const VibeTube = () => {
     let prevIndex;
     if (isShuffle) {
       prevIndex = Math.floor(Math.random() * playlist.length);
+      console.log(`🔀 Shuffle is ON - Playing random track #${prevIndex}`);
     } else {
       prevIndex = currentIndex - 1 < 0 ? playlist.length - 1 : currentIndex - 1;
+      console.log(`⏮️ Shuffle is OFF - Playing previous track #${prevIndex}`);
     }
     
     playVideo(prevIndex);
@@ -835,8 +901,16 @@ const VibeTube = () => {
               onToggleMute={handleToggleMute}
               isRepeat={isRepeat}
               isShuffle={isShuffle}
-              onToggleRepeat={() => setIsRepeat(!isRepeat)}
-              onToggleShuffle={() => setIsShuffle(!isShuffle)}
+              onToggleRepeat={() => {
+                const newRepeat = !isRepeat;
+                setIsRepeat(newRepeat);
+                console.log('🔁 Repeat toggled:', newRepeat ? 'ON' : 'OFF');
+              }}
+              onToggleShuffle={() => {
+                const newShuffle = !isShuffle;
+                setIsShuffle(newShuffle);
+                console.log('🔀 Shuffle toggled:', newShuffle ? 'ON' : 'OFF');
+              }}
             />
 
             {/* Playlist Sidebar */}
