@@ -173,8 +173,8 @@ export const AuthProvider = ({ children }) => {
           
           // Try to restore Google access token from MongoDB
           try {
-            console.log('🔄 Attempting to restore token from MongoDB for user:', user.uid);
             const userData = await usersAPI.getUser(user.uid);
+<<<<<<< HEAD
             console.log('📦 User data from MongoDB:', {
               hasUserData: !!userData,
               hasToken: !!userData?.googleAccessToken,
@@ -202,9 +202,14 @@ export const AuthProvider = ({ children }) => {
               }
             } else {
               console.warn('⚠️ No token found in MongoDB - user needs to sign in with Google again');
+=======
+            if (userData?.googleAccessToken) {
+              setGoogleAccessToken(userData.googleAccessToken);
+              console.log('✅ Google access token restored from MongoDB');
+>>>>>>> parent of b8f95de (Add YouTube token debug logging and test utility)
             }
           } catch (error) {
-            console.error('❌ Failed to restore access token:', error);
+            console.error('Failed to restore access token:', error);
           }
         } else {
           setGoogleAccessToken(null);

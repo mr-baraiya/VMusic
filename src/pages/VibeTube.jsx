@@ -714,12 +714,6 @@ const VibeTube = () => {
             showHistoryButton={!!currentUser}
             onShowYouTubePlaylists={() => {
               console.log('🎬 YouTube button clicked!');
-              console.log('📊 Token state:', {
-                hasToken: !!googleAccessToken,
-                tokenType: typeof googleAccessToken,
-                tokenValue: googleAccessToken,
-                tokenPreview: googleAccessToken ? String(googleAccessToken).substring(0, 30) + '...' : 'NULL'
-              });
               setShowYouTubePlaylists(true);
             }}
             showYouTubeButton={!!currentUser && !!googleAccessToken}
@@ -832,28 +826,11 @@ const VibeTube = () => {
       {showYouTubePlaylists && currentUser && (
         <YouTubePlaylists
           isOpen={showYouTubePlaylists}
-          onClose={() => {
-            console.log('🚪 Closing YouTube Playlists modal');
-            setShowYouTubePlaylists(false);
-          }}
+          onClose={() => setShowYouTubePlaylists(false)}
           userId={currentUser.uid}
           accessToken={googleAccessToken}
           onPlayVideo={playVideoDirectly}
         />
-      )}
-      {showYouTubePlaylists && !googleAccessToken && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-red-900/90 text-white p-8 rounded-xl max-w-md text-center">
-            <h3 className="text-xl font-bold mb-4">⚠️ No Access Token</h3>
-            <p className="mb-4">Please sign out and sign in with Google again to enable YouTube features.</p>
-            <button
-              onClick={() => setShowYouTubePlaylists(false)}
-              className="px-6 py-2 bg-white text-red-900 rounded-lg font-semibold hover:bg-gray-100 transition"
-            >
-              Close
-            </button>
-          </div>
-        </div>
       )}
 
       {/* Custom Scrollbar Styles */}

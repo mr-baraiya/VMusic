@@ -21,14 +21,6 @@ const YouTubePlaylists = ({ isOpen, onClose, userId, accessToken, onPlayVideo })
   const fetchPlaylists = async () => {
     setLoading(true);
     setError(null);
-    
-    console.log('🔍 Fetching playlists with:', {
-      hasUserId: !!userId,
-      hasAccessToken: !!accessToken,
-      userIdValue: userId,
-      tokenPreview: accessToken ? accessToken.substring(0, 30) + '...' : 'NULL'
-    });
-    
     try {
       const data = await youtubeAPI.getUserPlaylists(userId, accessToken);
       setPlaylists(data.playlists || []);
