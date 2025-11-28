@@ -129,7 +129,6 @@ export const AuthProvider = ({ children }) => {
     if (credential?.oauthAccessToken) {
       setGoogleAccessToken(credential.oauthAccessToken);
       console.log('✅ Google access token obtained for YouTube API');
-      console.log('🎯 Token length:', credential.oauthAccessToken.length);
       
       // Calculate token expiration time (Google tokens expire in 1 hour)
       const expiresAt = Date.now() + (3600 * 1000); // 1 hour from now
@@ -146,7 +145,6 @@ export const AuthProvider = ({ children }) => {
           tokenExpiresAt: expiresAt
         });
         console.log('✅ Access token saved to MongoDB');
-        console.log('⏰ Token expires at:', new Date(expiresAt).toLocaleString());
       } catch (error) {
         console.error('Failed to save access token:', error);
       }
@@ -174,14 +172,7 @@ export const AuthProvider = ({ children }) => {
           // Try to restore Google access token from MongoDB
           try {
             const userData = await usersAPI.getUser(user.uid);
-            console.log('📦 User data from MongoDB:', {
-              hasUserData: !!userData,
-              hasToken: !!userData?.googleAccessToken,
-              tokenLength: userData?.googleAccessToken?.length || 0,
-              tokenPreview: userData?.googleAccessToken ? userData.googleAccessToken.substring(0, 30) + '...' : 'NULL',
-              expiresAt: userData?.tokenExpiresAt ? new Date(userData.tokenExpiresAt).toLocaleString() : 'N/A',
-              allKeys: userData ? Object.keys(userData) : []
-            });
+            // Token restored from MongoDB
             
             if (userData?.googleAccessToken) {
               // Check if token is expired
@@ -193,11 +184,6 @@ export const AuthProvider = ({ children }) => {
               } else {
                 setGoogleAccessToken(userData.googleAccessToken);
                 console.log('✅ Google access token restored from MongoDB');
-                
-                if (userData.tokenExpiresAt) {
-                  const minutesLeft = Math.floor((userData.tokenExpiresAt - Date.now()) / 60000);
-                  console.log(`⏰ Token expires in ${minutesLeft} minutes`);
-                }
               }
             } else {
               console.warn('⚠️ No token found in MongoDB - user needs to sign in with Google again');

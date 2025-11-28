@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TrendingUp, X, List, Youtube, Sparkles, Music2 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
@@ -24,18 +24,11 @@ const YOUTUBE_API_BASE = 'https://www.googleapis.com/youtube/v3';
 // Main VibeTube Component
 const VibeTube = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { currentUser, googleAccessToken } = useAuth();
   
-  // Debug: Log token status
-  useEffect(() => {
-    console.log('🔍 VibeTube Auth Status:', {
-      hasUser: !!currentUser,
-      userEmail: currentUser?.email,
-      hasToken: !!googleAccessToken,
-      tokenPreview: googleAccessToken ? `${googleAccessToken.substring(0, 20)}...` : 'null'
-    });
-  }, [currentUser, googleAccessToken]);
-  const location = window.location;
+  const autoPlayVideo = location.state?.autoPlayVideo; // Get video from navigation state
+  
   const urlParams = new URLSearchParams(location.search);
   const searchQueryFromUrl = urlParams.get('search');
   
@@ -96,6 +89,7 @@ const VibeTube = () => {
   const playerRef = useRef(null);
   const intervalRef = useRef(null);
   const fullscreenPlayerRef = useRef(null);
+  const autoPlayHandledRef = useRef(false); // Prevent duplicate autoplay
   
   const currentPlaylist = playlists.find(p => p.id === currentPlaylistId) || playlists[0];
   const playlist = currentPlaylist.tracks;
@@ -185,6 +179,26 @@ const VibeTube = () => {
     }
   }, []);
 
+  // Handle autoplay from navigation (Playlists page)
+  useEffect(() => {
+    if (autoPlayVideo && playerRef.current && !autoPlayHandledRef.current) {
+      console.log('🎵 Autoplay from Playlists:', autoPlayVideo);
+      autoPlayHandledRef.current = true; // Mark as handled
+      
+      const video = {
+        videoId: autoPlayVideo.videoId,
+        title: autoPlayVideo.title,
+        channelTitle: autoPlayVideo.channelTitle,
+        thumbnail: autoPlayVideo.thumbnail
+      };
+      
+      // Use playVideoDirectly to add to playlist and play
+      playVideoDirectly(video);
+      
+      // Clear navigation state
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [autoPlayVideo, playerRef.current]);
   // Progress Tracking
   const startProgressTracking = () => {
     stopProgressTracking();
@@ -559,22 +573,54 @@ const VibeTube = () => {
 
   // Play video directly from search results (receives video object)
   const playVideoDirectly = (video) => {
+    console.log('🎵 Playing video:', video.title);
+    
     // Check if video is already in playlist
     const existingIndex = playlist.findIndex(t => t.videoId === video.videoId);
     
     if (existingIndex >= 0) {
       // Video exists in playlist, play it
+      console.log('✅ Video found in playlist at index:', existingIndex);
       playVideo(existingIndex);
     } else {
-      // Add to playlist first, then play
-      setPlaylist(prev => [...prev, video]);
-      setCurrentTrack(video);
-      setCurrentIndex(playlist.length);
+      // Add to current playlist and play immediately
+      const newPlaylist = [...playlist, video];
+      const newIndex = newPlaylist.length - 1;
       
-      if (playerRef.current && playerRef.current.loadVideoById) {
-        playerRef.current.loadVideoById(video.videoId);
-        playerRef.current.playVideo();
-      }
+      console.log('➕ Adding video to playlist at index:', newIndex);
+      
+      // Update the playlists array with the new track in current playlist
+      setPlaylists(prevPlaylists => 
+        prevPlaylists.map(p => 
+          p.id === currentPlaylistId 
+            ? { ...p, tracks: newPlaylist }
+            : p
+        )
+      );
+      
+      setCurrentTrack(video);
+      setCurrentIndex(newIndex);
+      
+      // Ensure player is ready before playing (with max retries)
+      let retryCount = 0;
+      const maxRetries = 10;
+      
+      const attemptPlay = () => {
+        if (playerRef.current && typeof playerRef.current.loadVideoById === 'function') {
+          console.log('▶️ Loading video ID:', video.videoId);
+          playerRef.current.loadVideoById(video.videoId);
+          playerRef.current.playVideo();
+          setIsPlaying(true);
+        } else if (retryCount < maxRetries) {
+          retryCount++;
+          console.warn(`⏳ Player not ready, retry ${retryCount}/${maxRetries}...`);
+          setTimeout(attemptPlay, 300);
+        } else {
+          console.error('❌ Player failed to initialize after', maxRetries, 'attempts');
+        }
+      };
+      
+      setTimeout(attemptPlay, 100);
     }
   };
 

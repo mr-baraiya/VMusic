@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Youtube, Loader2, Music, Play, AlertCircle } from 'lucide-react';
+import { X, Youtube, Loader2, Music, Play, AlertCircle, Download, CheckCircle } from 'lucide-react';
 import { youtubeAPI } from '../../api/youtube';
+import { playlistsAPI } from '../../api/playlists';
 
 const YouTubePlaylists = ({ isOpen, onClose, userId, accessToken, onPlayVideo }) => {
   const [playlists, setPlaylists] = useState([]);
@@ -10,6 +11,9 @@ const YouTubePlaylists = ({ isOpen, onClose, userId, accessToken, onPlayVideo })
   const [selectedPlaylist, setSelectedPlaylist] = useState(null);
   const [playlistItems, setPlaylistItems] = useState([]);
   const [loadingItems, setLoadingItems] = useState(false);
+  const [importing, setImporting] = useState(false);
+  const [importedPlaylists, setImportedPlaylists] = useState(new Set());
+  const [successMessage, setSuccessMessage] = useState('');
 
   // Fetch user's playlists when modal opens
   useEffect(() => {
@@ -95,6 +99,119 @@ const YouTubePlaylists = ({ isOpen, onClose, userId, accessToken, onPlayVideo })
     }
   };
 
+  const handleImportPlaylist = async (playlist) => {
+    setImporting(true);
+    setError(null);
+    setSuccessMessage('');
+    
+    try {
+      // Fetch all videos in the playlist
+      const data = await youtubeAPI.getPlaylistItems(userId, playlist.id, accessToken);
+      const items = data.items || [];
+      
+      if (items.length === 0) {
+        setError('This playlist is empty!');
+        return;
+      }
+
+      // Transform YouTube playlist items to track format
+      const tracks = items.map(item => ({
+        id: item.videoId,
+        videoId: item.videoId,
+        title: item.title,
+        artist: item.channelTitle,
+        channelTitle: item.channelTitle,
+        thumbnail: item.thumbnail,
+        source: 'youtube',
+        duration: 'N/A'
+      }));
+
+      // Save playlist to database
+      await playlistsAPI.createPlaylist(
+        userId,
+        playlist.title,
+        tracks,
+        'youtube'
+      );
+
+      setImportedPlaylists(prev => new Set([...prev, playlist.id]));
+      setSuccessMessage(`✅ "${playlist.title}" imported successfully! (${tracks.length} tracks)`);
+      
+      // Auto-hide success message after 3 seconds
+      setTimeout(() => setSuccessMessage(''), 3000);
+      
+      console.log(`✅ Playlist "${playlist.title}" imported with ${tracks.length} tracks`);
+    } catch (err) {
+      console.error('Error importing playlist:', err);
+      setError(err.message || 'Failed to import playlist. Please try again.');
+    } finally {
+      setImporting(false);
+    }
+  };
+
+  const handleImportAll = async () => {
+    setImporting(true);
+    setError(null);
+    setSuccessMessage('');
+    
+    try {
+      let importedCount = 0;
+      let totalTracks = 0;
+
+      for (const playlist of playlists) {
+        if (importedPlaylists.has(playlist.id)) {
+          console.log(`⏭️ Skipping "${playlist.title}" (already imported)`);
+          continue;
+        }
+
+        try {
+          const data = await youtubeAPI.getPlaylistItems(userId, playlist.id, accessToken);
+          const items = data.items || [];
+          
+          if (items.length === 0) continue;
+
+          const tracks = items.map(item => ({
+            id: item.videoId,
+            videoId: item.videoId,
+            title: item.title,
+            artist: item.channelTitle,
+            channelTitle: item.channelTitle,
+            thumbnail: item.thumbnail,
+            source: 'youtube',
+            duration: 'N/A'
+          }));
+
+          await playlistsAPI.createPlaylist(
+            userId,
+            playlist.title,
+            tracks,
+            'youtube'
+          );
+
+          setImportedPlaylists(prev => new Set([...prev, playlist.id]));
+          importedCount++;
+          totalTracks += tracks.length;
+          
+          console.log(`✅ Imported "${playlist.title}" (${tracks.length} tracks)`);
+        } catch (err) {
+          console.error(`Failed to import "${playlist.title}":`, err);
+        }
+      }
+
+      if (importedCount > 0) {
+        setSuccessMessage(`✅ Imported ${importedCount} playlist(s) with ${totalTracks} total tracks!`);
+        setTimeout(() => setSuccessMessage(''), 5000);
+      } else {
+        setError('All playlists are already imported or empty.');
+      }
+    } catch (err) {
+      console.error('Error importing playlists:', err);
+      setError('Failed to import playlists. Please try again.');
+    } finally {
+      setImporting(false);
+    }
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -131,16 +248,49 @@ const YouTubePlaylists = ({ isOpen, onClose, userId, accessToken, onPlayVideo })
                 )}
               </div>
             </div>
-            <button
-              onClick={onClose}
-              className="text-gray-400 hover:text-white transition-colors p-2 hover:bg-white/10 rounded-lg"
-            >
-              <X size={24} />
-            </button>
+            <div className="flex items-center gap-2">
+              {!selectedPlaylist && playlists.length > 0 && (
+                <button
+                  onClick={handleImportAll}
+                  disabled={importing}
+                  className="px-4 py-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-lg transition-colors flex items-center gap-2 text-sm font-medium"
+                >
+                  {importing ? (
+                    <>
+                      <Loader2 className="animate-spin" size={16} />
+                      Importing...
+                    </>
+                  ) : (
+                    <>
+                      <Download size={16} />
+                      Import All
+                    </>
+                  )}
+                </button>
+              )}
+              <button
+                onClick={onClose}
+                className="text-gray-400 hover:text-white transition-colors p-2 hover:bg-white/10 rounded-lg"
+              >
+                <X size={24} />
+              </button>
+            </div>
           </div>
 
           {/* Content */}
           <div className="p-6 overflow-y-auto max-h-[calc(80vh-120px)]">
+            {/* Success Message */}
+            {successMessage && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                className="mb-4 p-4 bg-green-600/20 border border-green-500/50 rounded-lg flex items-center gap-3"
+              >
+                <CheckCircle className="text-green-500" size={24} />
+                <p className="text-green-100 font-medium">{successMessage}</p>
+              </motion.div>
+            )}
             {/* Loading State */}
             {(loading || loadingItems) && (
               <div className="flex flex-col items-center justify-center py-16">
@@ -183,35 +333,75 @@ const YouTubePlaylists = ({ isOpen, onClose, userId, accessToken, onPlayVideo })
             {/* Playlists List */}
             {!loading && !selectedPlaylist && playlists.length > 0 && (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {playlists.map((playlist) => (
-                  <motion.div
-                    key={playlist.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    whileHover={{ scale: 1.05 }}
-                    className="bg-white/5 rounded-xl overflow-hidden border border-white/10 hover:border-red-500/50 transition-all cursor-pointer group"
-                    onClick={() => handlePlaylistClick(playlist)}
-                  >
-                    <div className="relative aspect-video">
-                      <img
-                        src={playlist.thumbnail}
-                        alt={playlist.title}
-                        className="w-full h-full object-cover"
-                      />
-                      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                        <Play className="text-white" size={48} />
+                {playlists.map((playlist) => {
+                  const isImported = importedPlaylists.has(playlist.id);
+                  
+                  return (
+                    <motion.div
+                      key={playlist.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="bg-white/5 rounded-xl overflow-hidden border border-white/10 hover:border-red-500/50 transition-all"
+                    >
+                      <div 
+                        className="relative aspect-video cursor-pointer group"
+                        onClick={() => handlePlaylistClick(playlist)}
+                      >
+                        <img
+                          src={playlist.thumbnail}
+                          alt={playlist.title}
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                          <Play className="text-white" size={48} />
+                        </div>
+                        <div className="absolute bottom-2 right-2 bg-black/80 px-2 py-1 rounded text-xs text-white">
+                          {playlist.itemCount} videos
+                        </div>
+                        {isImported && (
+                          <div className="absolute top-2 right-2 bg-green-600 px-2 py-1 rounded text-xs text-white flex items-center gap-1">
+                            <CheckCircle size={12} />
+                            Imported
+                          </div>
+                        )}
                       </div>
-                      <div className="absolute bottom-2 right-2 bg-black/80 px-2 py-1 rounded text-xs text-white">
-                        {playlist.itemCount} videos
+                      <div className="p-4">
+                        <h3 className="text-white font-semibold text-sm line-clamp-2 mb-3">
+                          {playlist.title}
+                        </h3>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleImportPlaylist(playlist);
+                          }}
+                          disabled={importing || isImported}
+                          className={`w-full px-4 py-2 rounded-lg transition-colors flex items-center justify-center gap-2 text-sm font-medium ${
+                            isImported
+                              ? 'bg-green-600/30 text-green-400 cursor-not-allowed'
+                              : 'bg-red-600 hover:bg-red-700 text-white'
+                          }`}
+                        >
+                          {isImported ? (
+                            <>
+                              <CheckCircle size={16} />
+                              Imported
+                            </>
+                          ) : importing ? (
+                            <>
+                              <Loader2 className="animate-spin" size={16} />
+                              Importing...
+                            </>
+                          ) : (
+                            <>
+                              <Download size={16} />
+                              Import Playlist
+                            </>
+                          )}
+                        </button>
                       </div>
-                    </div>
-                    <div className="p-4">
-                      <h3 className="text-white font-semibold text-sm line-clamp-2">
-                        {playlist.title}
-                      </h3>
-                    </div>
-                  </motion.div>
-                ))}
+                    </motion.div>
+                  );
+                })}
               </div>
             )}
 

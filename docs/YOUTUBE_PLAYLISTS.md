@@ -231,7 +231,7 @@ Authorization: Bearer {accessToken}
 ```javascript
 // In browser console
 const { googleAccessToken } = useAuth();
-console.log(googleAccessToken); // Should show token
+console.log('Has token:', !!googleAccessToken); // Check if token exists
 ```
 
 4. Verify MongoDB:

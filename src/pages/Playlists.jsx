@@ -1,15 +1,19 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ListMusic, Plus, Play, Trash2, Edit3, Music2 } from 'lucide-react';
+import { ListMusic, Plus, Play, Trash2, Edit3, Music2, Youtube } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { usePlayer } from '../contexts/PlayerContext';
 import { collection, query, where, getDocs, addDoc, deleteDoc, doc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../config/firebase';
+import { playlistsAPI } from '../api/playlists';
 
 const Playlists = () => {
+  const navigate = useNavigate();
   const { currentUser } = useAuth();
   const { playTrack } = usePlayer();
   const [playlists, setPlaylists] = useState([]);
+  const [mongoPlaylists, setMongoPlaylists] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [newPlaylistName, setNewPlaylistName] = useState('');
@@ -18,6 +22,7 @@ const Playlists = () => {
   useEffect(() => {
     if (currentUser) {
       loadPlaylists();
+      loadMongoPlaylists();
     }
   }, [currentUser]);
 
@@ -37,6 +42,19 @@ const Playlists = () => {
       console.error('Error loading playlists:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadMongoPlaylists = async () => {
+    try {
+      console.log('📥 Fetching playlists for user:', currentUser.uid);
+      const data = await playlistsAPI.getUserPlaylists(currentUser.uid);
+      console.log('📦 API Response:', data);
+      console.log('📋 Playlists array:', data.playlists);
+      setMongoPlaylists(data.playlists || []);
+      console.log('✅ Loaded', data.playlists?.length || 0, 'playlists from MongoDB');
+    } catch (error) {
+      console.error('❌ Error loading MongoDB playlists:', error);
     }
   };
 
@@ -117,6 +135,87 @@ const Playlists = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* YouTube Imported Playlists Section */}
+        {mongoPlaylists.length > 0 && (
+          <div className="mb-12">
+            <div className="flex items-center gap-3 mb-6">
+              <Youtube className="text-red-500" size={28} />
+              <h2 className="text-2xl font-bold text-white">YouTube Playlists</h2>
+              <span className="px-3 py-1 bg-red-600/20 text-red-400 text-sm rounded-full">
+                {mongoPlaylists.length} imported
+              </span>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {mongoPlaylists.map((playlist, index) => (
+                <motion.div
+                  key={playlist._id}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.3, delay: index * 0.05 }}
+                  className="group bg-white/5 hover:bg-white/10 rounded-xl p-4 transition-all border border-white/10 hover:border-red-500/50"
+                >
+                  {/* Playlist Cover */}
+                  <div className="relative mb-4 overflow-hidden rounded-lg aspect-square">
+                    {playlist.tracks && playlist.tracks[0]?.thumbnail ? (
+                      <img 
+                        src={playlist.tracks[0].thumbnail} 
+                        alt={playlist.name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-red-600/20 to-pink-600/20 flex items-center justify-center">
+                        <Youtube size={64} className="text-red-400" />
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <button 
+                        onClick={() => {
+                          if (playlist.tracks && playlist.tracks.length > 0) {
+                            // Navigate to VibeTube with the video from this playlist
+                            const track = playlist.tracks[0];
+                            navigate('/vibetube', {
+                              state: {
+                                autoPlayVideo: {
+                                  videoId: track.videoId,
+                                  title: track.title,
+                                  channelTitle: track.artist || track.channelTitle,
+                                  thumbnail: track.thumbnail
+                                }
+                              }
+                            });
+                          }
+                        }}
+                        className="w-14 h-14 bg-red-500 rounded-full flex items-center justify-center hover:bg-red-600 hover:scale-110 transition-all shadow-lg"
+                      >
+                        <Play size={24} className="text-white ml-1" fill="white" />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Playlist Info */}
+                  <h3 className="text-white font-semibold mb-1 truncate group-hover:text-red-400 transition-colors">
+                    {playlist.name}
+                  </h3>
+                  <p className="text-gray-400 text-sm mb-2">
+                    {playlist.tracks?.length || 0} track{playlist.tracks?.length !== 1 ? 's' : ''}
+                  </p>
+                  <p className="text-red-400 text-xs flex items-center gap-1">
+                    <Youtube size={12} />
+                    YouTube
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Firestore Playlists Section */}
+        {playlists.length > 0 && (
+          <div className="mb-6">
+            <h2 className="text-2xl font-bold text-white mb-6">My Playlists</h2>
+          </div>
+        )}
+
         {loading ? (
           // Loading State
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -128,7 +227,7 @@ const Playlists = () => {
               </div>
             ))}
           </div>
-        ) : playlists.length > 0 ? (
+        ) : playlists.length > 0 || mongoPlaylists.length > 0 ? (
           // Playlists Grid
           <motion.div
             initial={{ opacity: 0 }}

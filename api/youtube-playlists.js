@@ -80,7 +80,6 @@ async function fetchUserPlaylists(accessToken) {
   url.searchParams.append('maxResults', '50');
 
   console.log('🔍 Fetching YouTube playlists...');
-  console.log('Token preview:', accessToken.substring(0, 30) + '...');
 
   const response = await fetch(url.toString(), {
     headers: {
