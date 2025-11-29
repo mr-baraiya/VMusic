@@ -259,11 +259,11 @@ const Playlist = ({ playlist, currentIndex, onPlay, onRemove, onReorder }) => {
     <div className="space-y-2 max-h-[500px] overflow-y-auto custom-scrollbar">
       {playlist.map((video, index) => (
         <motion.div
-          key={`${video.videoId}-${index}`}
+          key={`track-${index}-${video.videoId}-${video.title.substring(0, 10)}`}
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: index * 0.03 }}
-          draggable
+          draggable="true"
           onDragStart={() => handleDragStart(index)}
           onDragOver={(e) => handleDragOver(e, index)}
           onDragEnd={handleDragEnd}

@@ -353,7 +353,7 @@ const VibeTube = () => {
     // Rate limiting check
     const now = Date.now();
     if (now - lastSearchTime.current < MIN_SEARCH_INTERVAL && !append) {
-      console.log('⏱️ Rate limited: Search too soon after previous call');
+      // Silently prevent rapid searches
       return;
     }
     lastSearchTime.current = now;
@@ -379,10 +379,24 @@ const VibeTube = () => {
 
       if (!searchResponse.ok) {
         const errorData = await searchResponse.json().catch(() => ({}));
+        console.error('YouTube API Error:', {
+          status: searchResponse.status,
+          statusText: searchResponse.statusText,
+          error: errorData
+        });
+        
         if (searchResponse.status === 403) {
-          throw new Error('YouTube API quota exceeded. Please try again later or use a different API key.');
+          setError('YouTube API quota exceeded. Please try again later.');
+          setSearchResults([]);
+          setIsLoading(false);
+          setLoadingMore(false);
+          return;
         } else if (searchResponse.status === 400) {
-          throw new Error('Invalid API request. Please check the API key configuration.');
+          setError('YouTube API key issue. Please check your API key in the .env file.');
+          setSearchResults([]);
+          setIsLoading(false);
+          setLoadingMore(false);
+          return;
         }
         throw new Error(errorData.error?.message || 'Failed to search videos. Please try again.');
       }
@@ -471,6 +485,11 @@ const VibeTube = () => {
       if (!searchQueryFromUrl) {
         setIsLoading(true);
         try {
+          // Check if API key exists
+          if (!YOUTUBE_API_KEY) {
+            throw new Error('YouTube API key not configured');
+          }
+
           // Use videos.list (1 unit) instead of search (100 units)
           const videoIds = POPULAR_MUSIC_IDS.join(',');
           const detailsResponse = await fetch(
@@ -478,10 +497,36 @@ const VibeTube = () => {
           );
 
           if (!detailsResponse.ok) {
-            throw new Error('Failed to load popular music');
+            const errorData = await detailsResponse.json().catch(() => ({}));
+            console.error('YouTube API Error on initial load:', {
+              status: detailsResponse.status,
+              statusText: detailsResponse.statusText,
+              errorDetails: errorData,
+              apiKey: YOUTUBE_API_KEY ? `${YOUTUBE_API_KEY.substring(0, 10)}...` : 'NOT SET',
+              requestUrl: `${YOUTUBE_API_BASE}/videos?part=snippet,contentDetails&id=<VIDEO_IDS>&key=<KEY>`
+            });
+            
+            // Set user-friendly error message
+            if (detailsResponse.status === 400) {
+              setError('YouTube API key has restrictions. Please remove API restrictions in Google Cloud Console for localhost development.');
+            } else if (detailsResponse.status === 403) {
+              setError('YouTube API quota exceeded. Please wait or create a new API key.');
+            } else {
+              setError(`YouTube API Error: ${errorData.error?.message || 'Unknown error'}`);
+            }
+            setSearchResults([]);
+            setIsLoading(false);
+            return;
           }
 
           const detailsData = await detailsResponse.json();
+          
+          if (!detailsData.items || detailsData.items.length === 0) {
+            setError('No videos found. The API key may have restrictions.');
+            setSearchResults([]);
+            return;
+          }
+
           const results = detailsData.items.map((item) => ({
             videoId: item.id,
             title: item.snippet.title,
@@ -492,10 +537,14 @@ const VibeTube = () => {
 
           setSearchResults(results);
           setHasMore(false); // No pagination for hardcoded list
+          setError(null); // Clear any previous errors
         } catch (err) {
           console.error('Error loading popular music:', err);
-          // Fallback to search if hardcoded approach fails
-          await searchVideos('top music 2024');
+          // Only set error if not already set (to avoid overriding specific API error messages)
+          if (!error) {
+            setError('Unable to load videos. Please check your YouTube API key configuration.');
+          }
+          setSearchResults([]);
         } finally {
           setIsLoading(false);
         }
@@ -719,8 +768,11 @@ const VibeTube = () => {
           }
         } else if (retryCount < maxRetries) {
           retryCount++;
-          console.warn(`⏳ Player not ready, retry ${retryCount}/${maxRetries}...`);
-          setTimeout(attemptPlay, 500); // Increased delay
+          // Only log every 5th retry to reduce console spam
+          if (retryCount === 1 || retryCount % 5 === 0 || retryCount === maxRetries) {
+            console.warn(`⏳ Player not ready, retry ${retryCount}/${maxRetries}...`);
+          }
+          setTimeout(attemptPlay, 300); // Reduced delay for faster retry
         } else {
           console.error('❌ Player failed to initialize after', maxRetries, 'attempts');
           console.error('Debug info:', {
@@ -732,7 +784,7 @@ const VibeTube = () => {
         }
       };
       
-      setTimeout(attemptPlay, 200);
+      setTimeout(attemptPlay, 100);
     }
   };
 

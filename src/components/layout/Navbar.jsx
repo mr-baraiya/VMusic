@@ -16,7 +16,8 @@ import {
   MapPin,
   Users,
   Sparkles,
-  Youtube
+  Youtube,
+  Disc3
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { SignIn, SignUp } from '../auth';

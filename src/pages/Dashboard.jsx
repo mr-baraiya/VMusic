@@ -16,41 +16,65 @@ import {
   Users,
   Album,
   Trophy,
-  Music
+  Music,
+  Youtube,
+  Download,
+  ArrowRight,
+  PlayCircle
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { usePlayer } from '../contexts/PlayerContext';
 import { useEffect, useState } from 'react';
 import jamendoAPI from '../api/jamendo';
+import { playlistsAPI } from '../api/playlists';
+import { favoritesAPI } from '../api/favorites';
 
 const Dashboard = () => {
-  const { currentUser } = useAuth();
+  const { currentUser, googleAccessToken } = useAuth();
   const { playTrack } = usePlayer();
   const navigate = useNavigate();
   const [trendingTracks, setTrendingTracks] = useState([]);
   const [popularTracks, setPopularTracks] = useState([]);
-  const [topArtists, setTopArtists] = useState([]);
-  const [latestAlbums, setLatestAlbums] = useState([]);
   const [loading, setLoading] = useState(true);
+  
+  // Real stats from database
+  const [stats, setStats] = useState({
+    playlists: 0,
+    favorites: 0,
+    totalTracks: 0,
+    ytPlaylists: 0
+  });
 
   useEffect(() => {
     const fetchAllData = async () => {
       try {
+        // Fetch real user stats
+        if (currentUser) {
+          const [playlistsData, favoritesData] = await Promise.all([
+            playlistsAPI.getUserPlaylists(currentUser.uid).catch(() => ({ playlists: [] })),
+            favoritesAPI.getFavorites(currentUser.uid).catch(() => ({ favorites: [] }))
+          ]);
+          
+          const playlists = playlistsData.playlists || [];
+          const favorites = favoritesData.favorites || [];
+          const ytPlaylists = playlists.filter(p => p.source === 'youtube').length;
+          const totalTracks = playlists.reduce((sum, p) => sum + (p.tracks?.length || 0), 0);
+          
+          setStats({
+            playlists: playlists.length,
+            favorites: favorites.length,
+            totalTracks: totalTracks,
+            ytPlaylists: ytPlaylists
+          });
+        }
+
         // Fetch trending tracks
-        const trendingData = await jamendoAPI.getTrendingTracks(6);
+        const trendingData = await jamendoAPI.getTrendingTracks(8);
         setTrendingTracks(trendingData.results || []);
 
         // Fetch popular tracks
         const popularData = await jamendoAPI.getPopularTracks(8);
         setPopularTracks(popularData.results || []);
-
-        // Fetch top artists
-        const artistsData = await jamendoAPI.getTopArtists(6);
-        setTopArtists(artistsData.results || []);
-
-        // Fetch latest albums
-        const albumsData = await jamendoAPI.getLatestAlbums(6);
-        setLatestAlbums(albumsData.results || []);
       } catch (error) {
         console.error('Error fetching dashboard data:', error);
       } finally {
@@ -59,35 +83,48 @@ const Dashboard = () => {
     };
 
     fetchAllData();
-  }, []);
+  }, [currentUser]);
 
   const quickStats = [
     { 
-      label: 'Favorite Tracks', 
-      value: '0', 
-      icon: Heart, 
-      gradient: 'from-pink-500 via-rose-500 to-red-500',
-      iconBg: 'bg-gradient-to-br from-pink-500 to-rose-600',
-      glow: 'shadow-pink-500/50',
-      link: '/favorites' 
+      label: 'YouTube Playlists', 
+      value: stats.ytPlaylists, 
+      icon: Youtube, 
+      gradient: 'from-red-500 via-pink-500 to-rose-500',
+      iconBg: 'bg-gradient-to-br from-red-500 to-pink-600',
+      glow: 'shadow-red-500/50',
+      link: '/playlists',
+      description: 'Imported from YouTube'
     },
     { 
-      label: 'Playlists', 
-      value: '0', 
+      label: 'Total Playlists', 
+      value: stats.playlists, 
       icon: ListMusic, 
       gradient: 'from-purple-500 via-violet-500 to-indigo-500',
       iconBg: 'bg-gradient-to-br from-purple-500 to-indigo-600',
       glow: 'shadow-purple-500/50',
-      link: '/playlists' 
+      link: '/playlists',
+      description: 'Your collections' 
     },
     { 
-      label: 'Recently Played', 
-      value: '0', 
-      icon: Clock, 
+      label: 'Favorite Tracks', 
+      value: stats.favorites, 
+      icon: Heart, 
+      gradient: 'from-pink-500 via-rose-500 to-red-500',
+      iconBg: 'bg-gradient-to-br from-pink-500 to-rose-600',
+      glow: 'shadow-pink-500/50',
+      link: '/favorites',
+      description: 'Liked songs' 
+    },
+    { 
+      label: 'Total Tracks', 
+      value: stats.totalTracks, 
+      icon: Music2, 
       gradient: 'from-blue-500 via-cyan-500 to-teal-500',
       iconBg: 'bg-gradient-to-br from-blue-500 to-cyan-600',
       glow: 'shadow-blue-500/50',
-      link: '#' 
+      link: '/playlists',
+      description: 'In your playlists' 
     },
   ];
 
@@ -254,6 +291,206 @@ const Dashboard = () => {
               </motion.div>
             </motion.button>
           ))}
+        </motion.div>
+
+        {/* 🎯 FEATURED: VibeTube Showcase - Import YouTube Playlists */}
+        <motion.div
+          initial={{ opacity: 0, y: 30, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.8, delay: 0.4, type: "spring" }}
+          className="mb-12 relative overflow-hidden"
+        >
+          <div className="relative bg-gradient-to-br from-red-600/20 via-pink-600/20 to-purple-600/20 backdrop-blur-2xl rounded-3xl border-2 border-red-500/40 shadow-2xl shadow-red-900/50 overflow-hidden">
+            {/* Animated Background Pattern */}
+            <div className="absolute inset-0 opacity-10">
+              <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTMwIDEwTDQwIDI1SDIwTDMwIDEwWk0zMCA1MEw0MCAzNUgyMEwzMCA1MFoiIGZpbGw9IndoaXRlIi8+PC9zdmc+')] animate-pulse"></div>
+            </div>
+            
+            {/* Glowing Orbs */}
+            <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-red-500/30 to-pink-500/30 rounded-full blur-3xl animate-pulse"></div>
+            <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-purple-500/30 to-pink-500/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+
+            <div className="relative p-8 md:p-12">
+              <div className="grid md:grid-cols-2 gap-8 items-center">
+                {/* Left: Feature Description */}
+                <div className="space-y-6">
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-red-600/30 backdrop-blur-sm border border-red-400/50 rounded-full"
+                  >
+                    <Sparkles className="text-yellow-400" size={20} />
+                    <span className="text-white font-bold text-sm uppercase tracking-wider">Featured</span>
+                  </motion.div>
+
+                  <motion.div
+                    initial={{ opacity: 0, x: -30 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.6, duration: 0.6 }}
+                  >
+                    <h2 className="text-5xl md:text-6xl font-black mb-4 leading-tight">
+                      <span className="bg-gradient-to-r from-white via-red-200 to-pink-200 bg-clip-text text-transparent">
+                        VibeTube
+                      </span>
+                    </h2>
+                    <div className="flex items-center gap-3 mb-6">
+                      <Youtube className="text-red-500" size={32} />
+                      <p className="text-3xl font-bold text-white">Import Your Playlists</p>
+                    </div>
+                  </motion.div>
+
+                  <motion.p
+                    initial={{ opacity: 0, x: -30 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.7, duration: 0.6 }}
+                    className="text-gray-200 text-lg leading-relaxed"
+                  >
+                    Connect your <span className="font-bold text-red-400">YouTube account</span> and seamlessly import all your playlists. 
+                    Play them directly in VMusic with <span className="font-bold text-pink-400">zero hassle</span>!
+                  </motion.p>
+
+                  {/* Feature Highlights */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.8, duration: 0.6 }}
+                    className="space-y-3"
+                  >
+                    {[
+                      { icon: Download, text: 'Import all your YouTube playlists instantly' },
+                      { icon: PlayCircle, text: 'Play music directly from YouTube' },
+                      { icon: ListMusic, text: 'Manage & edit your collections' }
+                    ].map((feature, idx) => (
+                      <motion.div
+                        key={idx}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.9 + idx * 0.1 }}
+                        className="flex items-center gap-3 text-white"
+                      >
+                        <div className="w-10 h-10 bg-red-600/30 backdrop-blur-sm rounded-xl flex items-center justify-center border border-red-400/30">
+                          <feature.icon size={20} className="text-red-400" />
+                        </div>
+                        <span className="text-gray-200 font-medium">{feature.text}</span>
+                      </motion.div>
+                    ))}
+                  </motion.div>
+
+                  {/* CTA Buttons */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 1.1, duration: 0.6 }}
+                    className="flex flex-wrap gap-4 pt-4"
+                  >
+                    <motion.button
+                      onClick={() => navigate('/vibetube')}
+                      whileHover={{ scale: 1.05, y: -2 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="px-8 py-4 bg-gradient-to-r from-red-600 via-pink-600 to-purple-600 hover:from-red-700 hover:via-pink-700 hover:to-purple-700 text-white font-black rounded-full shadow-2xl shadow-red-900/50 flex items-center gap-3 border-2 border-white/20 text-lg group"
+                    >
+                      <Youtube size={28} />
+                      <span>Go to VibeTube</span>
+                      <ArrowRight className="group-hover:translate-x-2 transition-transform" size={24} />
+                    </motion.button>
+
+                    {googleAccessToken ? (
+                      <motion.div
+                        whileHover={{ scale: 1.05 }}
+                        className="px-6 py-4 bg-green-600/20 backdrop-blur-sm border-2 border-green-400/40 rounded-full flex items-center gap-2"
+                      >
+                        <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                        <span className="text-green-200 font-semibold">YouTube Connected</span>
+                      </motion.div>
+                    ) : (
+                      <motion.div
+                        whileHover={{ scale: 1.05 }}
+                        className="px-6 py-4 bg-yellow-600/20 backdrop-blur-sm border-2 border-yellow-400/40 rounded-full flex items-center gap-2"
+                      >
+                        <Sparkles className="text-yellow-400" size={20} />
+                        <span className="text-yellow-200 font-semibold">Connect in VibeTube</span>
+                      </motion.div>
+                    )}
+                  </motion.div>
+                </div>
+
+                {/* Right: Visual Preview */}
+                <motion.div
+                  initial={{ opacity: 0, x: 30, rotateY: -30 }}
+                  animate={{ opacity: 1, x: 0, rotateY: 0 }}
+                  transition={{ delay: 0.7, duration: 0.8, type: "spring" }}
+                  className="relative"
+                >
+                  <div className="relative rounded-3xl overflow-hidden border-4 border-white/20 shadow-2xl bg-gray-900/50 backdrop-blur-xl">
+                    {/* Mock UI Preview */}
+                    <div className="p-6 space-y-4">
+                      <div className="flex items-center gap-3 mb-6">
+                        <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center">
+                          <Youtube className="text-white" size={24} />
+                        </div>
+                        <div>
+                          <div className="h-4 bg-white/20 rounded w-32 mb-2"></div>
+                          <div className="h-3 bg-white/10 rounded w-24"></div>
+                        </div>
+                      </div>
+                      
+                      {[1, 2, 3].map((i) => (
+                        <motion.div
+                          key={i}
+                          initial={{ opacity: 0, x: 20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.9 + i * 0.1 }}
+                          className="flex items-center gap-4 p-4 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 hover:bg-white/10 transition-all group"
+                        >
+                          <div className="w-16 h-16 bg-gradient-to-br from-red-500 to-pink-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <Music2 className="text-white" size={24} />
+                          </div>
+                          <div className="flex-1">
+                            <div className="h-4 bg-white/20 rounded w-full mb-2"></div>
+                            <div className="h-3 bg-white/10 rounded w-2/3"></div>
+                          </div>
+                          <Play className="text-white/50 group-hover:text-pink-400 transition-colors" size={24} />
+                        </motion.div>
+                      ))}
+                    </div>
+
+                    {/* Floating Stats Badge */}
+                    <motion.div
+                      animate={{ y: [0, -10, 0] }}
+                      transition={{ duration: 3, repeat: Infinity }}
+                      className="absolute top-4 right-4 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full shadow-xl border-2 border-white/30"
+                    >
+                      <span className="text-white font-bold text-sm">{stats.ytPlaylists} Imported</span>
+                    </motion.div>
+                  </div>
+
+                  {/* Floating Elements */}
+                  <motion.div
+                    animate={{ 
+                      y: [0, -20, 0],
+                      rotate: [0, 10, 0]
+                    }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                    className="absolute -top-6 -left-6 w-24 h-24 bg-gradient-to-br from-red-500 to-pink-500 rounded-2xl shadow-2xl flex items-center justify-center"
+                  >
+                    <Youtube className="text-white" size={40} />
+                  </motion.div>
+
+                  <motion.div
+                    animate={{ 
+                      y: [0, 20, 0],
+                      rotate: [0, -10, 0]
+                    }}
+                    transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                    className="absolute -bottom-6 -right-6 w-20 h-20 bg-gradient-to-br from-purple-500 to-blue-500 rounded-2xl shadow-2xl flex items-center justify-center"
+                  >
+                    <Music2 className="text-white" size={32} />
+                  </motion.div>
+                </motion.div>
+              </div>
+            </div>
+          </div>
         </motion.div>
 
         {/* Quick Actions - Revamped */}

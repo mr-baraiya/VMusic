@@ -26,21 +26,73 @@ const SearchResults = ({ results, onAdd, onPlayNow, onAddToFavorites, playlists,
         <h3 className="text-xl font-bold text-white mb-2">YouTube API Error</h3>
         <p className="text-gray-400 mb-4 max-w-md">{error}</p>
         
-        {error.includes('quota exceeded') && (
-          <div className="mt-4 p-4 bg-red-500/10 border border-red-500/30 rounded-lg max-w-2xl">
-            <p className="text-sm text-gray-300 mb-2">
-              <strong className="text-white">How to fix:</strong>
+        <div className="mt-4 p-6 bg-red-500/10 border border-red-500/30 rounded-xl max-w-3xl text-left">
+          <p className="text-sm text-gray-300 mb-3">
+            <strong className="text-white text-base">💡 Common Causes & Solutions:</strong>
+          </p>
+          
+          {error.includes('restrictions') ? (
+            <div className="space-y-3">
+              <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4">
+                <p className="text-yellow-300 font-semibold mb-2">🔧 Most Likely Issue: API Key Restrictions</p>
+                <p className="text-sm text-gray-300 mb-3">
+                  Your YouTube API key has restrictions that prevent it from working on localhost. Here's how to fix it:
+                </p>
+                <ol className="text-sm text-gray-300 space-y-2 ml-4 list-decimal">
+                  <li>Open <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer" className="text-yellow-400 hover:text-yellow-300 underline font-semibold">Google Cloud Console → API Credentials</a></li>
+                  <li>Click on your API key (starts with: <code className="bg-black/40 px-2 py-0.5 rounded text-cyan-300 font-mono text-xs">AIza...</code>)</li>
+                  <li>Under <strong className="text-white">"Application restrictions"</strong>: Select <span className="text-green-400 font-semibold">"None"</span></li>
+                  <li>Under <strong className="text-white">"API restrictions"</strong>: Select <span className="text-green-400 font-semibold">"Don't restrict key"</span> (for development)</li>
+                  <li>Click <strong className="text-white">"Save"</strong></li>
+                  <li>Wait 1-2 minutes for changes to propagate</li>
+                  <li>Refresh this page (F5)</li>
+                </ol>
+              </div>
+              
+              <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
+                <p className="text-blue-300 font-semibold mb-2">🔐 For Production:</p>
+                <p className="text-sm text-gray-300">
+                  Once deployed, you can restrict the API key to your domain (e.g., <code className="bg-black/40 px-2 py-0.5 rounded text-blue-300 font-mono text-xs">yourdomain.com/*</code>) for security.
+                </p>
+              </div>
+            </div>
+          ) : error.includes('quota exceeded') ? (
+            <div className="space-y-3">
+              <p className="text-sm text-gray-300">
+                Your YouTube API key has reached its daily quota limit. You can either wait until tomorrow or create a new API key:
+              </p>
+              <ol className="text-sm text-gray-300 space-y-2 ml-4 list-decimal">
+                <li>Visit <a href="https://console.cloud.google.com/" target="_blank" rel="noopener noreferrer" className="text-red-400 hover:text-red-300 underline font-semibold">Google Cloud Console</a></li>
+                <li>Create a new project (or select existing)</li>
+                <li>Enable <strong className="text-white">"YouTube Data API v3"</strong></li>
+                <li>Go to Credentials → Create Credentials → API Key</li>
+                <li>Copy the new API key</li>
+                <li>Update your <code className="bg-black/40 px-2 py-0.5 rounded text-red-300 font-mono text-xs">.env</code> file: <code className="bg-black/40 px-2 py-0.5 rounded text-green-300 font-mono text-xs">VITE_YOUTUBE_API_KEY=your_new_key</code></li>
+                <li>Restart your dev server: <code className="bg-black/40 px-2 py-0.5 rounded text-cyan-300 font-mono text-xs">npm run dev</code></li>
+              </ol>
+            </div>
+          ) : error.includes('API key') || error.includes('API Error') ? (
+            <div className="space-y-3">
+              <p className="text-sm text-gray-300 mb-2">
+                There's an issue with your YouTube API key configuration. Common causes:
+              </p>
+              <ul className="text-sm text-gray-300 space-y-2 ml-4 list-disc">
+                <li><strong className="text-white">API Key Restrictions:</strong> Your key might have HTTP referrer or IP restrictions. For local development, remove all restrictions.</li>
+                <li><strong className="text-white">API Not Enabled:</strong> Make sure "YouTube Data API v3" is enabled in your Google Cloud project.</li>
+                <li><strong className="text-white">Invalid Key:</strong> The API key might be incorrect. Double-check it in your <code className="bg-black/40 px-1.5 py-0.5 rounded text-red-300 font-mono text-xs">.env</code> file.</li>
+              </ul>
+              <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3 mt-3">
+                <p className="text-sm text-yellow-300">
+                  <strong>🔧 Quick Fix:</strong> Go to <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer" className="text-yellow-400 hover:text-yellow-300 underline font-semibold">API Credentials</a> → Select your API key → Remove all "Application restrictions" and "API restrictions" → Save
+                </p>
+              </div>
+            </div>
+          ) : (
+            <p className="text-sm text-gray-300">
+              Please check your YouTube API configuration in the <code className="bg-black/40 px-2 py-0.5 rounded text-red-300 font-mono">.env</code> file and ensure it's valid.
             </p>
-            <ol className="text-left text-sm text-gray-300 space-y-2">
-              <li>1. Go to <a href="https://console.cloud.google.com/" target="_blank" rel="noopener noreferrer" className="text-red-400 hover:text-red-300 underline">Google Cloud Console</a></li>
-              <li>2. Create a new project or select existing one</li>
-              <li>3. Enable "YouTube Data API v3"</li>
-              <li>4. Create credentials → API Key</li>
-              <li>5. Copy the API key and update it in your <code className="bg-black/30 px-2 py-1 rounded">.env</code> file: <code className="bg-black/30 px-2 py-1 rounded">VITE_YOUTUBE_API_KEY=your_new_key</code></li>
-              <li>6. Restart the development server</li>
-            </ol>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     );
   }
