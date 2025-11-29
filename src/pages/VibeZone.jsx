@@ -27,11 +27,10 @@ import { toast } from '../components/Toast';
 /**
  * Vibe Zone - Spotify-powered music discovery focused on Hindi/Bollywood content
  * 
- * Token Management:
- * - Development: Calls Spotify API directly with Client Credentials
- *   - Uses VITE_SPOTIFY_CLIENT_SECRET from .env file
- * - Production: Uses secure backend API at /api/spotify-token (Vercel serverless function)
- *   - Uses SPOTIFY_CLIENT_SECRET from Vercel environment variables
+ * 🔐 SECURE Token Management:
+ * - Always calls backend API at /api/spotify-token (Vercel/Netlify serverless function)
+ * - Backend uses SPOTIFY_CLIENT_SECRET (stored securely in hosting environment)
+ * - ✅ NO secrets exposed to frontend/browser
  * - Token cached for 55 minutes in localStorage
  * 
  * Features:
@@ -117,48 +116,15 @@ const VibeZone = () => {
         return;
       }
 
-      // In development, call Spotify directly (CLIENT_SECRET will be in production via Vercel)
-      // In production, use the secure backend API
-      const isDevelopment = import.meta.env.DEV;
+      // Always use backend API for token (secure - no secrets in frontend)
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'https://v-music-gamma.vercel.app/api';
+      const response = await fetch(`${apiBaseUrl}/spotify-token`);
       
-      let data;
-      
-      if (isDevelopment) {
-        // Development: Direct Spotify API call
-        const clientId = import.meta.env.VITE_SPOTIFY_CLIENT_ID || '375b56d194264fd18ddc1e4151bb6c48';
-        const clientSecret = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET;
-        
-        if (!clientSecret) {
-          throw new Error('VITE_SPOTIFY_CLIENT_SECRET not found in environment variables');
-        }
-        
-        const credentials = btoa(`${clientId}:${clientSecret}`);
-        
-        const response = await fetch('https://accounts.spotify.com/api/token', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Basic ${credentials}`,
-            'Content-Type': 'application/x-www-form-urlencoded'
-          },
-          body: 'grant_type=client_credentials'
-        });
-        
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error('Failed to get Spotify token from API');
-        }
-        
-        data = await response.json();
-      } else {
-        // Production: Use secure backend API
-        const response = await fetch('/api/spotify-token');
-        
-        if (!response.ok) {
-          throw new Error('Failed to get Spotify token from backend');
-        }
-        
-        data = await response.json();
+      if (!response.ok) {
+        throw new Error('Failed to get Spotify token from backend');
       }
+      
+      const data = await response.json();
       
       if (data.access_token) {
         const expiryTime = Date.now() + (data.expires_in * 1000) - 60000; // Expire 1 min early

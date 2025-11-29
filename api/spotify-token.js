@@ -6,8 +6,12 @@ export default async function handler(req, res) {
   }
 
   try {
-    const clientId = process.env.VITE_SPOTIFY_CLIENT_ID || '375b56d194264fd18ddc1e4151bb6c48';
-    const clientSecret = process.env.SPOTIFY_CLIENT_SECRET || 'ac0814caa22742a4bf8074e401bc9f36';
+    const clientId = process.env.VITE_SPOTIFY_CLIENT_ID;
+    const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
+
+    if (!clientId || !clientSecret) {
+      throw new Error('Missing Spotify credentials in environment variables');
+    }
 
     // Encode credentials
     const credentials = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
