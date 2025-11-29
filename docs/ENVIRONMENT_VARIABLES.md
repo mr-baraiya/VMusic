@@ -50,8 +50,8 @@ Add these variables:
 
 | Variable Name | Value | Environments |
 |--------------|-------|--------------|
-| `SPOTIFY_CLIENT_SECRET` | `ac0814caa22742a4bf8074e401bc9f36` | Production, Preview, Development |
-| `VITE_SPOTIFY_CLIENT_ID` | `375b56d194264fd18ddc1e4151bb6c48` | Production, Preview, Development |
+| `SPOTIFY_CLIENT_SECRET` | `your_spotify_secret` | Production, Preview, Development |
+| `VITE_SPOTIFY_CLIENT_ID` | `your_spotify_client_id` | Production, Preview, Development |
 
 **Note:** In production, the backend serverless function uses `SPOTIFY_CLIENT_SECRET` (without VITE_ prefix) from Vercel environment variables.
 

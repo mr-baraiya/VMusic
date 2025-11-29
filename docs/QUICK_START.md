@@ -39,12 +39,12 @@ Edit `.env` file:
 MONGODB_URI=mongodb+srv://i_am_vishal_1014:1014@cluster0.r4bt2.mongodb.net
 
 # Firebase (Already configured)
-VITE_FIREBASE_API_KEY=AIzaSyAxRVuhduqnfQF9Vb-Oz7PROv2Vb4zwj9U
+VITE_FIREBASE_API_KEY=your_firebase_api_key
 VITE_FIREBASE_AUTH_DOMAIN=vmusic-7806a.firebaseapp.com
 VITE_FIREBASE_PROJECT_ID=vmusic-7806a
 
 # YouTube (Already configured)
-VITE_YOUTUBE_API_KEY=AIzaSyDJXcz-kF17AFmQZ81NpSKf0Q_b7cx5gos
+VITE_YOUTUBE_API_KEY=your_youtube_api_key_here
 ```
 
 ---

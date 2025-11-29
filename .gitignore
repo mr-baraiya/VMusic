@@ -21,4 +21,18 @@ dist-ssr
 *.sln
 *.sw?
 
+# Environment variables (never commit real secrets)
 .env
+.env.local
+.env.production
+.env.development
+.env.*.local
+
+# Secret files
+secrets.json
+firebase-service-account.json
+*.pem
+*.key
+
+# Netlify
+.netlify

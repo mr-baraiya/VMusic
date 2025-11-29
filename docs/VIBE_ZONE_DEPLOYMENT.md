@@ -71,8 +71,8 @@ Follow the prompts:
 After deployment, add these to **Vercel Dashboard → Project Settings → Environment Variables**:
 
 ```plaintext
-SPOTIFY_CLIENT_SECRET=ac0814caa22742a4bf8074e401bc9f36
-VITE_SPOTIFY_CLIENT_ID=375b56d194264fd18ddc1e4151bb6c48
+SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
+VITE_SPOTIFY_CLIENT_ID=your_spotify_client_id
 ```
 
 **Important**: 

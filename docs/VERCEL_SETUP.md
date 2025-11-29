@@ -17,7 +17,7 @@ SPOTIFY_CLIENT_SECRET
 
 ### **Variable Value:**
 ```
-ac0814caa22742a4bf8074e401bc9f36
+your_spotify_client_secret_here
 ```
 
 ### **Environments to Select:**

@@ -15,8 +15,8 @@ I've successfully integrated the **Jamendo API** with your VMusic landing page. 
    - Duration formatting utility
    - Environment variable support
 
-2. **`.env`** — Environment variables (with demo key)
-   - `VITE_JAMENDO_CLIENT_ID=83bfb626`
+2. **`.env`** — Environment variables (get your own key from Jamendo)
+   - `VITE_JAMENDO_CLIENT_ID=your_jamendo_client_id_here`
 
 ### **Updated Files:**
 3. **`src/components/landing/Explore.jsx`** — Now fetches real tracks
@@ -216,7 +216,7 @@ function GenreFilter() {
 ## 🔑 API Key Configuration
 
 ### **Current Setup:**
-- Using demo key: `83bfb626`
+- Get your own API key from [Jamendo DevPortal](https://devportal.jamendo.com/)
 - Stored in `.env` file
 - Fallback in code if env var missing
 

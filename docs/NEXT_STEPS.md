@@ -113,10 +113,10 @@ Once authentication is working, we'll implement:
 Your `.env` file now has:
 ```env
 # Jamendo API
-VITE_JAMENDO_CLIENT_ID=83bfb626
+VITE_JAMENDO_CLIENT_ID=your_jamendo_client_id
 
 # Firebase (Your Project)
-VITE_FIREBASE_API_KEY=AIzaSyAxRVuhduqnfQF9Vb-Oz7PROv2Vb4zwj9U
+VITE_FIREBASE_API_KEY=your_firebase_api_key
 VITE_FIREBASE_AUTH_DOMAIN=vmusic-7806a.firebaseapp.com
 VITE_FIREBASE_PROJECT_ID=vmusic-7806a
 VITE_FIREBASE_STORAGE_BUCKET=vmusic-7806a.firebasestorage.app

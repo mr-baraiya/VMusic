@@ -98,7 +98,7 @@ VITE_GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
 VITE_GOOGLE_CLIENT_SECRET=GOCSPX-xxxxxxxxxxxxxxxxxxxx
 
 # YouTube API Key (for public video search)
-VITE_YOUTUBE_API_KEY=AIzaSyDQ4i49eBhNllyOkRh-0DyOWmkxnGGPojc
+VITE_YOUTUBE_API_KEY=your_youtube_api_key_here
 ```
 
 **Note**: The Client Secret is only needed for backend OAuth flows. Firebase handles auth automatically.

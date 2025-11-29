@@ -180,7 +180,7 @@ Invoke-RestMethod -Uri "$apiUrl/users?userId=test"
 VITE_API_BASE_URL=http://localhost:3000/api
 
 # External APIs
-VITE_JAMENDO_CLIENT_ID=83bfb626
+VITE_JAMENDO_CLIENT_ID=your_jamendo_client_id_here
 VITE_SPOTIFY_CLIENT_ID=your_client_id
 VITE_SPOTIFY_CLIENT_SECRET=your_client_secret
 VITE_YOUTUBE_API_KEY=your_api_key
