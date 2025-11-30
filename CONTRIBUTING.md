@@ -93,8 +93,11 @@ npm run lint        # ESLint check
 ## Testing Suggestions
 
 Before submitting your PR:
+
 ✔ Confirm UI does not break responsiveness
+
 ✔ Verify playback and API integration
+
 ✔ Ensure no warnings/errors in console
 
 ---
