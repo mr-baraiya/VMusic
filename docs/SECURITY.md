@@ -1,24 +1,24 @@
-# 🔐 Security Best Practices
+# Security Best Practices
 
-## ⚠️ CRITICAL: Never Expose Secrets
+## CRITICAL: Never Expose Secrets
 
 ### What NOT to do:
 ```javascript
-// ❌ WRONG - Never hardcode secrets
+// WRONG - Never hardcode secrets
 const clientSecret = "ac0814caa22742a4bf8074e401bc9f36";
 ```
 
 ### What TO do:
 ```javascript
-// ✅ CORRECT - Use environment variables
+// CORRECT - Use environment variables
 const clientSecret = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET;
 ```
 
 ---
 
-## 🛡️ Current Security Status
+## Current Security Status
 
-### ✅ Properly Secured:
+### Properly Secured:
 - [x] All secrets moved to `.env` file
 - [x] `.env` file is in `.gitignore`
 - [x] `.env.example` uses placeholders only
@@ -26,7 +26,7 @@ const clientSecret = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET;
 - [x] Documentation sanitized (no real secrets)
 - [x] Client secrets only used in backend API functions
 
-### 📋 Secret Storage Locations:
+### Secret Storage Locations:
 
 #### Frontend Environment Variables (Public - Safe to Expose):
 - `VITE_SPOTIFY_CLIENT_ID` - Public OAuth client ID
@@ -41,7 +41,7 @@ const clientSecret = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET;
 
 ---
 
-## 🔧 How Secrets Are Used
+## How Secrets Are Used
 
 ### Frontend (.env with VITE_ prefix):
 ```env
@@ -59,7 +59,7 @@ MONGODB_URI=mongodb+srv://...
 
 ---
 
-## 🚀 Deployment Checklist
+## Deployment Checklist
 
 ### Before Deploying:
 
@@ -85,7 +85,7 @@ MONGODB_URI=mongodb+srv://...
 
 ---
 
-## 🔐 API Key Restrictions
+## API Key Restrictions
 
 ### YouTube API Key:
 1. Go to [Google Cloud Console](https://console.cloud.google.com/apis/credentials)
@@ -104,10 +104,10 @@ MONGODB_URI=mongodb+srv://...
 
 ---
 
-## 🚫 What to NEVER Commit:
+## What to NEVER Commit:
 
 ```bash
-# ❌ NEVER commit these files:
+# NEVER commit these files:
 .env
 .env.local
 .env.production
@@ -116,7 +116,7 @@ firebase-service-account.json
 ```
 
 ```bash
-# ✅ Always commit these:
+# Always commit these:
 .env.example
 .gitignore
 documentation (without real secrets)
@@ -124,7 +124,7 @@ documentation (without real secrets)
 
 ---
 
-## 🔍 How to Check for Leaked Secrets:
+## How to Check for Leaked Secrets:
 
 ### Scan your repository:
 ```bash
@@ -152,7 +152,7 @@ git push origin --force --all
 
 ---
 
-## 📞 If Secrets Are Exposed:
+## If Secrets Are Exposed:
 
 1. **Immediately rotate all exposed credentials**:
    - Generate new API keys
@@ -170,20 +170,20 @@ git push origin --force --all
 
 ---
 
-## 🎯 Quick Reference
+## Quick Reference
 
 | Secret Type | Storage Location | Exposed to Client? |
 |------------|------------------|-------------------|
-| Spotify Client ID | `.env` (VITE_*) | ✅ Yes (safe) |
-| Spotify Client Secret | Vercel/Netlify | ❌ No (backend only) |
-| YouTube API Key | `.env` (VITE_*) | ✅ Yes (with restrictions) |
-| Firebase API Key | `.env` (VITE_*) | ✅ Yes (safe with rules) |
-| MongoDB URI | Vercel/Netlify | ❌ No (backend only) |
-| Google OAuth Secret | Vercel/Netlify | ❌ No (backend only) |
+| Spotify Client ID | `.env` (VITE_*) | Yes (safe) |
+| Spotify Client Secret | Vercel/Netlify | No (backend only) |
+| YouTube API Key | `.env` (VITE_*) | Yes (with restrictions) |
+| Firebase API Key | `.env` (VITE_*) | Yes (safe with rules) |
+| MongoDB URI | Vercel/Netlify | No (backend only) |
+| Google OAuth Secret | Vercel/Netlify | No (backend only) |
 
 ---
 
-## 📚 Additional Resources
+## Additional Resources
 
 - [Vite Environment Variables](https://vitejs.dev/guide/env-and-mode.html)
 - [Vercel Environment Variables](https://vercel.com/docs/concepts/projects/environment-variables)
@@ -192,4 +192,4 @@ git push origin --force --all
 
 ---
 
-**Remember**: When in doubt, treat it as a secret! 🔒
+**Remember**: When in doubt, treat it as a secret!
