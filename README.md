@@ -4,15 +4,13 @@
 A modern, open-source music streaming platform featuring indie music from Jamendo and Spotify’s 30-sec preview tracks. Built with React, Vite, Tailwind CSS, Firebase, and Vercel. Contributors will enhance functionality, optimize performance, and introduce new features to improve the listening experience.
 
 ---
-
 ## ❄️ Winter of Code Social 2025
 This project is part of **WOC Social 2025**. Contributors must follow the guidelines below to ensure successful participation.
 
-**Project Admin:** *Vishal Baraiya*
-
-**Mentors:** *To be updated once assigned*  
+**Project Admin:** **Vishal Baraiya**  
+**Mentors:** _To be updated once assigned_  
 **Repository:** https://github.com/mr-baraiya/VMusic  
-**Discord Forum:** *Will be added after forum creation*
+**Discord Forum:** _Will be added after forum creation_
 
 ---
 
