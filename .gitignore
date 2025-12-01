@@ -1,0 +1,55 @@
+# Dependencies
+node_modules/
+
+# Production builds
+dist/
+build/
+
+# Local environment variables
+.env
+.env.local
+.env.*.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Editor & system files
+.DS_Store
+Thumbs.db
+
+# IDE settings
+.vscode/
+.idea/
+
+# Optional caches
+.cache/
+vite-cache/
+.eslintcache
+parcel-cache/
+
+# Local dev tools
+*.local
+*.swp
+*.swo
+
+# macOS metadata
+*.DS_Store
+
+# TypeScript build info
+tsconfig.tsbuildinfo
+
+# Vite config backup
+vite.config*.backup
+vite.config*.timestamp
+
+# Coverage reports
+coverage/
+
+# Optional: backup & temp files
+*.tmp
+*.bak
+*.orig

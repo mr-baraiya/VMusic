@@ -6,10 +6,10 @@ const YouTubeSection = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="relative py-20 px-4 bg-gray-950 overflow-hidden">
+    <section className="relative py-20 px-4 bg-gradient-to-b from-blue-950 via-black to-blue-950 overflow-hidden">
       {/* Background Effects */}
       <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-5"></div>
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-red-500/10 rounded-full blur-3xl"></div>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-500/10 rounded-full blur-3xl"></div>
 
       <div className="relative max-w-7xl mx-auto">
         <motion.div
