@@ -1,5 +1,16 @@
 import { motion } from 'framer-motion';
-import { Music2, Youtube, Play, Pause, SkipForward, SkipBack, Shuffle, Repeat, Volume2, VolumeX } from 'lucide-react';
+import {
+  Music2,
+  Youtube,
+  Play,
+  Pause,
+  SkipForward,
+  SkipBack,
+  Shuffle,
+  Repeat,
+  Volume2,
+  VolumeX,
+} from 'lucide-react';
 
 // Component: NowPlaying - Audio Only with Thumbnail
 const NowPlaying = ({ currentTrack }) => {
@@ -9,7 +20,7 @@ const NowPlaying = ({ currentTrack }) => {
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1, rotate: 360 }}
-          transition={{ type: "spring", duration: 1 }}
+          transition={{ type: 'spring', duration: 1 }}
           className="relative mb-6"
         >
           <div className="w-32 h-32 bg-gradient-to-br from-red-600 to-pink-600 rounded-full flex items-center justify-center shadow-2xl">
@@ -30,7 +41,7 @@ const NowPlaying = ({ currentTrack }) => {
         <motion.div
           initial={{ scale: 0, rotate: -10 }}
           animate={{ scale: 1, rotate: 0 }}
-          transition={{ type: "spring", damping: 15 }}
+          transition={{ type: 'spring', damping: 15 }}
           className="relative group"
         >
           <div className="w-80 h-80 rounded-3xl overflow-hidden shadow-2xl border-4 border-white/10">
@@ -43,7 +54,10 @@ const NowPlaying = ({ currentTrack }) => {
           </div>
           {/* Floating decorative elements */}
           <div className="absolute -top-4 -right-4 w-20 h-20 bg-gradient-to-br from-red-500 to-pink-500 rounded-full blur-xl opacity-60 animate-pulse"></div>
-          <div className="absolute -bottom-4 -left-4 w-24 h-24 bg-gradient-to-br from-purple-500 to-blue-500 rounded-full blur-xl opacity-60 animate-pulse" style={{ animationDelay: '1s' }}></div>
+          <div
+            className="absolute -bottom-4 -left-4 w-24 h-24 bg-gradient-to-br from-purple-500 to-blue-500 rounded-full blur-xl opacity-60 animate-pulse"
+            style={{ animationDelay: '1s' }}
+          ></div>
         </motion.div>
       </div>
 
@@ -110,7 +124,7 @@ const PlayerControls = ({
           className="w-full h-2 bg-white/20 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:bg-red-500 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:cursor-pointer hover:[&::-webkit-slider-thumb]:bg-red-400"
           aria-label="Seek video"
           style={{
-            background: `linear-gradient(to right, rgb(239 68 68) 0%, rgb(239 68 68) ${progress}%, rgba(255,255,255,0.2) ${progress}%, rgba(255,255,255,0.2) 100%)`
+            background: `linear-gradient(to right, rgb(239 68 68) 0%, rgb(239 68 68) ${progress}%, rgba(255,255,255,0.2) ${progress}%, rgba(255,255,255,0.2) 100%)`,
           }}
         />
         <div className="flex justify-between text-xs text-gray-400">
@@ -192,7 +206,7 @@ const PlayerControls = ({
           className="flex-1 h-2 bg-white/20 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:bg-red-500 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:cursor-pointer hover:[&::-webkit-slider-thumb]:bg-red-400"
           aria-label="Volume"
           style={{
-            background: `linear-gradient(to right, rgb(239 68 68) 0%, rgb(239 68 68) ${isMuted ? 0 : volume}%, rgba(255,255,255,0.2) ${isMuted ? 0 : volume}%, rgba(255,255,255,0.2) 100%)`
+            background: `linear-gradient(to right, rgb(239 68 68) 0%, rgb(239 68 68) ${isMuted ? 0 : volume}%, rgba(255,255,255,0.2) ${isMuted ? 0 : volume}%, rgba(255,255,255,0.2) 100%)`,
           }}
         />
         <span className="text-xs text-gray-400 w-10 text-right">{isMuted ? 0 : volume}%</span>
@@ -231,9 +245,7 @@ const VideoPlayer = ({
           Now Playing
         </h2>
       </div>
-      <NowPlaying 
-        currentTrack={currentTrack}
-      />
+      <NowPlaying currentTrack={currentTrack} />
       <div className="p-6 border-t border-white/10">
         <PlayerControls
           isPlaying={isPlaying}

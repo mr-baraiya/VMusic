@@ -33,7 +33,7 @@ const Explore = () => {
       }
       setLoadingPopular(false);
     };
-    
+
     fetchPopular();
   }, []);
 
@@ -47,14 +47,14 @@ const Explore = () => {
       }
       setLoadingLatest(false);
     };
-    
+
     fetchLatest();
   }, []);
 
   const TrackCard = ({ track, tracks }) => (
     <motion.div
       whileHover={{ y: -8 }}
-      transition={{ duration: 0.2, ease: "easeOut" }}
+      transition={{ duration: 0.2, ease: 'easeOut' }}
       className="group relative bg-gray-800/50 backdrop-blur-lg rounded-xl overflow-hidden border border-gray-700 hover:border-green-500/50 transition-colors duration-300 cursor-pointer shrink-0 w-[200px]"
       onClick={() => navigate(`/track/${track.id}`)}
     >
@@ -65,7 +65,7 @@ const Explore = () => {
           alt={track.name}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
         />
-        
+
         {/* Source Badge */}
         {track.source === 'spotify' && (
           <div className="absolute top-2 left-2 px-2 py-1 bg-green-500 rounded-full text-xs font-semibold flex items-center gap-1">
@@ -73,7 +73,7 @@ const Explore = () => {
             Spotify
           </div>
         )}
-        
+
         {/* Overlay with Play Button */}
         <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
           <motion.button
@@ -94,7 +94,9 @@ const Explore = () => {
 
         {/* Duration Badge */}
         <div className="absolute bottom-2 right-2 px-2 py-1 bg-black/70 backdrop-blur-sm rounded-full text-xs">
-          {track.source === 'spotify' && track.preview_url ? '0:30' : jamendoAPI.formatDuration(track.duration)}
+          {track.source === 'spotify' && track.preview_url
+            ? '0:30'
+            : jamendoAPI.formatDuration(track.duration)}
         </div>
       </div>
 
@@ -103,9 +105,7 @@ const Explore = () => {
         <h3 className="font-semibold text-sm mb-1 truncate group-hover:text-green-400 transition-colors">
           {track.name}
         </h3>
-        <p className="text-gray-400 text-xs truncate">
-          {track.artist_name}
-        </p>
+        <p className="text-gray-400 text-xs truncate">{track.artist_name}</p>
       </div>
     </motion.div>
   );
@@ -134,12 +134,8 @@ const Explore = () => {
           {/* Section Header */}
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-2">
-                🔥 Popular Right Now
-              </h2>
-              <p className="text-gray-400">
-                Most played tracks this week
-              </p>
+              <h2 className="text-3xl md:text-4xl font-bold mb-2">🔥 Popular Right Now</h2>
+              <p className="text-gray-400">Most played tracks this week</p>
             </div>
             <button
               onClick={() => navigate('/explore')}
@@ -157,7 +153,11 @@ const Explore = () => {
                 [...Array(6)].map((_, i) => <LoadingSkeleton key={i} />)
               ) : popularTracks.length > 0 ? (
                 popularTracks.map((track, index) => (
-                  <TrackCard key={`popular-${track.id}-${index}`} track={track} tracks={popularTracks} />
+                  <TrackCard
+                    key={`popular-${track.id}-${index}`}
+                    track={track}
+                    tracks={popularTracks}
+                  />
                 ))
               ) : (
                 <div className="w-full text-center py-8 text-gray-400">
@@ -179,12 +179,8 @@ const Explore = () => {
           {/* Section Header */}
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-2">
-                ✨ Latest Releases
-              </h2>
-              <p className="text-gray-400">
-                Fresh music added today
-              </p>
+              <h2 className="text-3xl md:text-4xl font-bold mb-2">✨ Latest Releases</h2>
+              <p className="text-gray-400">Fresh music added today</p>
             </div>
             <button
               onClick={() => navigate('/explore')}
@@ -202,7 +198,11 @@ const Explore = () => {
                 [...Array(6)].map((_, i) => <LoadingSkeleton key={i} />)
               ) : latestTracks.length > 0 ? (
                 latestTracks.map((track, index) => (
-                  <TrackCard key={`latest-${track.id}-${index}`} track={track} tracks={latestTracks} />
+                  <TrackCard
+                    key={`latest-${track.id}-${index}`}
+                    track={track}
+                    tracks={latestTracks}
+                  />
                 ))
               ) : (
                 <div className="w-full text-center py-8 text-gray-400">

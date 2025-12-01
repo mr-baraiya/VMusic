@@ -18,12 +18,14 @@ export default defineConfig({
             res.writeHead(503, {
               'Content-Type': 'application/json',
             });
-            res.end(JSON.stringify({
-              error: 'API server not running. Please deploy to Vercel or run: npx vercel dev'
-            }));
+            res.end(
+              JSON.stringify({
+                error: 'API server not running. Please deploy to Vercel or run: npx vercel dev',
+              })
+            );
           });
-        }
-      }
-    }
-  }
+        },
+      },
+    },
+  },
 });

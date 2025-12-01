@@ -12,7 +12,7 @@ import {
   Play,
   GripVertical,
   Heart,
-  ExternalLink
+  ExternalLink,
 } from 'lucide-react';
 
 // Component: PlaylistManager
@@ -175,17 +175,24 @@ const PlaylistManager = ({
                   onClick={() => onSelectPlaylist(playlist.id)}
                   className="flex-1 text-left flex items-center gap-3"
                 >
-                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                    currentPlaylistId === playlist.id
-                      ? 'bg-red-500/30'
-                      : 'bg-white/10'
-                  }`}>
-                    <List size={18} className={currentPlaylistId === playlist.id ? 'text-red-400' : 'text-gray-400'} />
+                  <div
+                    className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                      currentPlaylistId === playlist.id ? 'bg-red-500/30' : 'bg-white/10'
+                    }`}
+                  >
+                    <List
+                      size={18}
+                      className={
+                        currentPlaylistId === playlist.id ? 'text-red-400' : 'text-gray-400'
+                      }
+                    />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className={`font-bold text-sm truncate ${
-                      currentPlaylistId === playlist.id ? 'text-red-400' : 'text-white'
-                    }`}>
+                    <p
+                      className={`font-bold text-sm truncate ${
+                        currentPlaylistId === playlist.id ? 'text-red-400' : 'text-white'
+                      }`}
+                    >
                       {playlist.name}
                     </p>
                     <p className="text-xs text-gray-400">
@@ -274,7 +281,7 @@ const Playlist = ({ playlist, currentIndex, onPlay, onRemove, onReorder }) => {
           }`}
         >
           <GripVertical size={16} className="text-gray-500 shrink-0" />
-          
+
           <button
             onClick={() => onPlay(index)}
             className="relative w-16 h-16 shrink-0 rounded-lg overflow-hidden group-hover:ring-2 ring-red-400 transition-all"
@@ -286,15 +293,15 @@ const Playlist = ({ playlist, currentIndex, onPlay, onRemove, onReorder }) => {
           </button>
 
           <div className="flex-1 min-w-0">
-            <h4 className={`font-semibold text-sm line-clamp-1 ${
-              currentIndex === index ? 'text-red-400' : 'text-white'
-            }`}>
+            <h4
+              className={`font-semibold text-sm line-clamp-1 ${
+                currentIndex === index ? 'text-red-400' : 'text-white'
+              }`}
+            >
               {video.title}
             </h4>
             <p className="text-gray-400 text-xs truncate">{video.channelTitle}</p>
-            {video.duration && (
-              <p className="text-gray-500 text-xs">{video.duration}</p>
-            )}
+            {video.duration && <p className="text-gray-500 text-xs">{video.duration}</p>}
           </div>
 
           <button
@@ -323,9 +330,9 @@ const PlaylistSidebar = ({
   onRemove,
   onReorder,
   showPlaylist,
-  onTogglePlaylist
+  onTogglePlaylist,
 }) => {
-  const currentPlaylist = playlists.find(p => p.id === currentPlaylistId) || playlists[0];
+  const currentPlaylist = playlists.find((p) => p.id === currentPlaylistId) || playlists[0];
 
   return (
     <div className="lg:col-span-1 space-y-6">

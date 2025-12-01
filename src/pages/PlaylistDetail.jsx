@@ -1,9 +1,20 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  ArrowLeft, Play, Pause, Edit3, Trash2, Plus, Music2, 
-  Youtube, Clock, MoreVertical, X, Save, Shuffle 
+import {
+  ArrowLeft,
+  Play,
+  Pause,
+  Edit3,
+  Trash2,
+  Plus,
+  Music2,
+  Youtube,
+  Clock,
+  MoreVertical,
+  X,
+  Save,
+  Shuffle,
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { playlistsAPI } from '../api/playlists';
@@ -12,7 +23,7 @@ const PlaylistDetail = () => {
   const { playlistId } = useParams();
   const navigate = useNavigate();
   const { currentUser } = useAuth();
-  
+
   const [playlist, setPlaylist] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -31,8 +42,8 @@ const PlaylistDetail = () => {
     try {
       setLoading(true);
       const data = await playlistsAPI.getUserPlaylists(currentUser.uid);
-      const foundPlaylist = data.playlists?.find(p => p._id === playlistId);
-      
+      const foundPlaylist = data.playlists?.find((p) => p._id === playlistId);
+
       if (foundPlaylist) {
         setPlaylist(foundPlaylist);
         setEditedName(foundPlaylist.name);
@@ -49,9 +60,9 @@ const PlaylistDetail = () => {
 
   const handlePlayAll = () => {
     if (!playlist?.tracks?.length) return;
-    
+
     const tracksToPlay = isShuffle ? shuffleArray([...playlist.tracks]) : playlist.tracks;
-    
+
     // Navigate to VibeTube with first track
     navigate('/vibetube', {
       state: {
@@ -59,9 +70,9 @@ const PlaylistDetail = () => {
           videoId: tracksToPlay[0].videoId,
           title: tracksToPlay[0].title,
           channelTitle: tracksToPlay[0].channelTitle || tracksToPlay[0].artist,
-          thumbnail: tracksToPlay[0].thumbnail
-        }
-      }
+          thumbnail: tracksToPlay[0].thumbnail,
+        },
+      },
     });
   };
 
@@ -73,9 +84,9 @@ const PlaylistDetail = () => {
           videoId: track.videoId,
           title: track.title,
           channelTitle: track.channelTitle || track.artist,
-          thumbnail: track.thumbnail
-        }
-      }
+          thumbnail: track.thumbnail,
+        },
+      },
     });
   };
 
@@ -110,7 +121,7 @@ const PlaylistDetail = () => {
       await playlistsAPI.removeTrackFromPlaylist(playlistId, trackId);
       setPlaylist({
         ...playlist,
-        tracks: playlist.tracks.filter(t => t.id !== trackId)
+        tracks: playlist.tracks.filter((t) => t.id !== trackId),
       });
     } catch (error) {
       console.error('Error removing track:', error);
@@ -169,12 +180,12 @@ const PlaylistDetail = () => {
       <div className="relative bg-gradient-to-b from-pink-900/40 via-gray-900/80 to-gray-900 pb-8">
         {/* Background Blur Effect */}
         {playlist.tracks?.[0]?.thumbnail && (
-          <div 
+          <div
             className="absolute inset-0 opacity-30 blur-3xl"
             style={{
               backgroundImage: `url(${playlist.tracks[0].thumbnail})`,
               backgroundSize: 'cover',
-              backgroundPosition: 'center'
+              backgroundPosition: 'center',
             }}
           />
         )}
@@ -220,7 +231,7 @@ const PlaylistDetail = () => {
             {/* Playlist Info */}
             <div className="flex-1">
               <p className="text-gray-400 text-sm uppercase tracking-wider mb-2">Playlist</p>
-              
+
               {/* Editable Name */}
               {isEditingName ? (
                 <div className="flex items-center gap-3 mb-4">
@@ -288,8 +299,8 @@ const PlaylistDetail = () => {
                 <button
                   onClick={() => setIsShuffle(!isShuffle)}
                   className={`p-4 rounded-full transition-all ${
-                    isShuffle 
-                      ? 'bg-pink-600 text-white' 
+                    isShuffle
+                      ? 'bg-pink-600 text-white'
                       : 'bg-white/10 text-gray-400 hover:text-white hover:bg-white/20'
                   }`}
                   title="Shuffle"

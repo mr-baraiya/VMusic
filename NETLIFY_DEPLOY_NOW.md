@@ -20,6 +20,7 @@ git push origin main
 ## 🔧 What `netlify.toml` Does
 
 The new `netlify.toml` file tells Netlify to **skip scanning** these paths:
+
 - `dist/**` - Your build output (contains bundled env vars by design)
 - `src/**` - Source code (contains fallback URLs for development)
 - `docs/**` - Documentation files (now cleaned, but excluded for safety)
@@ -40,6 +41,7 @@ Vite bundles `VITE_*` prefixed variables into the JavaScript - **this is intenti
 You already have these set in Netlify Dashboard. They're being injected correctly, which is why the scanner found them in `dist/`. This is **expected behavior**.
 
 ### The build process:
+
 1. Netlify reads your environment variables from dashboard
 2. Runs `npm run build` with those variables
 3. Vite bundles the `VITE_*` variables into JavaScript (by design)
@@ -69,6 +71,7 @@ After pushing the changes:
 ### 🛡️ Private secrets (backend only):
 
 These are **NOT** in the bundle (correctly):
+
 - `MONGODB_URI` - Backend only (Vercel)
 - `SPOTIFY_CLIENT_SECRET` - Backend only (Vercel)
 

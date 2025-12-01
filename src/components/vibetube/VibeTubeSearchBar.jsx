@@ -37,9 +37,15 @@ const VibeTubeSearchBar = ({ onSearch, isLoading, initialQuery = '' }) => {
             disabled={isLoading}
             aria-label="Search YouTube videos"
           />
-          <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-red-400 group-hover:scale-110 transition-transform" size={24} />
+          <Search
+            className="absolute left-5 top-1/2 -translate-y-1/2 text-red-400 group-hover:scale-110 transition-transform"
+            size={24}
+          />
           {isLoading && (
-            <Loader className="absolute right-5 top-1/2 -translate-y-1/2 text-red-400 animate-spin" size={24} />
+            <Loader
+              className="absolute right-5 top-1/2 -translate-y-1/2 text-red-400 animate-spin"
+              size={24}
+            />
           )}
           <button
             type="button"

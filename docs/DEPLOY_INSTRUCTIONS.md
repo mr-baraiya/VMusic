@@ -3,6 +3,7 @@
 ## ✅ Changes Made
 
 ### Files Modified:
+
 1. `vercel.json` - Added all API endpoints
 2. `src/api/users.js` - Point to production API
 3. `src/api/favorites.js` - Point to production API
@@ -14,6 +15,7 @@
 ## 🔧 Current Issue
 
 The API endpoints are returning HTML instead of JSON because:
+
 - ❌ Local Vite server doesn't serve `/api` folder
 - ❌ Need to deploy to Vercel for APIs to work
 
@@ -26,6 +28,7 @@ The API endpoints are returning HTML instead of JSON because:
 If your repo is connected to Vercel:
 
 1. **Push changes to GitHub**:
+
    ```bash
    git add .
    git commit -m "fix: Add YouTube playlists API and fix CORS"
@@ -50,6 +53,7 @@ If your repo is connected to Vercel:
 ### Option 3: Deploy via Vercel CLI
 
 1. **Authenticate** (if not done):
+
    ```bash
    npx vercel login
    ```

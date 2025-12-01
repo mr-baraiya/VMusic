@@ -1,9 +1,9 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.jsx'
-import { AuthProvider } from './contexts/AuthContext'
-import { PlayerProvider } from './contexts/PlayerContext'
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import './index.css';
+import App from './App.jsx';
+import { AuthProvider } from './contexts/AuthContext';
+import { PlayerProvider } from './contexts/PlayerContext';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -12,5 +12,5 @@ createRoot(document.getElementById('root')).render(
         <App />
       </PlayerProvider>
     </AuthProvider>
-  </StrictMode>,
-)
+  </StrictMode>
+);

@@ -6,11 +6,11 @@
 
 VMusic uses **3 environment files**:
 
-| File | Purpose | Git Tracked? | Contains Real Secrets? |
-|------|---------|--------------|----------------------|
-| `.env.local` | Local development | ❌ No | ✅ Yes (your real keys) |
-| `.env` | Fallback template | ✅ Yes | ❌ No (placeholders) |
-| `.env.production` | Production builds | ✅ Yes | ❌ No (placeholders) |
+| File              | Purpose           | Git Tracked? | Contains Real Secrets?  |
+| ----------------- | ----------------- | ------------ | ----------------------- |
+| `.env.local`      | Local development | ❌ No        | ✅ Yes (your real keys) |
+| `.env`            | Fallback template | ✅ Yes       | ❌ No (placeholders)    |
+| `.env.production` | Production builds | ✅ Yes       | ❌ No (placeholders)    |
 
 ### How It Works
 
@@ -32,9 +32,9 @@ Remove-Item -Path "dist" -Recurse -Force; npm run build
 'AIzaSy', '375b56d', '83bfb626', 'vcfvtcxuQfUbBL4ze' | ForEach-Object {
     $pattern = $_
     $found = Select-String -Path "dist/assets/*.js" -Pattern $pattern -Quiet
-    if ($found) { 
+    if ($found) {
         Write-Host "❌ FOUND: $pattern in build bundle!" -ForegroundColor Red
-    } else { 
+    } else {
         Write-Host "✅ CLEAN: $pattern" -ForegroundColor Green
     }
 }
@@ -71,23 +71,28 @@ Go to: **Site settings** → **Environment variables** → **Add a variable**
 Add these variables with your **REAL** values:
 
 #### Jamendo API
+
 ```
 VITE_JAMENDO_CLIENT_ID = your_jamendo_client_id_here
 ```
 
 #### Spotify API
+
 ```
 VITE_SPOTIFY_CLIENT_ID = your_spotify_client_id_here
 VITE_SPOTIFY_REDIRECT_URI = https://your-site.netlify.app/callback
 ```
+
 ⚠️ Replace `your-site` with your actual Netlify site name
 
 #### YouTube API
+
 ```
 VITE_YOUTUBE_API_KEY = your_youtube_api_key_here
 ```
 
 #### Firebase Configuration
+
 ```
 VITE_FIREBASE_API_KEY = your_firebase_api_key_here
 VITE_FIREBASE_AUTH_DOMAIN = your-project.firebaseapp.com
@@ -99,6 +104,7 @@ VITE_FIREBASE_MEASUREMENT_ID = your_measurement_id_here
 ```
 
 #### EmailJS Configuration
+
 ```
 VITE_EMAILJS_USER_ID = your_emailjs_user_id_here
 VITE_EMAILJS_SERVICE_ID = your_emailjs_service_id_here
@@ -106,6 +112,7 @@ VITE_EMAILJS_TEMPLATE_ID = your_emailjs_template_id_here
 ```
 
 #### Backend API URL
+
 ```
 VITE_API_BASE_URL = https://your-backend-api.vercel.app/api
 ```
@@ -113,6 +120,7 @@ VITE_API_BASE_URL = https://your-backend-api.vercel.app/api
 ### Step 3: Update OAuth Redirect URIs
 
 #### Spotify Developer Dashboard
+
 1. Go to [Spotify Developer Dashboard](https://developer.spotify.com/dashboard)
 2. Select your app
 3. Click **"Edit Settings"**
@@ -122,6 +130,7 @@ VITE_API_BASE_URL = https://your-backend-api.vercel.app/api
    ```
 
 #### Google Cloud Console (YouTube API)
+
 1. Go to [Google Cloud Console](https://console.cloud.google.com/)
 2. Select your project → **APIs & Services** → **Credentials**
 3. Edit OAuth 2.0 Client ID
@@ -135,6 +144,7 @@ VITE_API_BASE_URL = https://your-backend-api.vercel.app/api
    ```
 
 #### Firebase Console
+
 1. Go to [Firebase Console](https://console.firebase.google.com/)
 2. Select your project → **Authentication** → **Settings**
 3. Add **Authorized domain**:
@@ -145,11 +155,13 @@ VITE_API_BASE_URL = https://your-backend-api.vercel.app/api
 ## 🚀 Deploy
 
 ### Option 1: Deploy via Netlify Dashboard
+
 1. Click **"Deploy site"**
 2. Wait for build to complete
 3. Visit your site URL
 
 ### Option 2: Deploy via Git Push
+
 ```bash
 git add .
 git commit -m "feat: secure deployment with .env.production"
@@ -157,6 +169,7 @@ git push origin main
 ```
 
 Netlify will automatically:
+
 1. Detect the push
 2. Run `npm run build` (uses `.env.production`)
 3. Inject environment variables from dashboard
@@ -165,11 +178,13 @@ Netlify will automatically:
 ## 🔍 Post-Deployment Verification
 
 ### Check Build Logs
+
 1. Go to **Deploys** tab in Netlify
 2. Click on the latest deploy
 3. Check **Deploy log** for errors
 
 ### Test Features
+
 - ✅ Sign In with Google
 - ✅ YouTube Search (VibeTube)
 - ✅ Create/Save Playlists
@@ -178,7 +193,9 @@ Netlify will automatically:
 - ✅ Contact Form (EmailJS)
 
 ### Monitor for Errors
+
 Open browser console and check for:
+
 - ❌ API key errors
 - ❌ OAuth redirect mismatches
 - ❌ CORS errors
@@ -186,6 +203,7 @@ Open browser console and check for:
 ## 🛡️ Security Best Practices
 
 ### ✅ DO
+
 - Keep `.env.local` on your machine only
 - Commit `.env.production` with placeholders
 - Set real values in Netlify dashboard
@@ -193,6 +211,7 @@ Open browser console and check for:
 - Rotate API keys if accidentally exposed
 
 ### ❌ DON'T
+
 - Don't commit `.env.local` to git
 - Don't put real secrets in `.env` or `.env.production`
 - Don't share screenshots of Netlify environment variables
@@ -201,7 +220,9 @@ Open browser console and check for:
 ## 🐛 Troubleshooting
 
 ### Secret Scan Failed
+
 If Netlify shows "Secret scan failed":
+
 ```powershell
 # Re-run the verification script
 Remove-Item -Path "dist" -Recurse -Force
@@ -209,23 +230,26 @@ npm run build
 
 # Check for secrets in bundle
 'AIzaSy', '375b56d', '83bfb626' | ForEach-Object {
-    Select-String -Path "dist/assets/*.js" -Pattern $_ | 
+    Select-String -Path "dist/assets/*.js" -Pattern $_ |
     Select-Object -First 1 -Property LineNumber, Line
 }
 ```
 
 ### Build Fails on Netlify
+
 1. Check Node version: Settings → Environment → Node version (set to 18)
 2. Check environment variables are set correctly
 3. Check build command: `npm run build`
 4. Check publish directory: `dist`
 
 ### OAuth Redirect Errors
+
 - Verify redirect URIs match exactly (no trailing slashes)
 - Check protocol is HTTPS
 - Ensure domain is added to authorized lists
 
 ### API Key Errors
+
 - Verify all environment variables are set in Netlify
 - Check variable names match exactly (including `VITE_` prefix)
 - Redeploy after changing environment variables
@@ -240,6 +264,7 @@ npm run build
 ## 🆘 Need Help?
 
 If you encounter issues:
+
 1. Check Netlify deploy logs
 2. Verify all environment variables are set
 3. Test locally first with `.env.local`

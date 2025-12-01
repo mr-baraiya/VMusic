@@ -11,7 +11,7 @@ import {
   SearchBar,
   SearchResults,
   VideoPlayer,
-  PlaylistSidebar
+  PlaylistSidebar,
 } from '../components/vibetube';
 import SearchHistory from '../components/vibetube/SearchHistory';
 import YouTubePlaylists from '../components/vibetube/YouTubePlaylists';
@@ -20,23 +20,20 @@ import YouTubePlaylists from '../components/vibetube/YouTubePlaylists';
 const YOUTUBE_API_KEY = import.meta.env.VITE_YOUTUBE_API_KEY || '';
 const YOUTUBE_API_BASE = 'https://www.googleapis.com/youtube/v3';
 
-
 // Main VibeTube Component
 const VibeTube = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { currentUser, googleAccessToken, refreshGoogleAuth } = useAuth();
-  
+
   const autoPlayVideo = location.state?.autoPlayVideo; // Get video from navigation state
-  
+
   const urlParams = new URLSearchParams(location.search);
   const searchQueryFromUrl = urlParams.get('search');
-  
+
   // State Management
   const [searchResults, setSearchResults] = useState([]);
-  const [playlists, setPlaylists] = useState([
-    { id: 'default', name: 'My Playlist', tracks: [] }
-  ]);
+  const [playlists, setPlaylists] = useState([{ id: 'default', name: 'My Playlist', tracks: [] }]);
   const [currentPlaylistId, setCurrentPlaylistId] = useState('default');
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [currentTrack, setCurrentTrack] = useState(null); // Track being played (may not be in playlist)
@@ -83,15 +80,15 @@ const VibeTube = () => {
     'ZbZSe6N_BXs', // Happy - Pharrell Williams
     'S5L3JwHiGp0', // Let Her Go - Passenger
     'kXYiU_JCYtU', // Numb - Linkin Park
-    'Pkh8UtuejGw'  // Stereo Hearts - Gym Class Heroes
+    'Pkh8UtuejGw', // Stereo Hearts - Gym Class Heroes
   ];
 
   const playerRef = useRef(null);
   const intervalRef = useRef(null);
   const fullscreenPlayerRef = useRef(null);
   const autoPlayHandledRef = useRef(false); // Prevent duplicate autoplay
-  
-  const currentPlaylist = playlists.find(p => p.id === currentPlaylistId) || playlists[0];
+
+  const currentPlaylist = playlists.find((p) => p.id === currentPlaylistId) || playlists[0];
   const playlist = currentPlaylist.tracks;
 
   // Load playlists from localStorage
@@ -254,17 +251,17 @@ const VibeTube = () => {
     if (autoPlayVideo && playerRef.current && !autoPlayHandledRef.current) {
       console.log('🎵 Autoplay from Playlists:', autoPlayVideo);
       autoPlayHandledRef.current = true; // Mark as handled
-      
+
       const video = {
         videoId: autoPlayVideo.videoId,
         title: autoPlayVideo.title,
         channelTitle: autoPlayVideo.channelTitle,
-        thumbnail: autoPlayVideo.thumbnail
+        thumbnail: autoPlayVideo.thumbnail,
       };
-      
+
       // Use playVideoDirectly to add to playlist and play
       playVideoDirectly(video);
-      
+
       // Clear navigation state
       navigate(location.pathname, { replace: true, state: {} });
     }
@@ -292,11 +289,20 @@ const VibeTube = () => {
   // Handle Video End - using useCallback to capture latest state
   const handleVideoEnd = useCallback(() => {
     // Get current playlist tracks
-    const currentPlaylist = playlists.find(p => p.id === currentPlaylistId) || playlists[0];
+    const currentPlaylist = playlists.find((p) => p.id === currentPlaylistId) || playlists[0];
     const currentTracks = currentPlaylist?.tracks || [];
-    
-    console.log('🎵 Video ended. Repeat:', isRepeat, 'Shuffle:', isShuffle, 'Playlist length:', currentTracks.length, 'Current index:', currentIndex);
-    
+
+    console.log(
+      '🎵 Video ended. Repeat:',
+      isRepeat,
+      'Shuffle:',
+      isShuffle,
+      'Playlist length:',
+      currentTracks.length,
+      'Current index:',
+      currentIndex
+    );
+
     if (isRepeat) {
       console.log('🔁 Repeat is ON - Replaying current video');
       if (playerRef.current && playerRef.current.playVideo) {
@@ -304,7 +310,7 @@ const VibeTube = () => {
       }
     } else if (currentTracks.length > 0 && currentIndex !== -1) {
       console.log('⏭️ Playing next video');
-      
+
       // Calculate next index
       let nextIndex;
       if (isShuffle) {
@@ -314,7 +320,7 @@ const VibeTube = () => {
         nextIndex = (currentIndex + 1) % currentTracks.length;
         console.log(`⏭️ Shuffle is OFF - Playing next track #${nextIndex}`);
       }
-      
+
       // Play the next video
       const nextVideo = currentTracks[nextIndex];
       if (nextVideo && playerRef.current && playerRef.current.loadVideoById) {
@@ -382,9 +388,9 @@ const VibeTube = () => {
         console.error('YouTube API Error:', {
           status: searchResponse.status,
           statusText: searchResponse.statusText,
-          error: errorData
+          error: errorData,
         });
-        
+
         if (searchResponse.status === 403) {
           setError('YouTube API quota exceeded. Please try again later.');
           setSearchResults([]);
@@ -442,10 +448,10 @@ const VibeTube = () => {
       });
 
       if (append) {
-        setSearchResults(prev => [...prev, ...results]);
+        setSearchResults((prev) => [...prev, ...results]);
       } else {
         setSearchResults(results);
-        
+
         // Save search to history (only for user searches, not initial load)
         if (currentUser && query !== 'top music 2024') {
           try {
@@ -461,7 +467,7 @@ const VibeTube = () => {
       console.error('Search error:', err);
       const errorMessage = err.message || 'Failed to search videos. Please try again.';
       setError(errorMessage);
-      
+
       // Don't show error on initial load if it's just API quota issue
       if (!append && searchResults.length === 0) {
         setSearchResults([]);
@@ -503,12 +509,14 @@ const VibeTube = () => {
               statusText: detailsResponse.statusText,
               errorDetails: errorData,
               apiKey: YOUTUBE_API_KEY ? `${YOUTUBE_API_KEY.substring(0, 10)}...` : 'NOT SET',
-              requestUrl: `${YOUTUBE_API_BASE}/videos?part=snippet,contentDetails&id=<VIDEO_IDS>&key=<KEY>`
+              requestUrl: `${YOUTUBE_API_BASE}/videos?part=snippet,contentDetails&id=<VIDEO_IDS>&key=<KEY>`,
             });
-            
+
             // Set user-friendly error message
             if (detailsResponse.status === 400) {
-              setError('YouTube API key has restrictions. Please remove API restrictions in Google Cloud Console for localhost development.');
+              setError(
+                'YouTube API key has restrictions. Please remove API restrictions in Google Cloud Console for localhost development.'
+              );
             } else if (detailsResponse.status === 403) {
               setError('YouTube API quota exceeded. Please wait or create a new API key.');
             } else {
@@ -520,7 +528,7 @@ const VibeTube = () => {
           }
 
           const detailsData = await detailsResponse.json();
-          
+
           if (!detailsData.items || detailsData.items.length === 0) {
             setError('No videos found. The API key may have restrictions.');
             setSearchResults([]);
@@ -578,40 +586,40 @@ const VibeTube = () => {
     const newPlaylist = {
       id: Date.now().toString(),
       name,
-      tracks: []
+      tracks: [],
     };
-    setPlaylists(prev => [...prev, newPlaylist]);
+    setPlaylists((prev) => [...prev, newPlaylist]);
   };
 
   const renamePlaylist = (id, newName) => {
-    setPlaylists(prev => prev.map(p => 
-      p.id === id ? { ...p, name: newName } : p
-    ));
+    setPlaylists((prev) => prev.map((p) => (p.id === id ? { ...p, name: newName } : p)));
   };
 
   const deletePlaylist = (id) => {
     if (id === 'default') return;
-    setPlaylists(prev => prev.filter(p => p.id !== id));
+    setPlaylists((prev) => prev.filter((p) => p.id !== id));
     if (currentPlaylistId === id) {
       setCurrentPlaylistId('default');
     }
   };
 
   const addToPlaylist = (video, playlistId = currentPlaylistId) => {
-    setPlaylists(prev => prev.map(p => {
-      if (p.id === playlistId) {
-        // Check if video already exists
-        const exists = p.tracks.some(t => t.videoId === video.videoId);
-        if (!exists) {
-          // Show success feedback
-          console.log(`✅ Added "${video.title}" to playlist "${p.name}"`);
-          return { ...p, tracks: [...p.tracks, video] };
-        } else {
-          console.log(`ℹ️ "${video.title}" already exists in playlist "${p.name}"`);
+    setPlaylists((prev) =>
+      prev.map((p) => {
+        if (p.id === playlistId) {
+          // Check if video already exists
+          const exists = p.tracks.some((t) => t.videoId === video.videoId);
+          if (!exists) {
+            // Show success feedback
+            console.log(`✅ Added "${video.title}" to playlist "${p.name}"`);
+            return { ...p, tracks: [...p.tracks, video] };
+          } else {
+            console.log(`ℹ️ "${video.title}" already exists in playlist "${p.name}"`);
+          }
         }
-      }
-      return p;
-    }));
+        return p;
+      })
+    );
   };
 
   // Add track to favorites (MongoDB)
@@ -619,7 +627,8 @@ const VibeTube = () => {
     if (!currentUser) {
       // Show toast notification
       const toast = document.createElement('div');
-      toast.className = 'fixed top-4 right-4 z-50 bg-red-600 text-white px-6 py-3 rounded-xl shadow-2xl flex items-center gap-3';
+      toast.className =
+        'fixed top-4 right-4 z-50 bg-red-600 text-white px-6 py-3 rounded-xl shadow-2xl flex items-center gap-3';
       toast.innerHTML = `
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="10"></circle>
@@ -635,10 +644,11 @@ const VibeTube = () => {
 
     try {
       const result = await favoritesAPI.addToFavorites(currentUser.uid, track);
-      
+
       // Show success toast
       const toast = document.createElement('div');
-      toast.className = 'fixed top-4 right-4 z-50 bg-gradient-to-r from-pink-600 to-red-600 text-white px-6 py-3 rounded-xl shadow-2xl flex items-center gap-3 animate-fade-in';
+      toast.className =
+        'fixed top-4 right-4 z-50 bg-gradient-to-r from-pink-600 to-red-600 text-white px-6 py-3 rounded-xl shadow-2xl flex items-center gap-3 animate-fade-in';
       toast.innerHTML = `
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
@@ -649,10 +659,11 @@ const VibeTube = () => {
       setTimeout(() => toast.remove(), 3000);
     } catch (error) {
       console.error('Error adding to favorites:', error);
-      
+
       // Show error toast
       const toast = document.createElement('div');
-      toast.className = 'fixed top-4 right-4 z-50 bg-red-600 text-white px-6 py-3 rounded-xl shadow-2xl flex items-center gap-3';
+      toast.className =
+        'fixed top-4 right-4 z-50 bg-red-600 text-white px-6 py-3 rounded-xl shadow-2xl flex items-center gap-3';
       toast.innerHTML = `
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="10"></circle>
@@ -667,67 +678,73 @@ const VibeTube = () => {
   };
 
   const removeFromPlaylist = (index) => {
-    setPlaylists(prev => prev.map(p => {
-      if (p.id === currentPlaylistId) {
-        const newTracks = p.tracks.filter((_, i) => i !== index);
-        
-        // If currently playing track from this playlist
-        if (currentTrack && currentIndex === index && p.tracks[index]?.videoId === currentTrack.videoId) {
-          setCurrentIndex(-1);
-          setCurrentTrack(null);
-          playerRef.current?.stopVideo();
-        } else if (index < currentIndex) {
-          setCurrentIndex(prev => prev - 1);
+    setPlaylists((prev) =>
+      prev.map((p) => {
+        if (p.id === currentPlaylistId) {
+          const newTracks = p.tracks.filter((_, i) => i !== index);
+
+          // If currently playing track from this playlist
+          if (
+            currentTrack &&
+            currentIndex === index &&
+            p.tracks[index]?.videoId === currentTrack.videoId
+          ) {
+            setCurrentIndex(-1);
+            setCurrentTrack(null);
+            playerRef.current?.stopVideo();
+          } else if (index < currentIndex) {
+            setCurrentIndex((prev) => prev - 1);
+          }
+
+          return { ...p, tracks: newTracks };
         }
-        
-        return { ...p, tracks: newTracks };
-      }
-      return p;
-    }));
+        return p;
+      })
+    );
   };
 
   const reorderPlaylist = (fromIndex, toIndex) => {
-    setPlaylists(prev => prev.map(p => {
-      if (p.id === currentPlaylistId) {
-        const newTracks = [...p.tracks];
-        const [removed] = newTracks.splice(fromIndex, 1);
-        newTracks.splice(toIndex, 0, removed);
-        
-        // Update current index if needed
-        if (fromIndex === currentIndex) {
-          setCurrentIndex(toIndex);
-        } else if (fromIndex < currentIndex && toIndex >= currentIndex) {
-          setCurrentIndex(prev => prev - 1);
-        } else if (fromIndex > currentIndex && toIndex <= currentIndex) {
-          setCurrentIndex(prev => prev + 1);
+    setPlaylists((prev) =>
+      prev.map((p) => {
+        if (p.id === currentPlaylistId) {
+          const newTracks = [...p.tracks];
+          const [removed] = newTracks.splice(fromIndex, 1);
+          newTracks.splice(toIndex, 0, removed);
+
+          // Update current index if needed
+          if (fromIndex === currentIndex) {
+            setCurrentIndex(toIndex);
+          } else if (fromIndex < currentIndex && toIndex >= currentIndex) {
+            setCurrentIndex((prev) => prev - 1);
+          } else if (fromIndex > currentIndex && toIndex <= currentIndex) {
+            setCurrentIndex((prev) => prev + 1);
+          }
+
+          return { ...p, tracks: newTracks };
         }
-        
-        return { ...p, tracks: newTracks };
-      }
-      return p;
-    }));
+        return p;
+      })
+    );
   };
 
   // Play video directly without adding to playlist
   const playNow = (video) => {
     setCurrentTrack(video);
     setCurrentIndex(-1); // Not from playlist
-    
+
     if (playerRef.current && playerRef.current.loadVideoById) {
       playerRef.current.loadVideoById(video.videoId);
       playerRef.current.playVideo();
     }
   };
 
-
-
   // Play video directly from search results (receives video object)
   const playVideoDirectly = (video) => {
     console.log('🎵 Playing video:', video.title);
-    
+
     // Check if video is already in playlist
-    const existingIndex = playlist.findIndex(t => t.videoId === video.videoId);
-    
+    const existingIndex = playlist.findIndex((t) => t.videoId === video.videoId);
+
     if (existingIndex >= 0) {
       // Video exists in playlist, play it
       console.log('✅ Video found in playlist at index:', existingIndex);
@@ -736,28 +753,29 @@ const VibeTube = () => {
       // Add to current playlist and play immediately
       const newPlaylist = [...playlist, video];
       const newIndex = newPlaylist.length - 1;
-      
+
       console.log('➕ Adding video to playlist at index:', newIndex);
-      
+
       // Update the playlists array with the new track in current playlist
-      setPlaylists(prevPlaylists => 
-        prevPlaylists.map(p => 
-          p.id === currentPlaylistId 
-            ? { ...p, tracks: newPlaylist }
-            : p
-        )
+      setPlaylists((prevPlaylists) =>
+        prevPlaylists.map((p) => (p.id === currentPlaylistId ? { ...p, tracks: newPlaylist } : p))
       );
-      
+
       setCurrentTrack(video);
       setCurrentIndex(newIndex);
-      
+
       // Ensure player is ready before playing (with max retries)
       let retryCount = 0;
       const maxRetries = 15;
-      
+
       const attemptPlay = () => {
         // Check if YT API is loaded and player is initialized
-        if (window.YT && window.YT.Player && playerRef.current && typeof playerRef.current.loadVideoById === 'function') {
+        if (
+          window.YT &&
+          window.YT.Player &&
+          playerRef.current &&
+          typeof playerRef.current.loadVideoById === 'function'
+        ) {
           try {
             console.log('▶️ Loading video ID:', video.videoId);
             playerRef.current.loadVideoById(video.videoId);
@@ -779,22 +797,24 @@ const VibeTube = () => {
             hasYT: !!window.YT,
             hasYTPlayer: !!(window.YT && window.YT.Player),
             hasPlayerRef: !!playerRef.current,
-            hasLoadMethod: !!(playerRef.current && typeof playerRef.current.loadVideoById === 'function')
+            hasLoadMethod: !!(
+              playerRef.current && typeof playerRef.current.loadVideoById === 'function'
+            ),
           });
         }
       };
-      
+
       setTimeout(attemptPlay, 100);
     }
   };
 
   const playVideo = (index) => {
     if (index < 0 || index >= playlist.length) return;
-    
+
     setCurrentIndex(index);
     const video = playlist[index];
     setCurrentTrack(video);
-    
+
     if (playerRef.current && playerRef.current.loadVideoById) {
       playerRef.current.loadVideoById(video.videoId);
       playerRef.current.playVideo();
@@ -804,7 +824,7 @@ const VibeTube = () => {
   // Player Controls
   const handlePlayPause = () => {
     if (!playerRef.current) return;
-    
+
     if (isPlaying) {
       playerRef.current.pauseVideo();
     } else {
@@ -819,7 +839,7 @@ const VibeTube = () => {
   const handleNext = () => {
     // Only skip if playing from playlist
     if (currentIndex === -1 || playlist.length === 0) return;
-    
+
     let nextIndex;
     if (isShuffle) {
       nextIndex = Math.floor(Math.random() * playlist.length);
@@ -828,14 +848,14 @@ const VibeTube = () => {
       nextIndex = (currentIndex + 1) % playlist.length;
       console.log(`⏭️ Shuffle is OFF - Playing next track #${nextIndex}`);
     }
-    
+
     playVideo(nextIndex);
   };
 
   const handlePrevious = () => {
     // Only skip if playing from playlist
     if (currentIndex === -1 || playlist.length === 0) return;
-    
+
     let prevIndex;
     if (isShuffle) {
       prevIndex = Math.floor(Math.random() * playlist.length);
@@ -844,7 +864,7 @@ const VibeTube = () => {
       prevIndex = currentIndex - 1 < 0 ? playlist.length - 1 : currentIndex - 1;
       console.log(`⏮️ Shuffle is OFF - Playing previous track #${prevIndex}`);
     }
-    
+
     playVideo(prevIndex);
   };
 
@@ -882,19 +902,33 @@ const VibeTube = () => {
       {/* Animated Background Effects */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-red-600/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-pink-600/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
-        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '4s' }}></div>
+        <div
+          className="absolute bottom-0 right-1/4 w-96 h-96 bg-pink-600/10 rounded-full blur-3xl animate-pulse"
+          style={{ animationDelay: '2s' }}
+        ></div>
+        <div
+          className="absolute top-1/2 left-1/2 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl animate-pulse"
+          style={{ animationDelay: '4s' }}
+        ></div>
       </div>
 
       {/* YouTube Player Container (hidden - audio only) */}
-      <div style={{ position: 'absolute', width: '1px', height: '1px', overflow: 'hidden', opacity: 0 }}>
+      <div
+        style={{
+          position: 'absolute',
+          width: '1px',
+          height: '1px',
+          overflow: 'hidden',
+          opacity: 0,
+        }}
+      >
         <div id="yt-player"></div>
       </div>
 
       {/* Header */}
       <div className="relative overflow-hidden bg-gradient-to-r from-red-900/40 via-pink-900/40 to-purple-900/40 border-b border-white/10 shadow-2xl">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSA2MCAwIEwgMCAwIDAgNjAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjAzKSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-40"></div>
-        
+
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -904,7 +938,7 @@ const VibeTube = () => {
             <div className="flex items-center justify-center gap-4 mb-4">
               <motion.div
                 animate={{ rotate: 360 }}
-                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
               >
                 <Youtube size={56} className="text-red-500" />
               </motion.div>
@@ -918,11 +952,13 @@ const VibeTube = () => {
                 <Sparkles size={36} className="text-yellow-400" />
               </motion.div>
             </div>
-            <p className="text-gray-300 text-xl font-medium">Stream Millions of Music Videos in Stunning Quality</p>
+            <p className="text-gray-300 text-xl font-medium">
+              Stream Millions of Music Videos in Stunning Quality
+            </p>
           </motion.div>
 
-          <SearchBar 
-            onSearch={searchVideos} 
+          <SearchBar
+            onSearch={searchVideos}
             isLoading={isLoading}
             onShowHistory={() => setShowSearchHistory(true)}
             showHistoryButton={!!currentUser}

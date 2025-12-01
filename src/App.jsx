@@ -40,11 +40,14 @@ function App() {
           <Route path="/explore" element={<Explore />} />
           <Route path="/artists" element={<Artists />} />
           <Route path="/vibe-zone" element={<VibeZone />} />
-          <Route path="/vibetube" element={
-            <ErrorBoundary>
-              <VibeTube />
-            </ErrorBoundary>
-          } />
+          <Route
+            path="/vibetube"
+            element={
+              <ErrorBoundary>
+                <VibeTube />
+              </ErrorBoundary>
+            }
+          />
           <Route path="/search" element={<Search />} />
           <Route path="/artist/:id" element={<Artist />} />
           <Route path="/album/:id" element={<Album />} />
@@ -99,10 +102,10 @@ function App() {
             }
           />
         </Routes>
-        
+
         {/* Floating Music Player */}
         <FloatingPlayer />
-        
+
         {/* Toast Notifications */}
         <Toast />
       </div>

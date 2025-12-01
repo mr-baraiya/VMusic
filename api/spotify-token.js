@@ -21,7 +21,7 @@ export default async function handler(req, res) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': `Basic ${credentials}`,
+        Authorization: `Basic ${credentials}`,
       },
       body: 'grant_type=client_credentials',
     });
@@ -31,20 +31,20 @@ export default async function handler(req, res) {
     }
 
     const data = await response.json();
-    
+
     // Set cache headers to cache token for 55 minutes (tokens expire in 1 hour)
     res.setHeader('Cache-Control', 's-maxage=3300, stale-while-revalidate');
-    
+
     return res.status(200).json({
       access_token: data.access_token,
       token_type: data.token_type,
-      expires_in: data.expires_in
+      expires_in: data.expires_in,
     });
   } catch (error) {
     console.error('Error getting Spotify token:', error);
-    return res.status(500).json({ 
+    return res.status(500).json({
       error: 'Failed to get Spotify token',
-      message: error.message 
+      message: error.message,
     });
   }
 }

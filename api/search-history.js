@@ -48,9 +48,9 @@ export default async function handler(req, res) {
         .sort({ timestamp: -1 })
         .limit(parseInt(limit))
         .toArray();
-      
+
       return res.status(200).json({
-        history
+        history,
       });
     }
 
@@ -67,7 +67,7 @@ export default async function handler(req, res) {
       const existingQuery = await searchHistoryCollection.findOne({
         userId,
         query: query.toLowerCase().trim(),
-        timestamp: { $gte: oneHourAgo }
+        timestamp: { $gte: oneHourAgo },
       });
 
       if (existingQuery) {
@@ -77,14 +77,14 @@ export default async function handler(req, res) {
           {
             $set: {
               timestamp: new Date().toISOString(),
-              resultsCount: results || 0
-            }
+              resultsCount: results || 0,
+            },
           }
         );
 
         return res.status(200).json({
           message: 'Search history updated',
-          success: true
+          success: true,
         });
       }
 
@@ -94,7 +94,7 @@ export default async function handler(req, res) {
         query: query.toLowerCase().trim(),
         originalQuery: query,
         resultsCount: results || 0,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
 
       // Keep only last 100 searches per user
@@ -104,15 +104,15 @@ export default async function handler(req, res) {
         .toArray();
 
       if (allSearches.length > 100) {
-        const oldSearchIds = allSearches.slice(100).map(s => s._id);
+        const oldSearchIds = allSearches.slice(100).map((s) => s._id);
         await searchHistoryCollection.deleteMany({
-          _id: { $in: oldSearchIds }
+          _id: { $in: oldSearchIds },
         });
       }
 
       return res.status(200).json({
         message: 'Search query added to history',
-        success: true
+        success: true,
       });
     }
 
@@ -128,12 +128,11 @@ export default async function handler(req, res) {
 
       return res.status(200).json({
         message: 'Search history cleared',
-        success: true
+        success: true,
       });
     }
 
     return res.status(405).json({ error: 'Method not allowed' });
-
   } catch (error) {
     console.error('Database error:', error);
     return res.status(500).json({ error: 'Internal server error', details: error.message });

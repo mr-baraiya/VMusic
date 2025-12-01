@@ -18,11 +18,11 @@ const Toast = () => {
   useEffect(() => {
     showToastFn = (message, type) => {
       const id = Date.now();
-      setToasts(prev => [...prev, { id, message, type }]);
-      
+      setToasts((prev) => [...prev, { id, message, type }]);
+
       // Auto remove after 3 seconds
       setTimeout(() => {
-        setToasts(prev => prev.filter(t => t.id !== id));
+        setToasts((prev) => prev.filter((t) => t.id !== id));
       }, 3000);
     };
 
@@ -32,7 +32,7 @@ const Toast = () => {
   }, []);
 
   const removeToast = (id) => {
-    setToasts(prev => prev.filter(t => t.id !== id));
+    setToasts((prev) => prev.filter((t) => t.id !== id));
   };
 
   return (
@@ -46,9 +46,10 @@ const Toast = () => {
             exit={{ opacity: 0, x: 100 }}
             className={`
               min-w-[300px] max-w-md p-4 rounded-lg shadow-lg backdrop-blur-xl border
-              ${toast.type === 'error' 
-                ? 'bg-red-500/10 border-red-500/50 text-red-400' 
-                : 'bg-blue-500/10 border-blue-500/50 text-blue-400'
+              ${
+                toast.type === 'error'
+                  ? 'bg-red-500/10 border-red-500/50 text-red-400'
+                  : 'bg-blue-500/10 border-blue-500/50 text-blue-400'
               }
             `}
           >

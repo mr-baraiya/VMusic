@@ -41,7 +41,7 @@ const SpotifyCallback = () => {
 
         setStatus('success');
         setMessage('Successfully connected to Spotify! Redirecting to dashboard...');
-        
+
         // Store Spotify connection status
         localStorage.setItem('spotify_connected', 'true');
 
@@ -104,9 +104,7 @@ const SpotifyCallback = () => {
           {status === 'success' && 'Connection Successful!'}
           {status === 'error' && 'Connection Failed'}
         </h2>
-        <p className="text-gray-600 dark:text-gray-400 mb-6">
-          {message}
-        </p>
+        <p className="text-gray-600 dark:text-gray-400 mb-6">{message}</p>
 
         {/* Loading Dots */}
         {status === 'loading' && (

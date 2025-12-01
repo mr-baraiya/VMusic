@@ -3,10 +3,12 @@
 ## ✅ What's Been Configured
 
 ### 1. Firebase SDK Installed
+
 - **Package**: `firebase` (v11.x)
 - **Services**: Authentication, Firestore, Analytics
 
 ### 2. Firebase Configuration
+
 - **File**: `src/config/firebase.js`
 - **Environment Variables**: Stored securely in `.env`
 - **Services Initialized**:
@@ -15,6 +17,7 @@
   - ✅ Analytics
 
 ### 3. Authentication Context
+
 - **File**: `src/contexts/AuthContext.jsx`
 - **Features**:
   - User state management
@@ -26,6 +29,7 @@
   - Persistent auth state
 
 ### 4. UI Components
+
 - **Sign In Modal**: `src/components/auth/SignIn.jsx`
 - **Sign Up Modal**: `src/components/auth/SignUp.jsx`
 - **Features**:
@@ -38,6 +42,7 @@
   - Switch between Sign In/Sign Up
 
 ### 5. Landing Page Integration
+
 - **Updated**: Hero component now shows auth buttons
 - **Dynamic UI**: Shows user info when logged in
 - **Sign Out**: Button to logout
@@ -54,11 +59,13 @@
 4. Enable the following providers:
 
 #### A. Email/Password
+
 - Click on **Email/Password**
 - Toggle **Enable**
 - Click **Save**
 
 #### B. Google Sign-In
+
 - Click on **Google**
 - Toggle **Enable**
 - **Public-facing name**: VMusic
@@ -86,14 +93,14 @@ service cloud.firestore {
       allow read: if request.auth != null;
       allow write: if request.auth != null && request.auth.uid == userId;
     }
-    
+
     // Playlists collection - users can only modify their own playlists
     match /playlists/{playlistId} {
       allow read: if request.auth != null;
       allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
       allow update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
     }
-    
+
     // Favorites/Likes collection
     match /favorites/{favoriteId} {
       allow read: if request.auth != null;
@@ -115,6 +122,7 @@ service cloud.firestore {
 ## 📊 Firestore Database Structure
 
 ### Users Collection
+
 ```javascript
 users/{userId}
   - email: string
@@ -126,6 +134,7 @@ users/{userId}
 ```
 
 ### Playlists Collection (to be implemented)
+
 ```javascript
 playlists/{playlistId}
   - userId: string
@@ -139,6 +148,7 @@ playlists/{playlistId}
 ```
 
 ### Favorites Collection (to be implemented)
+
 ```javascript
 favorites/{favoriteId}
   - userId: string
@@ -153,6 +163,7 @@ favorites/{favoriteId}
 ## 🧪 Testing Authentication
 
 ### Test Sign Up (Email/Password)
+
 1. Open http://localhost:5174
 2. Click **"Get Started Free"**
 3. Enter:
@@ -163,6 +174,7 @@ favorites/{favoriteId}
 5. Check Firestore Console → users collection for new document
 
 ### Test Google Sign In
+
 1. Click **"Sign In"**
 2. Click **"Continue with Google"**
 3. Select your Google account
@@ -170,6 +182,7 @@ favorites/{favoriteId}
 5. Should redirect back and show "Welcome, [Your Name]!"
 
 ### Test Sign Out
+
 1. When logged in, click **"Sign Out"**
 2. Should return to landing page with Sign In/Sign Up buttons
 
@@ -178,11 +191,13 @@ favorites/{favoriteId}
 ## 🔐 Security Best Practices
 
 ### Environment Variables
+
 ✅ **Already Configured**: Firebase keys stored in `.env`
 ⚠️ **Never commit** `.env` to Git (already in `.gitignore`)
 ✅ **Use** `.env.example` as template for team members
 
 ### Firebase Security
+
 1. ✅ Use Firestore Security Rules (see Step 3)
 2. ✅ Validate user input on client-side
 3. 🔜 Add rate limiting for authentication
@@ -220,6 +235,7 @@ User can now access protected features (favorites, playlists)
 ## 🎯 Phase 3 Progress (Personalization)
 
 ### ✅ Completed
+
 - [x] Firebase SDK installation
 - [x] Firebase configuration
 - [x] Authentication Context with hooks
@@ -230,6 +246,7 @@ User can now access protected features (favorites, playlists)
 - [x] Auth state persistence
 
 ### 🚧 Next Tasks
+
 - [ ] Enable authentication providers in Firebase Console (YOU NEED TO DO THIS!)
 - [ ] Create Firestore database (YOU NEED TO DO THIS!)
 - [ ] Add user profile page
@@ -245,15 +262,19 @@ User can now access protected features (favorites, playlists)
 ## 🐛 Troubleshooting
 
 ### Error: "Firebase: Error (auth/unauthorized-domain)"
+
 **Solution**: Add your domain to authorized domains in Firebase Console
 
 ### Error: "Missing or insufficient permissions"
+
 **Solution**: Configure Firestore Security Rules (see Step 3)
 
 ### Error: "Firebase: Error (auth/popup-blocked)"
+
 **Solution**: Allow popups for localhost in browser settings
 
 ### Error: "Firebase config is undefined"
+
 **Solution**: Make sure `.env` file exists with all Firebase variables
 
 ---
@@ -275,6 +296,7 @@ User can now access protected features (favorites, playlists)
 4. **See User Info**: Welcome message with your name on landing page
 
 **Next Phase**: Once you enable providers in Firebase Console, we'll implement:
+
 - Saving favorite tracks to Firestore
 - Creating and managing playlists
 - User profile page

@@ -61,11 +61,15 @@ const Profile = () => {
       }
 
       // Save to Firestore
-      await setDoc(doc(db, 'users', currentUser.uid), {
-        displayName,
-        email: currentUser.email,
-        updatedAt: new Date().toISOString(),
-      }, { merge: true });
+      await setDoc(
+        doc(db, 'users', currentUser.uid),
+        {
+          displayName,
+          email: currentUser.email,
+          updatedAt: new Date().toISOString(),
+        },
+        { merge: true }
+      );
 
       setMessage({ type: 'success', text: 'Profile updated successfully!' });
     } catch (error) {
@@ -100,7 +104,10 @@ const Profile = () => {
       setConfirmPassword('');
     } catch (error) {
       if (error.code === 'auth/requires-recent-login') {
-        setMessage({ type: 'error', text: 'Please sign out and sign in again before changing password.' });
+        setMessage({
+          type: 'error',
+          text: 'Please sign out and sign in again before changing password.',
+        });
       } else {
         setMessage({ type: 'error', text: error.message });
       }
@@ -114,10 +121,14 @@ const Profile = () => {
     setPreferences(newPreferences);
 
     try {
-      await setDoc(doc(db, 'users', currentUser.uid), {
-        preferences: newPreferences,
-        updatedAt: new Date().toISOString(),
-      }, { merge: true });
+      await setDoc(
+        doc(db, 'users', currentUser.uid),
+        {
+          preferences: newPreferences,
+          updatedAt: new Date().toISOString(),
+        },
+        { merge: true }
+      );
     } catch (error) {
       console.error('Error updating preferences:', error);
     }
@@ -144,24 +155,28 @@ const Profile = () => {
     try {
       // Create a reference to storage
       const storageRef = ref(storage, `profile-pictures/${currentUser.uid}/${file.name}`);
-      
+
       // Upload file
       await uploadBytes(storageRef, file);
-      
+
       // Get download URL
       const photoURL = await getDownloadURL(storageRef);
-      
+
       // Update user profile
       await updateProfile(currentUser, { photoURL });
-      
+
       // Save to Firestore
-      await setDoc(doc(db, 'users', currentUser.uid), {
-        photoURL,
-        updatedAt: new Date().toISOString(),
-      }, { merge: true });
+      await setDoc(
+        doc(db, 'users', currentUser.uid),
+        {
+          photoURL,
+          updatedAt: new Date().toISOString(),
+        },
+        { merge: true }
+      );
 
       toast.show('Profile picture updated successfully!', 'info');
-      
+
       // Reload the page to show new photo
       window.location.reload();
     } catch (error) {
@@ -177,7 +192,7 @@ const Profile = () => {
       {/* Header */}
       <div className="relative overflow-hidden bg-gradient-to-r from-purple-900/40 via-indigo-900/40 to-blue-900/40 border-b border-white/10">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDI1NSwgMjU1LCAyNTUsIDAuMDUpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-30"></div>
-        
+
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -189,12 +204,16 @@ const Profile = () => {
             <div className="relative inline-block mb-4">
               <div className="w-24 h-24 rounded-full overflow-hidden bg-gradient-to-r from-purple-600 to-indigo-600 flex items-center justify-center shadow-xl border-4 border-white/10">
                 {currentUser?.photoURL ? (
-                  <img src={currentUser.photoURL} alt="Profile" className="w-full h-full object-cover" />
+                  <img
+                    src={currentUser.photoURL}
+                    alt="Profile"
+                    className="w-full h-full object-cover"
+                  />
                 ) : (
                   <User size={48} className="text-white" />
                 )}
               </div>
-              
+
               {/* Hidden file input */}
               <input
                 ref={fileInputRef}
@@ -203,7 +222,7 @@ const Profile = () => {
                 onChange={handlePhotoUpload}
                 className="hidden"
               />
-              
+
               {/* Upload button */}
               <button
                 onClick={() => fileInputRef.current?.click()}
@@ -219,12 +238,8 @@ const Profile = () => {
               </button>
             </div>
 
-            <h1 className="text-4xl font-bold text-white mb-2">
-              Profile Settings
-            </h1>
-            <p className="text-gray-300">
-              Manage your account and preferences
-            </p>
+            <h1 className="text-4xl font-bold text-white mb-2">Profile Settings</h1>
+            <p className="text-gray-300">Manage your account and preferences</p>
           </motion.div>
         </div>
       </div>
@@ -241,11 +256,7 @@ const Profile = () => {
                 : 'bg-red-500/10 border border-red-500/30 text-red-400'
             }`}
           >
-            {message.type === 'success' ? (
-              <CheckCircle2 size={20} />
-            ) : (
-              <AlertCircle size={20} />
-            )}
+            {message.type === 'success' ? <CheckCircle2 size={20} /> : <AlertCircle size={20} />}
             <span>{message.text}</span>
           </motion.div>
         )}
@@ -262,12 +273,10 @@ const Profile = () => {
               <User size={24} className="text-purple-400" />
               Profile Information
             </h2>
-            
+
             <form onSubmit={updateProfileInfo} className="space-y-4">
               <div>
-                <label className="block text-gray-300 text-sm font-medium mb-2">
-                  Display Name
-                </label>
+                <label className="block text-gray-300 text-sm font-medium mb-2">Display Name</label>
                 <input
                   type="text"
                   value={displayName}
@@ -314,12 +323,10 @@ const Profile = () => {
               <Lock size={24} className="text-purple-400" />
               Change Password
             </h2>
-            
+
             <form onSubmit={updateUserPassword} className="space-y-4">
               <div>
-                <label className="block text-gray-300 text-sm font-medium mb-2">
-                  New Password
-                </label>
+                <label className="block text-gray-300 text-sm font-medium mb-2">New Password</label>
                 <input
                   type="password"
                   value={newPassword}
@@ -362,10 +369,8 @@ const Profile = () => {
             transition={{ delay: 0.3 }}
             className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10"
           >
-            <h2 className="text-2xl font-bold text-white mb-6">
-              Preferences
-            </h2>
-            
+            <h2 className="text-2xl font-bold text-white mb-6">Preferences</h2>
+
             <div className="space-y-4">
               {/* Theme */}
               <div className="flex items-center justify-between">

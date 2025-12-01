@@ -3,6 +3,7 @@
 ## 🎯 Current Setup
 
 Your `.env` file:
+
 ```env
 VITE_API_BASE_URL=http://localhost:3000/api
 ```
@@ -12,21 +13,27 @@ VITE_API_BASE_URL=http://localhost:3000/api
 ## 🔄 Switch Backend URL
 
 ### → Local Backend
+
 ```env
 VITE_API_BASE_URL=http://localhost:3000/api
 ```
+
 Then run: `npm test` (backend) + `npm run dev` (frontend)
 
 ### → Render Backend
+
 ```env
 VITE_API_BASE_URL=https://your-app.onrender.com/api
 ```
+
 Then run: `npm run dev` (frontend only)
 
 ### → Vercel Backend
+
 ```env
 VITE_API_BASE_URL=https://v-music-gamma.vercel.app/api
 ```
+
 Then run: `npm run dev` (frontend only)
 
 ---
@@ -34,11 +41,13 @@ Then run: `npm run dev` (frontend only)
 ## ✅ How It Works
 
 All API clients now use:
+
 ```javascript
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 ```
 
 **Files Updated:**
+
 - ✅ `src/api/users.js`
 - ✅ `src/api/favorites.js`
 - ✅ `src/api/youtube.js`
@@ -81,5 +90,6 @@ Invoke-RestMethod -Uri "$url/users?userId=test"
 ---
 
 **Quick Access:**
+
 - Full Guide: `docs/ENVIRONMENT_CONFIG.md`
 - API Docs: `docs/BACKEND_API.md`

@@ -16,7 +16,7 @@ const Hero = () => {
           transition={{
             duration: 8,
             repeat: Infinity,
-            ease: "easeInOut"
+            ease: 'easeInOut',
           }}
         />
         <motion.div
@@ -28,7 +28,7 @@ const Hero = () => {
           transition={{
             duration: 10,
             repeat: Infinity,
-            ease: "easeInOut"
+            ease: 'easeInOut',
           }}
         />
         <motion.div
@@ -40,7 +40,7 @@ const Hero = () => {
           transition={{
             duration: 15,
             repeat: Infinity,
-            ease: "easeInOut"
+            ease: 'easeInOut',
           }}
         />
       </div>
@@ -55,7 +55,7 @@ const Hero = () => {
         transition={{
           duration: 5,
           repeat: Infinity,
-          ease: "easeInOut"
+          ease: 'easeInOut',
         }}
       >
         <Music2 size={64} />
@@ -69,7 +69,7 @@ const Hero = () => {
         transition={{
           duration: 6,
           repeat: Infinity,
-          ease: "easeInOut"
+          ease: 'easeInOut',
         }}
       >
         <Music2 size={80} />
@@ -82,39 +82,40 @@ const Hero = () => {
           initial={{ scale: 0, rotate: -180 }}
           animate={{ scale: 1, rotate: 0 }}
           transition={{
-            type: "spring",
+            type: 'spring',
             stiffness: 260,
             damping: 20,
-            duration: 1
+            duration: 1,
           }}
           className="mb-12 flex justify-center"
         >
           <div className="relative group">
             {/* Outer glow effect */}
             <div className="absolute inset-0 bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 rounded-full blur-3xl opacity-60 animate-pulse"></div>
-            
+
             {/* Spinning CD ring */}
             <motion.div
               animate={{ rotate: 360 }}
               transition={{
                 duration: 8,
                 repeat: Infinity,
-                ease: "linear"
+                ease: 'linear',
               }}
               className="absolute inset-0 rounded-full"
               style={{
-                background: 'conic-gradient(from 0deg, transparent 0deg, rgba(139, 92, 246, 0.3) 90deg, transparent 180deg, rgba(236, 72, 153, 0.3) 270deg, transparent 360deg)',
-                transform: 'scale(1.15)'
+                background:
+                  'conic-gradient(from 0deg, transparent 0deg, rgba(139, 92, 246, 0.3) 90deg, transparent 180deg, rgba(236, 72, 153, 0.3) 270deg, transparent 360deg)',
+                transform: 'scale(1.15)',
               }}
             />
-            
+
             {/* CD player effect with rotating logo */}
             <motion.div
               animate={{ rotate: 360 }}
               transition={{
                 duration: 20,
                 repeat: Infinity,
-                ease: "linear"
+                ease: 'linear',
               }}
               className="relative p-3 bg-gradient-to-br from-gray-900/80 to-purple-900/80 rounded-full backdrop-blur-sm border-4 border-purple-500/30 shadow-2xl"
             >
@@ -122,15 +123,15 @@ const Hero = () => {
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="w-12 h-12 bg-gradient-to-br from-gray-800 to-gray-900 rounded-full shadow-inner"></div>
               </div>
-              
+
               {/* Logo */}
-              <img 
-                src="/logo.png" 
-                alt="VMusic Logo" 
-                className="w-40 h-40 md:w-48 md:h-48 drop-shadow-2xl relative z-10" 
+              <img
+                src="/logo.png"
+                alt="VMusic Logo"
+                className="w-40 h-40 md:w-48 md:h-48 drop-shadow-2xl relative z-10"
               />
             </motion.div>
-            
+
             {/* Vinyl grooves effect */}
             <div className="absolute inset-0 rounded-full pointer-events-none">
               {[...Array(5)].map((_, i) => (
@@ -138,13 +139,13 @@ const Hero = () => {
                   key={i}
                   className="absolute inset-0 rounded-full border border-white/5"
                   style={{
-                    transform: `scale(${1 + i * 0.08})`
+                    transform: `scale(${1 + i * 0.08})`,
                   }}
                   animate={{ opacity: [0.1, 0.3, 0.1] }}
                   transition={{
                     duration: 2,
                     repeat: Infinity,
-                    delay: i * 0.2
+                    delay: i * 0.2,
                   }}
                 />
               ))}

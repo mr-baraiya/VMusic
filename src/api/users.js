@@ -18,8 +18,8 @@ export const usersAPI = {
           photoURL: userData.photoURL,
           provider: userData.providerData?.[0]?.providerId || 'email',
           googleAccessToken: userData.googleAccessToken || null,
-          googleRefreshToken: userData.googleRefreshToken || null
-        })
+          googleRefreshToken: userData.googleRefreshToken || null,
+        }),
       });
 
       if (!response.ok) throw new Error('Failed to sync user');
@@ -54,8 +54,8 @@ export const usersAPI = {
         },
         body: JSON.stringify({
           userId,
-          ...profileData
-        })
+          ...profileData,
+        }),
       });
 
       if (!response.ok) throw new Error('Failed to update profile');
@@ -65,14 +65,16 @@ export const usersAPI = {
       console.error('Error updating profile:', error);
       throw error;
     }
-  }
+  },
 };
 
 export const searchHistoryAPI = {
   // Get user's search history
   async getSearchHistory(userId, limit = 20) {
     try {
-      const response = await fetch(`${API_BASE_URL}/search-history?userId=${userId}&limit=${limit}`);
+      const response = await fetch(
+        `${API_BASE_URL}/search-history?userId=${userId}&limit=${limit}`
+      );
       if (!response.ok) throw new Error('Failed to fetch search history');
       const data = await response.json();
       return data.history || [];
@@ -93,8 +95,8 @@ export const searchHistoryAPI = {
         body: JSON.stringify({
           userId,
           query,
-          results: resultsCount
-        })
+          results: resultsCount,
+        }),
       });
 
       if (!response.ok) throw new Error('Failed to add to search history');
@@ -115,8 +117,8 @@ export const searchHistoryAPI = {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          userId
-        })
+          userId,
+        }),
       });
 
       if (!response.ok) throw new Error('Failed to clear search history');
@@ -126,7 +128,7 @@ export const searchHistoryAPI = {
       console.error('Error clearing search history:', error);
       throw error;
     }
-  }
+  },
 };
 
 export const playlistsAPI = {
@@ -155,8 +157,8 @@ export const playlistsAPI = {
           userId,
           name,
           tracks,
-          source
-        })
+          source,
+        }),
       });
 
       if (!response.ok) throw new Error('Failed to create playlist');
@@ -178,8 +180,8 @@ export const playlistsAPI = {
         },
         body: JSON.stringify({
           playlistId,
-          ...updates
-        })
+          ...updates,
+        }),
       });
 
       if (!response.ok) throw new Error('Failed to update playlist');
@@ -201,8 +203,8 @@ export const playlistsAPI = {
         },
         body: JSON.stringify({
           playlistId,
-          addTrack: track
-        })
+          addTrack: track,
+        }),
       });
 
       if (!response.ok) throw new Error('Failed to add track');
@@ -224,8 +226,8 @@ export const playlistsAPI = {
         },
         body: JSON.stringify({
           playlistId,
-          removeTrackId: trackId
-        })
+          removeTrackId: trackId,
+        }),
       });
 
       if (!response.ok) throw new Error('Failed to remove track');
@@ -246,8 +248,8 @@ export const playlistsAPI = {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          playlistId
-        })
+          playlistId,
+        }),
       });
 
       if (!response.ok) throw new Error('Failed to delete playlist');
@@ -257,5 +259,5 @@ export const playlistsAPI = {
       console.error('Error deleting playlist:', error);
       throw error;
     }
-  }
+  },
 };

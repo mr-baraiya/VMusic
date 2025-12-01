@@ -1,6 +1,6 @@
 /**
  * Playlists API Client
- * 
+ *
  * Manages user playlists in MongoDB database
  */
 
@@ -16,7 +16,7 @@ export const playlistsAPI = {
     try {
       const response = await fetch(`${BASE_URL}/playlists?userId=${userId}`, {
         method: 'GET',
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
       });
 
       if (!response.ok) {
@@ -43,7 +43,7 @@ export const playlistsAPI = {
       const response = await fetch(`${BASE_URL}/playlists`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId, name, tracks, source })
+        body: JSON.stringify({ userId, name, tracks, source }),
       });
 
       if (!response.ok) {
@@ -68,7 +68,7 @@ export const playlistsAPI = {
       const response = await fetch(`${BASE_URL}/playlists`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ playlistId, ...updates })
+        body: JSON.stringify({ playlistId, ...updates }),
       });
 
       if (!response.ok) {
@@ -93,7 +93,7 @@ export const playlistsAPI = {
       const response = await fetch(`${BASE_URL}/playlists`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ playlistId, addTrack: track })
+        body: JSON.stringify({ playlistId, addTrack: track }),
       });
 
       if (!response.ok) {
@@ -117,7 +117,7 @@ export const playlistsAPI = {
       const response = await fetch(`${BASE_URL}/playlists`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ playlistId })
+        body: JSON.stringify({ playlistId }),
       });
 
       if (!response.ok) {
@@ -131,7 +131,7 @@ export const playlistsAPI = {
       console.error('Error deleting playlist:', error);
       throw error;
     }
-  }
+  },
 };
 
 export default playlistsAPI;

@@ -24,8 +24,12 @@ const SignIn = ({ onClose, onSwitchToSignUp }) => {
     } catch (err) {
       console.error('Sign in error:', err);
       let errorMessage = 'Failed to sign in. Please try again.';
-      
-      if (err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password' || err.code === 'auth/user-not-found') {
+
+      if (
+        err.code === 'auth/invalid-credential' ||
+        err.code === 'auth/wrong-password' ||
+        err.code === 'auth/user-not-found'
+      ) {
         errorMessage = 'Invalid email or password.';
       } else if (err.code === 'auth/invalid-email') {
         errorMessage = 'Invalid email address.';
@@ -36,7 +40,7 @@ const SignIn = ({ onClose, onSwitchToSignUp }) => {
       } else if (err.message) {
         errorMessage = err.message;
       }
-      
+
       setError(errorMessage);
     } finally {
       setLoading(false);
@@ -54,15 +58,16 @@ const SignIn = ({ onClose, onSwitchToSignUp }) => {
     } catch (err) {
       console.error('Google sign in error:', err);
       let errorMessage = 'Failed to sign in with Google.';
-      
+
       if (err.code === 'auth/popup-closed-by-user') {
         errorMessage = 'Sign in cancelled.';
       } else if (err.code === 'auth/unauthorized-domain') {
-        errorMessage = 'This domain is not authorized for Google sign-in. Please add it to Firebase console.';
+        errorMessage =
+          'This domain is not authorized for Google sign-in. Please add it to Firebase console.';
       } else if (err.message) {
         errorMessage = err.message;
       }
-      
+
       setError(errorMessage);
     } finally {
       setLoading(false);
@@ -109,9 +114,7 @@ const SignIn = ({ onClose, onSwitchToSignUp }) => {
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Email Input */}
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
-              Email
-            </label>
+            <label className="block text-sm font-medium text-gray-300 mb-2">Email</label>
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
               <input
@@ -128,9 +131,7 @@ const SignIn = ({ onClose, onSwitchToSignUp }) => {
 
           {/* Password Input */}
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
-              Password
-            </label>
+            <label className="block text-sm font-medium text-gray-300 mb-2">Password</label>
             <div className="relative">
               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
               <input

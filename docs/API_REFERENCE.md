@@ -7,6 +7,7 @@ Quick reference guide for Jamendo API endpoints used in VMusic.
 Get your free API key at: https://devportal.jamendo.com/
 
 Add to `.env`:
+
 ```
 VITE_JAMENDO_CLIENT_ID=your_client_id_here
 ```
@@ -20,16 +21,19 @@ https://api.jamendo.com/v3.0
 ## 🎧 Tracks Endpoints
 
 ### Search Tracks
+
 ```
 GET /tracks/?client_id={CLIENT_ID}&search={query}&limit={limit}&format=json&audioformat=mp32
 ```
 
 **Parameters:**
+
 - `search` — Search term (song name, artist, album)
 - `limit` — Number of results (default: 10, max: 200)
 - `audioformat` — Audio quality: `mp31` (low), `mp32` (high)
 
 **Example:**
+
 ```javascript
 const searchSongs = async (query) => {
   const response = await fetch(
@@ -40,15 +44,18 @@ const searchSongs = async (query) => {
 ```
 
 ### Get Tracks by Genre/Tag
+
 ```
 GET /tracks/?client_id={CLIENT_ID}&tags={genre}&limit={limit}
 ```
 
 **Popular Tags:**
+
 - `rock`, `pop`, `jazz`, `electronic`, `classical`, `hiphop`, `indie`, `metal`, `folk`, `reggae`
 - `chill`, `happy`, `sad`, `energetic`, `relaxing`, `dark`, `uplifting`
 
 **Example:**
+
 ```javascript
 const getChillSongs = async () => {
   const response = await fetch(
@@ -59,11 +66,13 @@ const getChillSongs = async () => {
 ```
 
 ### Get Popular Tracks
+
 ```
 GET /tracks/?client_id={CLIENT_ID}&order=popularity_total&limit={limit}
 ```
 
 **Order Options:**
+
 - `popularity_total` — All-time popular
 - `popularity_week` — Popular this week
 - `popularity_month` — Popular this month
@@ -71,11 +80,13 @@ GET /tracks/?client_id={CLIENT_ID}&order=popularity_total&limit={limit}
 - `releasedate_asc` — Oldest first
 
 ### Get New Releases
+
 ```
 GET /tracks/?client_id={CLIENT_ID}&order=releasedate_desc&limit={limit}
 ```
 
 ### Get Track by ID
+
 ```
 GET /tracks/?client_id={CLIENT_ID}&id={track_id}
 ```
@@ -83,11 +94,13 @@ GET /tracks/?client_id={CLIENT_ID}&id={track_id}
 ## 🎤 Artists Endpoints
 
 ### Get Artist Info
+
 ```
 GET /artists/?client_id={CLIENT_ID}&id={artist_id}&format=json
 ```
 
 **Returns:**
+
 - Artist name
 - Bio/description
 - Website
@@ -95,11 +108,13 @@ GET /artists/?client_id={CLIENT_ID}&id={artist_id}&format=json
 - Image/avatar
 
 ### Get Artist Tracks
+
 ```
 GET /tracks/?client_id={CLIENT_ID}&artist_id={artist_id}&limit={limit}
 ```
 
 ### Search Artists
+
 ```
 GET /artists/?client_id={CLIENT_ID}&search={query}&limit={limit}
 ```
@@ -107,16 +122,19 @@ GET /artists/?client_id={CLIENT_ID}&search={query}&limit={limit}
 ## 💿 Albums Endpoints
 
 ### Get Album Info
+
 ```
 GET /albums/?client_id={CLIENT_ID}&id={album_id}&format=json
 ```
 
 ### Get Album Tracks
+
 ```
 GET /albums/tracks/?client_id={CLIENT_ID}&id={album_id}
 ```
 
 ### Search Albums
+
 ```
 GET /albums/?client_id={CLIENT_ID}&search={query}&limit={limit}
 ```
@@ -124,6 +142,7 @@ GET /albums/?client_id={CLIENT_ID}&search={query}&limit={limit}
 ## 📊 Response Format
 
 ### Track Object
+
 ```json
 {
   "id": "123456",
@@ -144,6 +163,7 @@ GET /albums/?client_id={CLIENT_ID}&search={query}&limit={limit}
 ```
 
 ### Artist Object
+
 ```json
 {
   "id": "78910",
@@ -158,6 +178,7 @@ GET /albums/?client_id={CLIENT_ID}&search={query}&limit={limit}
 ## 🎯 Common Use Cases
 
 ### 1. Build a "Chill Radio"
+
 ```javascript
 const getChillRadio = async () => {
   const response = await fetch(
@@ -168,6 +189,7 @@ const getChillRadio = async () => {
 ```
 
 ### 2. Search with Autocomplete
+
 ```javascript
 const searchWithDebounce = debounce(async (query) => {
   if (query.length < 2) return;
@@ -180,17 +202,23 @@ const searchWithDebounce = debounce(async (query) => {
 ```
 
 ### 3. Get Artist's Full Discography
+
 ```javascript
 const getArtistDiscography = async (artistId) => {
   const [tracks, albums] = await Promise.all([
-    fetch(`https://api.jamendo.com/v3.0/tracks/?client_id=${CLIENT_ID}&artist_id=${artistId}&limit=100&audioformat=mp32`).then(r => r.json()),
-    fetch(`https://api.jamendo.com/v3.0/albums/?client_id=${CLIENT_ID}&artist_id=${artistId}&limit=50`).then(r => r.json())
+    fetch(
+      `https://api.jamendo.com/v3.0/tracks/?client_id=${CLIENT_ID}&artist_id=${artistId}&limit=100&audioformat=mp32`
+    ).then((r) => r.json()),
+    fetch(
+      `https://api.jamendo.com/v3.0/albums/?client_id=${CLIENT_ID}&artist_id=${artistId}&limit=50`
+    ).then((r) => r.json()),
   ]);
   return { tracks: tracks.results, albums: albums.results };
 };
 ```
 
 ### 4. Get Trending This Week
+
 ```javascript
 const getTrending = async () => {
   const response = await fetch(
@@ -230,11 +258,13 @@ const jamendoFetch = async (endpoint) => {
 ## 🎨 Image Sizes
 
 Jamendo provides dynamic image resizing:
+
 ```
 https://usercontent.jamendo.com/?type=album&id={album_id}&width={width}
 ```
 
 **Recommended widths:**
+
 - Thumbnail: `100`
 - Card: `300`
 - Detail: `500`
@@ -256,6 +286,7 @@ https://usercontent.jamendo.com/?type=album&id={album_id}&width={width}
 ---
 
 **Pro Tip:** Use the `includeFilters` parameter to filter explicit content:
+
 ```
 &includeFilters=clean
 ```

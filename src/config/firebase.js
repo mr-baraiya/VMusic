@@ -31,7 +31,7 @@ export const googleProvider = new GoogleAuthProvider();
 googleProvider.addScope('https://www.googleapis.com/auth/youtube.readonly');
 googleProvider.setCustomParameters({
   prompt: 'consent', // Force consent screen to get refresh token
-  access_type: 'offline' // Request offline access for refresh token
+  access_type: 'offline', // Request offline access for refresh token
 });
 export const emailProvider = new EmailAuthProvider();
 

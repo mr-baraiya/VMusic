@@ -75,7 +75,7 @@ const Explore = () => {
     try {
       const userRef = doc(db, 'users', currentUser.uid);
       const userSnap = await getDoc(userRef);
-      
+
       if (userSnap.exists()) {
         const userData = userSnap.data();
         const likedTrackIds = userData.likedTracks || [];
@@ -93,8 +93,8 @@ const Explore = () => {
     setLoading(true);
     try {
       let data;
-      const genre = genres.find(g => g.id === activeGenre);
-      
+      const genre = genres.find((g) => g.id === activeGenre);
+
       if (activeCategory === 'trending') {
         if (genre?.tag) {
           data = await jamendoAPI.getTracksByTag(genre.tag, limit);
@@ -106,10 +106,10 @@ const Explore = () => {
       } else {
         data = await jamendoAPI.getTrendingTracks(limit);
       }
-      
+
       // Remove duplicates by track id
       const uniqueTracks = Array.from(
-        new Map((data.results || []).map(track => [track.id, track])).values()
+        new Map((data.results || []).map((track) => [track.id, track])).values()
       );
       setTracks(uniqueTracks);
       setHasMore(uniqueTracks.length >= limit);
@@ -124,14 +124,14 @@ const Explore = () => {
 
   const loadMoreTracks = async () => {
     if (loadingMore || !hasMore) return;
-    
+
     setLoadingMore(true);
     const newLimit = limit + 24;
-    
+
     try {
       let data;
-      const genre = genres.find(g => g.id === activeGenre);
-      
+      const genre = genres.find((g) => g.id === activeGenre);
+
       if (activeCategory === 'trending') {
         if (genre?.tag) {
           data = await jamendoAPI.getTracksByTag(genre.tag, newLimit);
@@ -143,10 +143,10 @@ const Explore = () => {
       } else {
         data = await jamendoAPI.getTrendingTracks(newLimit);
       }
-      
+
       // Remove duplicates by track id
       const uniqueTracks = Array.from(
-        new Map((data.results || []).map(track => [track.id, track])).values()
+        new Map((data.results || []).map((track) => [track.id, track])).values()
       );
       setTracks(uniqueTracks);
       setLimit(newLimit);
@@ -173,7 +173,7 @@ const Explore = () => {
         await updateDoc(userRef, {
           likedTracks: arrayRemove(trackId),
         });
-        setLikedTracks(prev => {
+        setLikedTracks((prev) => {
           const newSet = new Set(prev);
           newSet.delete(trackId);
           return newSet;
@@ -183,7 +183,7 @@ const Explore = () => {
         await updateDoc(userRef, {
           likedTracks: arrayUnion(trackId),
         });
-        setLikedTracks(prev => {
+        setLikedTracks((prev) => {
           const newSet = new Set(prev);
           newSet.add(trackId);
           return newSet;
@@ -201,16 +201,14 @@ const Explore = () => {
       {/* Header */}
       <div className="relative overflow-hidden bg-gradient-to-r from-indigo-900/40 via-purple-900/40 to-pink-900/40 border-b border-white/10">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDI1NSwgMjU1LCAyNTUsIDAuMDUpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-30"></div>
-        
+
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              Explore Music
-            </h1>
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">Explore Music</h1>
             <p className="text-gray-300 text-lg">
               Discover 500,000+ free tracks from independent artists worldwide
             </p>
@@ -286,90 +284,87 @@ const Explore = () => {
               transition={{ duration: 0.5, delay: 0.4 }}
               className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4"
             >
-            {tracks.map((track, index) => (
-              <motion.div
-                key={`${track.id}-${index}`}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.3, delay: index * 0.02 }}
-                className="group relative bg-white/5 hover:bg-white/10 rounded-xl p-3 transition-all border border-white/10 hover:border-white/20 cursor-pointer"
-                onClick={() => navigate(`/track/${track.id}`)}
-              >
-                {/* Album Art */}
-                <div className="relative mb-3 overflow-hidden rounded-lg">
-                  <img
-                    src={track.image || 'https://via.placeholder.com/300'}
-                    alt={track.name}
-                    className="w-full aspect-square object-cover group-hover:scale-110 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <button 
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        playTrack(track, tracks);
-                      }}
-                      className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center hover:bg-green-600 hover:scale-110 transition-all shadow-lg"
+              {tracks.map((track, index) => (
+                <motion.div
+                  key={`${track.id}-${index}`}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.3, delay: index * 0.02 }}
+                  className="group relative bg-white/5 hover:bg-white/10 rounded-xl p-3 transition-all border border-white/10 hover:border-white/20 cursor-pointer"
+                  onClick={() => navigate(`/track/${track.id}`)}
+                >
+                  {/* Album Art */}
+                  <div className="relative mb-3 overflow-hidden rounded-lg">
+                    <img
+                      src={track.image || 'https://via.placeholder.com/300'}
+                      alt={track.name}
+                      className="w-full aspect-square object-cover group-hover:scale-110 transition-transform duration-300"
+                    />
+                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          playTrack(track, tracks);
+                        }}
+                        className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center hover:bg-green-600 hover:scale-110 transition-all shadow-lg"
+                      >
+                        <Play size={20} className="text-white ml-0.5" fill="white" />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Track Info */}
+                  <h3 className="text-white text-sm font-semibold mb-1 truncate group-hover:text-green-400 transition-colors">
+                    {track.name}
+                  </h3>
+                  <p className="text-gray-400 text-xs truncate mb-2">{track.artist_name}</p>
+
+                  {/* Footer */}
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-gray-500">
+                      {jamendoAPI.formatDuration(track.duration)}
+                    </span>
+                    <button
+                      onClick={() => toggleLike(track.id)}
+                      className={`transition-colors ${
+                        likedTracks.has(track.id)
+                          ? 'text-pink-500'
+                          : 'text-gray-400 hover:text-pink-500'
+                      }`}
                     >
-                      <Play size={20} className="text-white ml-0.5" fill="white" />
+                      <Heart size={16} fill={likedTracks.has(track.id) ? 'currentColor' : 'none'} />
                     </button>
                   </div>
-                </div>
+                </motion.div>
+              ))}
+            </motion.div>
 
-                {/* Track Info */}
-                <h3 className="text-white text-sm font-semibold mb-1 truncate group-hover:text-green-400 transition-colors">
-                  {track.name}
-                </h3>
-                <p className="text-gray-400 text-xs truncate mb-2">{track.artist_name}</p>
-                
-                {/* Footer */}
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-gray-500">
-                    {jamendoAPI.formatDuration(track.duration)}
-                  </span>
-                  <button
-                    onClick={() => toggleLike(track.id)}
-                    className={`transition-colors ${
-                      likedTracks.has(track.id)
-                        ? 'text-pink-500'
-                        : 'text-gray-400 hover:text-pink-500'
-                    }`}
-                  >
-                    <Heart
-                      size={16}
-                      fill={likedTracks.has(track.id) ? 'currentColor' : 'none'}
-                    />
-                  </button>
-                </div>
+            {/* Loading More Indicator */}
+            {loadingMore && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="flex flex-col items-center justify-center py-8"
+              >
+                <div className="w-12 h-12 border-4 border-pink-500/30 border-t-pink-500 rounded-full animate-spin mb-3"></div>
+                <p className="text-gray-400 text-sm">Loading more tracks...</p>
               </motion.div>
-            ))}
-          </motion.div>
+            )}
 
-          {/* Loading More Indicator */}
-          {loadingMore && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="flex flex-col items-center justify-center py-8"
-            >
-              <div className="w-12 h-12 border-4 border-pink-500/30 border-t-pink-500 rounded-full animate-spin mb-3"></div>
-              <p className="text-gray-400 text-sm">Loading more tracks...</p>
-            </motion.div>
-          )}
-
-          {/* No More Tracks Indicator */}
-          {!hasMore && tracks.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="text-center py-8"
-            >
-              <p className="text-gray-400 text-sm">
-                🎵 You've reached the end! All tracks loaded.
-              </p>
-            </motion.div>
-          )}
-        </>
-      ) : (
+            {/* No More Tracks Indicator */}
+            {!hasMore && tracks.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="text-center py-8"
+              >
+                <p className="text-gray-400 text-sm">
+                  🎵 You've reached the end! All tracks loaded.
+                </p>
+              </motion.div>
+            )}
+          </>
+        ) : (
           <div className="text-center py-20">
             <Music2 size={64} className="text-gray-600 mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-white mb-2">No tracks found</h3>

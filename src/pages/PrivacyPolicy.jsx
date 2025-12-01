@@ -30,9 +30,7 @@ const PrivacyPolicy = () => {
             <div className="inline-flex items-center justify-center w-20 h-20 bg-linear-to-r from-blue-600 to-indigo-600 rounded-full mb-6">
               <Shield size={40} className="text-white" />
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              Privacy Policy
-            </h1>
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">Privacy Policy</h1>
             <p className="text-gray-300 text-lg">
               Learn how VMusic collects, uses, and protects your data.
             </p>
@@ -44,9 +42,9 @@ const PrivacyPolicy = () => {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* INTRODUCTION */}
         <Section title="Introduction" delay={0.1}>
-          Welcome to VMusic. This Privacy Policy explains how we collect, use, store,
-          and protect your information when you use our service. By using VMusic, you
-          agree to the practices outlined in this policy.
+          Welcome to VMusic. This Privacy Policy explains how we collect, use, store, and protect
+          your information when you use our service. By using VMusic, you agree to the practices
+          outlined in this policy.
         </Section>
 
         {/* INFORMATION WE COLLECT */}
@@ -55,24 +53,24 @@ const PrivacyPolicy = () => {
 
           <ul className="list-disc ml-6 space-y-2">
             <li>
-              <strong className="text-white">Google Account Data:</strong> your name,
-              email address, and profile picture (via Google OAuth).
+              <strong className="text-white">Google Account Data:</strong> your name, email address,
+              and profile picture (via Google OAuth).
             </li>
             <li>
-              <strong className="text-white">YouTube API Data:</strong> playlists, liked
-              videos, subscriptions, or public activity (only if you grant permission).
+              <strong className="text-white">YouTube API Data:</strong> playlists, liked videos,
+              subscriptions, or public activity (only if you grant permission).
             </li>
             <li>
-              <strong className="text-white">Usage Data:</strong> search queries,
-              listening activity, and interactions inside the app.
+              <strong className="text-white">Usage Data:</strong> search queries, listening
+              activity, and interactions inside the app.
             </li>
             <li>
-              <strong className="text-white">Technical Data:</strong> device type,
-              browser, operating system, IP address.
+              <strong className="text-white">Technical Data:</strong> device type, browser,
+              operating system, IP address.
             </li>
             <li>
-              <strong className="text-white">Cookies:</strong> used for authentication
-              and user sessions.
+              <strong className="text-white">Cookies:</strong> used for authentication and user
+              sessions.
             </li>
           </ul>
         </Section>
@@ -87,7 +85,6 @@ const PrivacyPolicy = () => {
             <li>Improve app performance and security</li>
             <li>Communicate account-related updates</li>
           </ul>
-
           <p className="mt-4 text-gray-300">
             <strong className="text-white">We never sell or share your personal data.</strong>
           </p>
@@ -110,8 +107,8 @@ const PrivacyPolicy = () => {
           </p>
 
           <p className="mb-3">
-            We DO NOT store, share, or sell any YouTube data you provide access to.
-            Data is only displayed inside the app to enhance your music experience.
+            We DO NOT store, share, or sell any YouTube data you provide access to. Data is only
+            displayed inside the app to enhance your music experience.
           </p>
 
           <p>
@@ -128,10 +125,7 @@ const PrivacyPolicy = () => {
 
           <p className="mt-3">
             You may revoke access anytime at:{' '}
-            <a
-              href="https://myaccount.google.com/permissions"
-              className="text-blue-400 underline"
-            >
+            <a href="https://myaccount.google.com/permissions" className="text-blue-400 underline">
               https://myaccount.google.com/permissions
             </a>
           </p>
@@ -141,32 +135,39 @@ const PrivacyPolicy = () => {
         <Section title="5. Third-Party Services" delay={0.6}>
           VMusic uses the following services:
           <ul className="list-disc ml-6 mt-2 space-y-2">
-            <li><strong className="text-white">Firebase:</strong> authentication & database</li>
-            <li><strong className="text-white">Jamendo API:</strong> music content</li>
-            <li><strong className="text-white">EmailJS:</strong> sending contact form emails</li>
+            <li>
+              <strong className="text-white">Firebase:</strong> authentication & database
+            </li>
+            <li>
+              <strong className="text-white">Jamendo API:</strong> music content
+            </li>
+            <li>
+              <strong className="text-white">EmailJS:</strong> sending contact form emails
+            </li>
           </ul>
         </Section>
 
         {/* CHILDREN PRIVACY */}
         <Section title="6. Children's Privacy" delay={0.7}>
-          VMusic is not intended for children under 13. We do not knowingly collect data
-          from children. Contact us if such data was submitted.
+          VMusic is not intended for children under 13. We do not knowingly collect data from
+          children. Contact us if such data was submitted.
         </Section>
 
         {/* DATA DELETION */}
         <Section title="7. Data Deletion" delay={0.8}>
-          You may request deletion of your account and all associated data by emailing
-          us at:
-          <br /><br />
+          You may request deletion of your account and all associated data by emailing us at:
+          <br />
+          <br />
           <span className="text-white font-semibold">baraiyavishalbhai32@gmail.com</span>
-          <br /><br />
+          <br />
+          <br />
           We will delete your data within 48 hours.
         </Section>
 
         {/* UPDATES */}
         <Section title="8. Updates to This Policy" delay={0.9}>
-          We may update this Privacy Policy. Updates will appear on this page with a new
-          "Last Updated" date.
+          We may update this Privacy Policy. Updates will appear on this page with a new "Last
+          Updated" date.
         </Section>
 
         {/* CONTACT */}
@@ -180,9 +181,7 @@ const PrivacyPolicy = () => {
           <h2 className="text-2xl font-bold text-white mb-4">
             Questions About This Privacy Policy?
           </h2>
-          <p className="text-gray-300 mb-6">
-            Contact us anytime at:
-          </p>
+          <p className="text-gray-300 mb-6">Contact us anytime at:</p>
           <a
             href="mailto:baraiyavishalbhai32@gmail.com"
             className="inline-flex items-center gap-2 px-8 py-3 bg-linear-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg"

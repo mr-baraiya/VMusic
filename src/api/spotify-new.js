@@ -24,7 +24,7 @@ class SpotifyAPI {
   loadTokenFromStorage() {
     const token = localStorage.getItem('spotify_access_token');
     const expiry = localStorage.getItem('spotify_token_expiry');
-    
+
     if (token && expiry && Date.now() < parseInt(expiry)) {
       this.accessToken = token;
       this.tokenExpiry = parseInt(expiry);
@@ -36,7 +36,7 @@ class SpotifyAPI {
    * Save token to localStorage
    */
   saveTokenToStorage(token, expiresIn) {
-    const expiry = Date.now() + (expiresIn * 1000);
+    const expiry = Date.now() + expiresIn * 1000;
     localStorage.setItem('spotify_access_token', token);
     localStorage.setItem('spotify_token_expiry', expiry.toString());
     this.accessToken = token;
@@ -57,7 +57,7 @@ class SpotifyAPI {
       'playlist-read-private',
       'streaming',
       'user-read-playback-state',
-      'user-read-currently-playing'
+      'user-read-currently-playing',
     ];
 
     const params = new URLSearchParams({
@@ -65,7 +65,7 @@ class SpotifyAPI {
       response_type: 'token',
       redirect_uri: REDIRECT_URI,
       scope: scopes.join(' '),
-      show_dialog: 'false'
+      show_dialog: 'false',
     });
 
     return `${AUTH_URL}?${params.toString()}`;
@@ -77,17 +77,17 @@ class SpotifyAPI {
   handleCallback() {
     const hash = window.location.hash.substring(1);
     const params = new URLSearchParams(hash);
-    
+
     const accessToken = params.get('access_token');
     const expiresIn = params.get('expires_in');
-    
+
     if (accessToken && expiresIn) {
       this.saveTokenToStorage(accessToken, parseInt(expiresIn));
       // Clean up URL
       window.history.replaceState({}, document.title, window.location.pathname);
       return true;
     }
-    
+
     return false;
   }
 
@@ -124,7 +124,7 @@ class SpotifyAPI {
    */
   async request(endpoint, options = {}) {
     const token = await this.getAccessToken();
-    
+
     if (!token) {
       throw new Error('Not authenticated. Please login with Spotify.');
     }
@@ -132,10 +132,10 @@ class SpotifyAPI {
     const response = await fetch(`${BASE_URL}${endpoint}`, {
       ...options,
       headers: {
-        'Authorization': `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
-        ...options.headers
-      }
+        ...options.headers,
+      },
     });
 
     if (response.status === 401) {
@@ -156,20 +156,22 @@ class SpotifyAPI {
    */
   async searchTracks(query, limit = 20) {
     try {
-      const data = await this.request(`/search?q=${encodeURIComponent(query)}&type=track&limit=${limit}`);
+      const data = await this.request(
+        `/search?q=${encodeURIComponent(query)}&type=track&limit=${limit}`
+      );
       return {
-        tracks: data.tracks.items.map(track => ({
+        tracks: data.tracks.items.map((track) => ({
           id: track.id,
           name: track.name,
           artist: track.artists[0].name,
-          artists: track.artists.map(a => a.name).join(', '),
+          artists: track.artists.map((a) => a.name).join(', '),
           album: track.album.name,
           albumCover: track.album.images[0]?.url || '',
           duration: track.duration_ms,
           previewUrl: track.preview_url,
           uri: track.uri,
-          external_url: track.external_urls.spotify
-        }))
+          external_url: track.external_urls.spotify,
+        })),
       };
     } catch (error) {
       console.error('Error searching tracks:', error);
@@ -188,7 +190,7 @@ class SpotifyAPI {
       for (const album of data.albums.items) {
         // Get album tracks
         const albumData = await this.request(`/albums/${album.id}`);
-        
+
         // Add first track from each album
         if (albumData.tracks.items.length > 0) {
           const track = albumData.tracks.items[0];
@@ -196,13 +198,13 @@ class SpotifyAPI {
             id: track.id,
             name: track.name,
             artist: track.artists[0].name,
-            artists: track.artists.map(a => a.name).join(', '),
+            artists: track.artists.map((a) => a.name).join(', '),
             album: album.name,
             albumCover: album.images[0]?.url || '',
             duration: track.duration_ms,
             previewUrl: track.preview_url,
             uri: track.uri,
-            external_url: track.external_urls?.spotify
+            external_url: track.external_urls?.spotify,
           });
         }
 
@@ -223,18 +225,18 @@ class SpotifyAPI {
     try {
       const data = await this.request(`/me/top/tracks?limit=${limit}&time_range=${timeRange}`);
       return {
-        tracks: data.items.map(track => ({
+        tracks: data.items.map((track) => ({
           id: track.id,
           name: track.name,
           artist: track.artists[0].name,
-          artists: track.artists.map(a => a.name).join(', '),
+          artists: track.artists.map((a) => a.name).join(', '),
           album: track.album.name,
           albumCover: track.album.images[0]?.url || '',
           duration: track.duration_ms,
           previewUrl: track.preview_url,
           uri: track.uri,
-          external_url: track.external_urls.spotify
-        }))
+          external_url: track.external_urls.spotify,
+        })),
       };
     } catch (error) {
       console.error('Error getting top tracks:', error);
@@ -262,18 +264,18 @@ class SpotifyAPI {
     try {
       const data = await this.request(`/playlists/${playlistId}/tracks`);
       return {
-        tracks: data.items.map(item => ({
+        tracks: data.items.map((item) => ({
           id: item.track.id,
           name: item.track.name,
           artist: item.track.artists[0].name,
-          artists: item.track.artists.map(a => a.name).join(', '),
+          artists: item.track.artists.map((a) => a.name).join(', '),
           album: item.track.album.name,
           albumCover: item.track.album.images[0]?.url || '',
           duration: item.track.duration_ms,
           previewUrl: item.track.preview_url,
           uri: item.track.uri,
-          external_url: item.track.external_urls.spotify
-        }))
+          external_url: item.track.external_urls.spotify,
+        })),
       };
     } catch (error) {
       console.error('Error getting playlist tracks:', error);
@@ -289,18 +291,18 @@ class SpotifyAPI {
       const seedIds = seedTracks.slice(0, 5).join(',');
       const data = await this.request(`/recommendations?seed_tracks=${seedIds}&limit=${limit}`);
       return {
-        tracks: data.tracks.map(track => ({
+        tracks: data.tracks.map((track) => ({
           id: track.id,
           name: track.name,
           artist: track.artists[0].name,
-          artists: track.artists.map(a => a.name).join(', '),
+          artists: track.artists.map((a) => a.name).join(', '),
           album: track.album.name,
           albumCover: track.album.images[0]?.url || '',
           duration: track.duration_ms,
           previewUrl: track.preview_url,
           uri: track.uri,
-          external_url: track.external_urls.spotify
-        }))
+          external_url: track.external_urls.spotify,
+        })),
       };
     } catch (error) {
       console.error('Error getting recommendations:', error);

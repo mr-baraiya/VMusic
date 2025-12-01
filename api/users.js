@@ -44,15 +44,23 @@ export default async function handler(req, res) {
       }
 
       const user = await usersCollection.findOne({ userId });
-      
+
       return res.status(200).json({
-        user: user || null
+        user: user || null,
       });
     }
 
     // POST - Create/Update user after Firebase authentication
     if (req.method === 'POST') {
-      const { userId, email, displayName, photoURL, provider, googleAccessToken, googleRefreshToken } = req.body;
+      const {
+        userId,
+        email,
+        displayName,
+        photoURL,
+        provider,
+        googleAccessToken,
+        googleRefreshToken,
+      } = req.body;
 
       if (!userId || !email) {
         return res.status(400).json({ error: 'User ID and email are required' });
@@ -67,7 +75,7 @@ export default async function handler(req, res) {
         photoURL: photoURL || null,
         provider: provider || 'email',
         lastLogin: now,
-        updatedAt: now
+        updatedAt: now,
       };
 
       // Add Google tokens if provided
@@ -87,8 +95,8 @@ export default async function handler(req, res) {
           $setOnInsert: {
             userId,
             createdAt: now,
-            searchHistory: []
-          }
+            searchHistory: [],
+          },
         },
         { upsert: true }
       );
@@ -98,7 +106,7 @@ export default async function handler(req, res) {
       return res.status(200).json({
         message: result.upsertedCount ? 'User created' : 'User updated',
         user,
-        success: true
+        success: true,
       });
     }
 
@@ -116,19 +124,18 @@ export default async function handler(req, res) {
           $set: {
             displayName,
             photoURL,
-            updatedAt: new Date().toISOString()
-          }
+            updatedAt: new Date().toISOString(),
+          },
         }
       );
 
       return res.status(200).json({
         message: 'Profile updated',
-        success: true
+        success: true,
       });
     }
 
     return res.status(405).json({ error: 'Method not allowed' });
-
   } catch (error) {
     console.error('Database error:', error);
     return res.status(500).json({ error: 'Internal server error', details: error.message });

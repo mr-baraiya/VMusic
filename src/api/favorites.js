@@ -31,9 +31,9 @@ export const favoritesAPI = {
             title: track.title,
             channelTitle: track.channelTitle,
             thumbnail: track.thumbnail,
-            duration: track.duration
-          }
-        })
+            duration: track.duration,
+          },
+        }),
       });
 
       if (!response.ok) throw new Error('Failed to add to favorites');
@@ -55,8 +55,8 @@ export const favoritesAPI = {
         },
         body: JSON.stringify({
           userId,
-          videoId
-        })
+          videoId,
+        }),
       });
 
       if (!response.ok) throw new Error('Failed to remove from favorites');
@@ -72,10 +72,10 @@ export const favoritesAPI = {
   async isInFavorites(userId, videoId) {
     try {
       const favorites = await this.getFavorites(userId);
-      return favorites.some(track => track.videoId === videoId);
+      return favorites.some((track) => track.videoId === videoId);
     } catch (error) {
       console.error('Error checking favorites:', error);
       return false;
     }
-  }
+  },
 };

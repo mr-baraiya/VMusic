@@ -1,6 +1,12 @@
 import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Hero, Features, Explore as ExploreLanding, HowItWorks, Footer } from '../components/landing';
+import {
+  Hero,
+  Features,
+  Explore as ExploreLanding,
+  HowItWorks,
+  Footer,
+} from '../components/landing';
 
 const Landing = () => {
   const [searchParams] = useSearchParams();

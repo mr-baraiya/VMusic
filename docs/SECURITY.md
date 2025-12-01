@@ -3,12 +3,14 @@
 ## CRITICAL: Never Expose Secrets
 
 ### What NOT to do:
+
 ```javascript
 // WRONG - Never hardcode secrets
-const clientSecret = "ac0814caa22742a4bf8074e401bc9f36";
+const clientSecret = 'ac0814caa22742a4bf8074e401bc9f36';
 ```
 
 ### What TO do:
+
 ```javascript
 // CORRECT - Use environment variables
 const clientSecret = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET;
@@ -19,6 +21,7 @@ const clientSecret = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET;
 ## Current Security Status
 
 ### Properly Secured:
+
 - [x] All secrets moved to `.env` file
 - [x] `.env` file is in `.gitignore`
 - [x] `.env.example` uses placeholders only
@@ -29,12 +32,14 @@ const clientSecret = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET;
 ### Secret Storage Locations:
 
 #### Frontend Environment Variables (Public - Safe to Expose):
+
 - `VITE_SPOTIFY_CLIENT_ID` - Public OAuth client ID
 - `VITE_YOUTUBE_API_KEY` - YouTube Data API key (with restrictions)
 - `VITE_FIREBASE_API_KEY` - Firebase public API key
 - `VITE_JAMENDO_CLIENT_ID` - Jamendo public client ID
 
 #### Backend Environment Variables (Private - NEVER Expose):
+
 - `SPOTIFY_CLIENT_SECRET` - Only in Vercel/Netlify backend
 - `MONGODB_URI` - Database connection string
 - `GOOGLE_CLIENT_SECRET` - OAuth secret for backend
@@ -43,7 +48,8 @@ const clientSecret = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET;
 
 ## How Secrets Are Used
 
-### Frontend (.env with VITE_ prefix):
+### Frontend (.env with VITE\_ prefix):
+
 ```env
 # These are bundled into the app (client-side)
 VITE_SPOTIFY_CLIENT_ID=your_client_id
@@ -51,6 +57,7 @@ VITE_YOUTUBE_API_KEY=your_api_key
 ```
 
 ### Backend (Vercel/Netlify Environment Variables):
+
 ```env
 # These stay on the server (never sent to client)
 SPOTIFY_CLIENT_SECRET=your_secret
@@ -64,12 +71,14 @@ MONGODB_URI=mongodb+srv://...
 ### Before Deploying:
 
 1. **Verify .gitignore**:
+
    ```bash
    cat .gitignore | grep .env
    # Should show: .env
    ```
 
 2. **Check for exposed secrets**:
+
    ```bash
    git log -p | grep -i "client_secret\|api_key"
    # Should return nothing
@@ -88,6 +97,7 @@ MONGODB_URI=mongodb+srv://...
 ## API Key Restrictions
 
 ### YouTube API Key:
+
 1. Go to [Google Cloud Console](https://console.cloud.google.com/apis/credentials)
 2. Select your API key
 3. Add **Application restrictions**:
@@ -96,6 +106,7 @@ MONGODB_URI=mongodb+srv://...
    - Only allow: YouTube Data API v3
 
 ### Spotify Client ID:
+
 1. Go to [Spotify Dashboard](https://developer.spotify.com/dashboard)
 2. Edit Settings
 3. Add **Redirect URIs**:
@@ -127,6 +138,7 @@ documentation (without real secrets)
 ## How to Check for Leaked Secrets:
 
 ### Scan your repository:
+
 ```bash
 # Check if .env is tracked
 git ls-files | grep .env
@@ -140,6 +152,7 @@ git secrets --scan-history
 ```
 
 ### Remove secrets from git history:
+
 ```bash
 # If you accidentally committed secrets:
 git filter-branch --force --index-filter \
@@ -172,14 +185,14 @@ git push origin --force --all
 
 ## Quick Reference
 
-| Secret Type | Storage Location | Exposed to Client? |
-|------------|------------------|-------------------|
-| Spotify Client ID | `.env` (VITE_*) | Yes (safe) |
-| Spotify Client Secret | Vercel/Netlify | No (backend only) |
-| YouTube API Key | `.env` (VITE_*) | Yes (with restrictions) |
-| Firebase API Key | `.env` (VITE_*) | Yes (safe with rules) |
-| MongoDB URI | Vercel/Netlify | No (backend only) |
-| Google OAuth Secret | Vercel/Netlify | No (backend only) |
+| Secret Type           | Storage Location  | Exposed to Client?      |
+| --------------------- | ----------------- | ----------------------- |
+| Spotify Client ID     | `.env` (VITE\_\*) | Yes (safe)              |
+| Spotify Client Secret | Vercel/Netlify    | No (backend only)       |
+| YouTube API Key       | `.env` (VITE\_\*) | Yes (with restrictions) |
+| Firebase API Key      | `.env` (VITE\_\*) | Yes (safe with rules)   |
+| MongoDB URI           | Vercel/Netlify    | No (backend only)       |
+| Google OAuth Secret   | Vercel/Netlify    | No (backend only)       |
 
 ---
 

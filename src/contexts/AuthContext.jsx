@@ -59,7 +59,7 @@ export const AuthProvider = ({ children }) => {
           email: user.email,
           displayName: user.displayName,
           photoURL: user.photoURL,
-          providerData: user.providerData
+          providerData: user.providerData,
         });
         console.log('✅ User synced to MongoDB');
       } catch (mongoError) {
@@ -83,64 +83,66 @@ export const AuthProvider = ({ children }) => {
   // Sign up with email and password
   const signUp = async (email, password, displayName) => {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    
+
     // Update profile with display name
     await updateProfile(userCredential.user, { displayName });
-    
+
     // Create user document in Firestore
     await createUserDocument(userCredential.user, { displayName });
-    
+
     return userCredential;
   };
 
   // Sign in with email and password
   const signIn = async (email, password) => {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    
+
     // Sync user to MongoDB on sign in
     try {
       await usersAPI.syncUser(userCredential.user.uid, {
         email: userCredential.user.email,
         displayName: userCredential.user.displayName,
         photoURL: userCredential.user.photoURL,
-        providerData: userCredential.user.providerData
+        providerData: userCredential.user.providerData,
       });
       console.log('✅ User synced to MongoDB on sign in');
     } catch (mongoError) {
       console.error('MongoDB sync error on sign in:', mongoError);
       // Continue even if MongoDB sync fails
     }
-    
+
     return userCredential;
   };
 
   // Sign in with Google
   const signInWithGoogle = async () => {
     const result = await signInWithPopup(auth, googleProvider);
-    
+
     console.log('🔍 Google Sign-In Result:', {
       hasTokenResponse: !!result._tokenResponse,
       hasOAuthAccessToken: !!result._tokenResponse?.oauthAccessToken,
-      tokenPreview: result._tokenResponse?.oauthAccessToken?.substring(0, 30)
+      tokenPreview: result._tokenResponse?.oauthAccessToken?.substring(0, 30),
     });
-    
+
     // Get Google OAuth access token for YouTube API
     const credential = result._tokenResponse;
     if (credential?.oauthAccessToken) {
       setGoogleAccessToken(credential.oauthAccessToken);
       console.log('✅ Google access token obtained for YouTube API');
-      
+
       // Calculate token expiration time (Google tokens expire in 1 hour)
-      const expiresAt = Date.now() + (3600 * 1000); // 1 hour from now
-      
+      const expiresAt = Date.now() + 3600 * 1000; // 1 hour from now
+
       // Extract refresh token (only available on first consent or when prompt=consent)
       const refreshToken = credential.refreshToken || null;
       if (refreshToken) {
         console.log('✅ Refresh token obtained (will never expire)');
       } else {
-        console.warn('⚠️ No refresh token in response. May need to revoke app permissions and sign in again.');
+        console.warn(
+          '⚠️ No refresh token in response. May need to revoke app permissions and sign in again.'
+        );
       }
-      
+
       // Store token in MongoDB for persistent access
       try {
         await usersAPI.syncUser(result.user.uid, {
@@ -150,7 +152,7 @@ export const AuthProvider = ({ children }) => {
           providerData: result.user.providerData,
           googleAccessToken: credential.oauthAccessToken,
           googleRefreshToken: refreshToken, // Store refresh token
-          tokenExpiresAt: expiresAt
+          tokenExpiresAt: expiresAt,
         });
         console.log('✅ Access token and refresh token saved to MongoDB');
       } catch (error) {
@@ -160,7 +162,7 @@ export const AuthProvider = ({ children }) => {
       console.error('❌ No OAuth access token in response!');
       console.error('Token response keys:', Object.keys(credential || {}));
     }
-    
+
     await createUserDocument(result.user);
     return result;
   };
@@ -176,19 +178,19 @@ export const AuthProvider = ({ children }) => {
       try {
         if (user) {
           await createUserDocument(user);
-          
+
           // Try to restore Google access token from MongoDB
           try {
             const userData = await usersAPI.getUser(user.uid);
             // Token restored from MongoDB
-            
+
             if (userData?.googleAccessToken) {
               // Check if token is expired
               const isExpired = userData.tokenExpiresAt && Date.now() > userData.tokenExpiresAt;
-              
+
               if (isExpired) {
                 console.warn('⚠️ Token has expired. Attempting auto-refresh...');
-                
+
                 // Try to auto-refresh using refresh token
                 try {
                   const newToken = await autoRefreshToken(user.uid);
@@ -202,7 +204,9 @@ export const AuthProvider = ({ children }) => {
                 console.log('✅ Google access token restored from MongoDB');
               }
             } else {
-              console.warn('⚠️ No token found in MongoDB - user needs to sign in with Google again');
+              console.warn(
+                '⚠️ No token found in MongoDB - user needs to sign in with Google again'
+              );
             }
           } catch (error) {
             console.error('Failed to restore access token:', error);
@@ -226,11 +230,11 @@ export const AuthProvider = ({ children }) => {
   const autoRefreshToken = async (userId) => {
     try {
       console.log('🔄 Auto-refreshing token using refresh token...');
-      
+
       const response = await fetch('/api/refresh-google-token', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId })
+        body: JSON.stringify({ userId }),
       });
 
       if (!response.ok) {
@@ -241,7 +245,7 @@ export const AuthProvider = ({ children }) => {
       const data = await response.json();
       setGoogleAccessToken(data.accessToken);
       console.log('✅ Token auto-refreshed successfully (no popup needed!)');
-      
+
       return data.accessToken;
     } catch (error) {
       console.error('❌ Auto-refresh failed:', error);
@@ -254,7 +258,7 @@ export const AuthProvider = ({ children }) => {
     if (!currentUser) {
       throw new Error('No user signed in');
     }
-    
+
     // Try automatic refresh first (using refresh token)
     try {
       console.log('🔄 Attempting automatic token refresh...');
@@ -263,33 +267,33 @@ export const AuthProvider = ({ children }) => {
     } catch (autoRefreshError) {
       console.warn('⚠️ Automatic refresh failed, falling back to popup:', autoRefreshError.message);
     }
-    
+
     // Fallback: Show Google sign-in popup
     const result = await signInWithPopup(auth, googleProvider);
-    
+
     // Get new Google OAuth access token
     const credential = result._tokenResponse;
     if (credential?.oauthAccessToken) {
       setGoogleAccessToken(credential.oauthAccessToken);
       console.log('✅ Google access token refreshed successfully');
-      
+
       // Calculate token expiration time (Google tokens expire in 1 hour)
-      const expiresAt = Date.now() + (3600 * 1000); // 1 hour from now
-      
+      const expiresAt = Date.now() + 3600 * 1000; // 1 hour from now
+
       // Update token in MongoDB
       try {
         await usersAPI.syncUser(result.user.uid, {
           email: result.user.email,
           displayName: result.user.displayName,
           googleAccessToken: credential.oauthAccessToken,
-          tokenExpiresAt: expiresAt
+          tokenExpiresAt: expiresAt,
         });
         console.log('✅ Refreshed token saved to MongoDB');
       } catch (mongoError) {
         console.error('MongoDB sync error on token refresh:', mongoError);
         // Continue even if MongoDB sync fails
       }
-      
+
       return credential.oauthAccessToken;
     } else {
       throw new Error('Failed to obtain access token');
@@ -308,9 +312,5 @@ export const AuthProvider = ({ children }) => {
     googleAccessToken, // Expose access token for YouTube API calls
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {!loading && children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{!loading && children}</AuthContext.Provider>;
 };

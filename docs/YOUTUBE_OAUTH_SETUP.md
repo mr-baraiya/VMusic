@@ -25,12 +25,14 @@ Your VMusic app already has YouTube playlist import functionality implemented! T
 ### **Step 1: Choose Your Google Cloud Project**
 
 **Option A: Use Firebase Project (vmusic-7806a)** ✅ Recommended
+
 1. Go to [Google Cloud Console](https://console.cloud.google.com/)
 2. Select project `vmusic-7806a`
 3. Create new OAuth 2.0 credentials for this project
 4. Use these new credentials in your app
 
 **Option B: Switch Firebase to OAuth Project (vmusic-478107)**
+
 1. Create a new Firebase project linked to `vmusic-478107`
 2. Update your `.env` file with new Firebase config
 3. Migrate Firestore data if needed
@@ -58,7 +60,9 @@ Your VMusic app already has YouTube playlist import functionality implemented! T
 4. Click **Save and Continue**
 
 #### Add Scopes:
+
 Click **Add or Remove Scopes** and add:
+
 - `https://www.googleapis.com/auth/youtube.readonly`
 - `.../auth/userinfo.email`
 - `.../auth/userinfo.profile`
@@ -119,12 +123,14 @@ Add environment variables in Vercel:
 ## 🔧 How It Works (Already Implemented)
 
 ### **1. OAuth Scope Added** ✅
+
 ```javascript
 // src/config/firebase.js
 googleProvider.addScope('https://www.googleapis.com/auth/youtube.readonly');
 ```
 
 ### **2. Token Capture** ✅
+
 ```javascript
 // src/contexts/AuthContext.jsx
 const result = await signInWithPopup(auth, googleProvider);
@@ -133,18 +139,21 @@ setGoogleAccessToken(token);
 ```
 
 ### **3. Fetch Playlists** ✅
+
 ```javascript
 // src/api/youtube.js
 const playlists = await youtubeAPI.getUserPlaylists(userId, accessToken);
 ```
 
 ### **4. Backend API** ✅
+
 ```javascript
 // api/youtube-playlists.js
 // Fetches playlists using YouTube Data API v3
 ```
 
 ### **5. UI Component** ✅
+
 ```jsx
 // src/components/vibetube/YouTubePlaylists.jsx
 // Modal to display and import playlists
@@ -170,6 +179,7 @@ const playlists = await youtubeAPI.getUserPlaylists(userId, accessToken);
 **Access tokens expire after 1 hour!**
 
 Your app already handles this:
+
 - ✅ Token stored in MongoDB
 - ✅ Expiration time tracked
 - ✅ User-friendly error messages when expired
@@ -180,6 +190,7 @@ Your app already handles this:
 ## 🔒 Security Best Practices
 
 ✅ **Already Implemented:**
+
 - Tokens never exposed in frontend code
 - Backend validates tokens before API calls
 - CORS properly configured
@@ -190,10 +201,13 @@ Your app already handles this:
 ## 🐛 Common Issues & Solutions
 
 ### **Issue 1: "Access token expired"**
+
 **Solution**: User needs to sign out and sign in with Google again.
 
 ### **Issue 2: "YouTube API access denied"**
+
 **Causes:**
+
 - YouTube API not enabled in Google Cloud Console
 - Daily quota exceeded (10,000 units/day)
 - OAuth consent screen not published
@@ -201,13 +215,16 @@ Your app already handles this:
 **Solution**: Enable API and check quotas.
 
 ### **Issue 3: "No OAuth access token in response"**
+
 **Causes:**
+
 - Scope not added to OAuth provider
 - Using wrong Firebase project
 
 **Solution**: Verify Firebase and OAuth are from same project.
 
 ### **Issue 4: "Invalid credentials"**
+
 **Cause**: Project mismatch (different Client ID in code vs Firebase)
 
 **Solution**: Use same Google Cloud project for both.
@@ -217,6 +234,7 @@ Your app already handles this:
 ## 📊 YouTube API Quota
 
 Each API call costs quota units:
+
 - **Fetch playlists**: 1 unit
 - **Fetch playlist items**: 1 unit
 - **Search videos**: 100 units
@@ -285,6 +303,7 @@ Daily limit: **10,000 units**
 Your YouTube playlist integration is **already fully implemented**! Just complete the OAuth setup in Google Cloud Console to enable it.
 
 **The app will automatically work once you:**
+
 1. Use matching Firebase and OAuth projects
 2. Enable YouTube Data API v3
 3. Configure OAuth consent screen

@@ -74,7 +74,7 @@ const ArtistsByLocation = () => {
       {/* Header */}
       <div className="relative overflow-hidden bg-gradient-to-r from-green-900/40 via-teal-900/40 to-cyan-900/40 border-b border-white/10">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDI1NSwgMjU1LCAyNTUsIDAuMDUpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-30"></div>
-        
+
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -184,18 +184,17 @@ const ArtistsByLocation = () => {
             <p className="text-gray-400">Searching for artists...</p>
           </div>
         ) : artists.length > 0 ? (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-          >
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}>
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold text-white flex items-center gap-2">
                 <Users size={24} className="text-green-500" />
                 Found {artists.length} Artists
                 {selectedCountry && (
                   <span className="text-gray-400 text-lg">
-                    {' '}in {popularCountries.find(c => c.code === selectedCountry)?.name || selectedCountry}
+                    {' '}
+                    in{' '}
+                    {popularCountries.find((c) => c.code === selectedCountry)?.name ||
+                      selectedCountry}
                     {selectedCity && `, ${selectedCity}`}
                   </span>
                 )}
@@ -211,7 +210,7 @@ const ArtistsByLocation = () => {
                   className="group bg-white/5 hover:bg-white/10 rounded-xl overflow-hidden transition-all border border-white/10 hover:border-white/20"
                 >
                   {/* Artist Header */}
-                  <div 
+                  <div
                     className="p-4 cursor-pointer flex items-center gap-4 hover:bg-white/5 transition-all"
                     onClick={() => navigate(`/artist/${artist.id}`)}
                   >
@@ -237,7 +236,7 @@ const ArtistsByLocation = () => {
                       <h3 className="text-white font-semibold mb-1 truncate group-hover:text-green-400 transition-colors">
                         {artist.name}
                       </h3>
-                      
+
                       {/* Location */}
                       {artist.locations && artist.locations.length > 0 && (
                         <div className="flex items-center gap-1 text-gray-400 text-sm mb-1">
@@ -247,13 +246,15 @@ const ArtistsByLocation = () => {
                           </span>
                         </div>
                       )}
-                      
+
                       {/* Albums count */}
                       <div className="flex items-center gap-3 text-gray-400 text-sm">
                         {artist.albums && artist.albums.length > 0 && (
                           <div className="flex items-center gap-1">
                             <Music2 size={14} />
-                            <span>{artist.albums.length} album{artist.albums.length !== 1 ? 's' : ''}</span>
+                            <span>
+                              {artist.albums.length} album{artist.albums.length !== 1 ? 's' : ''}
+                            </span>
                           </div>
                         )}
                       </div>
@@ -299,10 +300,11 @@ const ArtistsByLocation = () => {
                           </div>
                         </motion.div>
                       ))}
-                      
+
                       {artist.albums.length > 5 && (
                         <p className="text-gray-400 text-xs text-center pt-2">
-                          +{artist.albums.length - 5} more album{artist.albums.length - 5 !== 1 ? 's' : ''}
+                          +{artist.albums.length - 5} more album
+                          {artist.albums.length - 5 !== 1 ? 's' : ''}
                         </p>
                       )}
                     </div>
@@ -325,7 +327,9 @@ const ArtistsByLocation = () => {
               <Globe size={32} className="text-gray-400" />
             </div>
             <h3 className="text-white text-xl font-semibold mb-2">Explore Artists Worldwide</h3>
-            <p className="text-gray-400">Select a country above to discover artists from around the world</p>
+            <p className="text-gray-400">
+              Select a country above to discover artists from around the world
+            </p>
           </div>
         )}
       </div>

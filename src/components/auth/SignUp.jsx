@@ -91,9 +91,7 @@ const SignUp = ({ onClose, onSwitchToSignIn }) => {
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Display Name Input */}
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
-              Display Name
-            </label>
+            <label className="block text-sm font-medium text-gray-300 mb-2">Display Name</label>
             <div className="relative">
               <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
               <input
@@ -110,9 +108,7 @@ const SignUp = ({ onClose, onSwitchToSignIn }) => {
 
           {/* Email Input */}
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
-              Email
-            </label>
+            <label className="block text-sm font-medium text-gray-300 mb-2">Email</label>
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
               <input
@@ -129,9 +125,7 @@ const SignUp = ({ onClose, onSwitchToSignIn }) => {
 
           {/* Password Input */}
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
-              Password
-            </label>
+            <label className="block text-sm font-medium text-gray-300 mb-2">Password</label>
             <div className="relative">
               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
               <input

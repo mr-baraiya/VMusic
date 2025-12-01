@@ -32,7 +32,7 @@ const Search = () => {
     try {
       const userRef = doc(db, 'users', currentUser.uid);
       const userSnap = await getDoc(userRef);
-      
+
       if (userSnap.exists()) {
         const userData = userSnap.data();
         const likedTrackIds = userData.likedTracks || [];
@@ -71,7 +71,7 @@ const Search = () => {
 
     setLoading(true);
     setHasSearched(true);
-    
+
     try {
       const data = await jamendoAPI.searchTracks(query, 30);
       const results = data.results || [];
@@ -125,7 +125,7 @@ const Search = () => {
         await updateDoc(userRef, {
           likedTracks: arrayRemove(trackId),
         });
-        setLikedTracks(prev => {
+        setLikedTracks((prev) => {
           const newSet = new Set(prev);
           newSet.delete(trackId);
           return newSet;
@@ -135,7 +135,7 @@ const Search = () => {
         await updateDoc(userRef, {
           likedTracks: arrayUnion(trackId),
         });
-        setLikedTracks(prev => {
+        setLikedTracks((prev) => {
           const newSet = new Set(prev);
           newSet.add(trackId);
           return newSet;
@@ -153,7 +153,7 @@ const Search = () => {
       {/* Header with Search */}
       <div className="relative overflow-hidden bg-gradient-to-r from-blue-900/40 via-indigo-900/40 to-purple-900/40 border-b border-white/10">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDI1NSwgMjU1LCAyNTUsIDAuMDUpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-30"></div>
-        
+
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -170,7 +170,10 @@ const Search = () => {
             {/* Search Bar */}
             <form onSubmit={handleSearchSubmit} className="relative">
               <div className="relative">
-                <SearchIcon className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-400" size={24} />
+                <SearchIcon
+                  className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-400"
+                  size={24}
+                />
                 <input
                   type="text"
                   value={searchQuery}
@@ -216,7 +219,7 @@ const Search = () => {
                   </p>
                 )}
               </div>
-              
+
               {/* VibeTube Search Button */}
               {searchQuery.trim() && (
                 <button
@@ -269,7 +272,7 @@ const Search = () => {
                     className="w-full aspect-square object-cover group-hover:scale-110 transition-transform duration-300"
                   />
                   <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <button 
+                    <button
                       onClick={(e) => {
                         e.stopPropagation();
                         playTrack(track, tracks);
@@ -286,7 +289,7 @@ const Search = () => {
                   {track.name}
                 </h3>
                 <p className="text-gray-400 text-xs truncate mb-2">{track.artist_name}</p>
-                
+
                 {/* Footer */}
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-gray-500">
@@ -300,10 +303,7 @@ const Search = () => {
                         : 'text-gray-400 hover:text-pink-500'
                     }`}
                   >
-                    <Heart
-                      size={16}
-                      fill={likedTracks.has(track.id) ? 'currentColor' : 'none'}
-                    />
+                    <Heart size={16} fill={likedTracks.has(track.id) ? 'currentColor' : 'none'} />
                   </button>
                 </div>
               </motion.div>
@@ -322,11 +322,10 @@ const Search = () => {
             <div className="inline-flex items-center justify-center w-24 h-24 bg-white/5 rounded-full mb-6">
               <SearchIcon size={48} className="text-gray-600" />
             </div>
-            <h3 className="text-2xl font-semibold text-white mb-2">
-              Start your search
-            </h3>
+            <h3 className="text-2xl font-semibold text-white mb-2">Start your search</h3>
             <p className="text-gray-400 max-w-md mx-auto">
-              Enter a song name, artist, or album to discover amazing indie music from around the world
+              Enter a song name, artist, or album to discover amazing indie music from around the
+              world
             </p>
           </motion.div>
         )}
@@ -340,9 +339,7 @@ const Search = () => {
             className="text-center py-20"
           >
             <Music2 size={64} className="text-gray-600 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-white mb-2">
-              No tracks found
-            </h3>
+            <h3 className="text-xl font-semibold text-white mb-2">No tracks found</h3>
             <p className="text-gray-400 mb-6">
               We couldn't find any tracks matching "{searchQuery}"
             </p>

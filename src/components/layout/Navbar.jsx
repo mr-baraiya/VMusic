@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Music2, 
-  Search, 
-  Home, 
-  Compass, 
-  Heart, 
-  ListMusic, 
-  User, 
+import {
+  Music2,
+  Search,
+  Home,
+  Compass,
+  Heart,
+  ListMusic,
+  User,
   LogOut,
   Menu,
   X,
@@ -17,7 +17,7 @@ import {
   Users,
   Sparkles,
   Youtube,
-  Disc3
+  Disc3,
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { SignIn, SignUp } from '../auth';
@@ -29,7 +29,7 @@ const Navbar = () => {
   const [showSignUp, setShowSignUp] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showSearchBar, setShowSearchBar] = useState(false);
-  
+
   const { currentUser, logout } = useAuth();
   const navigate = useNavigate();
 
@@ -112,7 +112,10 @@ const Navbar = () => {
               ) : (
                 <form onSubmit={handleSearch} className="flex items-center flex-1 max-w-md mx-8">
                   <div className="relative w-full">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                    <Search
+                      className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                      size={18}
+                    />
                     <input
                       type="text"
                       value={searchQuery}
@@ -205,7 +208,10 @@ const Navbar = () => {
           {/* Mobile Search Bar */}
           <form onSubmit={handleSearch} className="md:hidden pb-4">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+              <Search
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                size={18}
+              />
               <input
                 type="text"
                 value={searchQuery}
@@ -229,7 +235,10 @@ const Navbar = () => {
             >
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
                 <form onSubmit={handleSearch} className="relative">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                  <Search
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+                    size={20}
+                  />
                   <input
                     type="text"
                     value={searchQuery}

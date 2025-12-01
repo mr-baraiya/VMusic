@@ -8,61 +8,62 @@ A comprehensive development plan for building VMusic — a professional-grade mu
 
 ## 📊 Feature Tracker Table
 
-| Feature | Phase | Priority | Difficulty | Impact (1-10) | Est. Time | Status | Dependencies |
-|---------|-------|----------|------------|---------------|-----------|--------|--------------|
-| **Core Foundation** |
-| Jamendo API Integration | 1 | High | Easy | 10 | 2 days | ✅ Done | - |
-| Basic Player (Play/Pause) | 1 | High | Easy | 10 | 2 days | ✅ Done | API |
-| Song Metadata Display | 1 | High | Easy | 9 | 1 day | ✅ Done | API |
-| Loading States & Skeletons | 1 | High | Easy | 8 | 2 days | ⏳ Todo | - |
-| Error Handling & Fallbacks | 1 | High | Easy | 8 | 1 day | ⏳ Todo | - |
-| Search Functionality | 1 | High | Medium | 9 | 3 days | ⏳ Todo | API |
-| Genre/Mood Filters | 1 | High | Medium | 8 | 3 days | ⏳ Todo | API |
-| Popular/New Release Tabs | 1 | Medium | Easy | 7 | 2 days | ⏳ Todo | API |
-| **Playback Experience** |
-| Next/Previous Track Controls | 2 | High | Easy | 9 | 2 days | ⏳ Todo | Player |
-| Seek Bar (Progress + Time) | 2 | High | Medium | 9 | 3 days | ⏳ Todo | Player |
-| Volume Slider | 2 | High | Easy | 7 | 2 days | ⏳ Todo | Player |
-| Shuffle & Repeat Modes | 2 | Medium | Medium | 6 | 2 days | ⏳ Todo | Player |
-| Mini Floating Player | 2 | Medium | Medium | 8 | 3 days | ⏳ Todo | Player |
-| Keyboard Shortcuts | 2 | Low | Easy | 5 | 1 day | ⏳ Todo | Player |
-| **UI/UX Polish** |
-| Responsive Design (Mobile/Tablet/Desktop) | 2 | High | Medium | 10 | 4 days | ⏳ Todo | - |
-| Smooth Animations (Framer Motion) | 2 | Medium | Medium | 8 | 3 days | ⏳ Todo | - |
-| Glassmorphism UI Design | 2 | Low | Easy | 7 | 2 days | ⏳ Todo | Tailwind |
-| Dynamic Blurred Background | 2 | Medium | Medium | 9 | 2 days | ⏳ Todo | Album Art |
-| Dark/Light Mode Toggle | 2 | Medium | Easy | 8 | 2 days | ⏳ Todo | Tailwind |
-| Album Art Fallback Images | 1 | Medium | Easy | 6 | 1 day | ⏳ Todo | - |
-| **Personalization** |
-| Recently Played (localStorage) | 3 | High | Easy | 8 | 2 days | ⏳ Todo | - |
-| Favorite/Like Songs (localStorage) | 3 | High | Easy | 9 | 2 days | ⏳ Todo | - |
-| Create & Manage Playlists | 3 | High | Medium | 9 | 4 days | ⏳ Todo | Storage |
-| User Authentication (Optional) | 3 | Low | Hard | 7 | 5 days | ⏳ Todo | Backend |
-| Profile Settings Page | 3 | Low | Easy | 5 | 2 days | ⏳ Todo | Auth |
-| **Discovery & Social** |
-| Trending Songs Section | 4 | High | Easy | 8 | 2 days | ⏳ Todo | API |
-| Mood-Based Radio (Chill/Focus/Workout) | 4 | Medium | Medium | 8 | 3 days | ⏳ Todo | API |
-| Artist Profile Pages | 4 | Medium | Medium | 7 | 4 days | ⏳ Todo | API |
-| Share Song (Copy Link/Social) | 4 | Low | Easy | 6 | 2 days | ⏳ Todo | - |
-| Related Artists/Songs | 4 | Low | Medium | 6 | 3 days | ⏳ Todo | API |
-| **Backend (Optional)** |
-| Express.js / ASP.NET Core Setup | 5 | Medium | Medium | 7 | 3 days | ⏳ Todo | - |
-| MongoDB / PostgreSQL Integration | 5 | Medium | Medium | 7 | 3 days | ⏳ Todo | Backend |
-| User API (Signup/Login/JWT) | 5 | Medium | Hard | 8 | 5 days | ⏳ Todo | DB |
-| Playlists API (CRUD) | 5 | Medium | Medium | 8 | 3 days | ⏳ Todo | DB, Auth |
-| Favorites API | 5 | Medium | Easy | 7 | 2 days | ⏳ Todo | DB, Auth |
-| Listening History API | 5 | Low | Easy | 6 | 2 days | ⏳ Todo | DB, Auth |
-| **Advanced Features** |
-| PWA Support (Installable) | 6 | Medium | Medium | 8 | 3 days | ⏳ Todo | Vite Config |
-| Offline Mode (Service Workers) | 6 | Low | Hard | 6 | 5 days | ⏳ Todo | PWA |
-| Music Visualizer (Web Audio API) | 7 | Low | Hard | 7 | 5 days | ⏳ Todo | Player |
-| Lyrics Integration (Lyrics.ovh) | 7 | Low | Medium | 7 | 3 days | ⏳ Todo | API |
-| AI Mood Playlist Generator | 7 | Low | Hard | 8 | 7 days | ⏳ Todo | Backend, AI |
-| Recommendation System | 7 | Low | Hard | 8 | 7 days | ⏳ Todo | Backend, ML |
-| Queue Management | 2 | Medium | Medium | 8 | 3 days | ⏳ Todo | Player |
-| Crossfade Between Songs | 7 | Low | Hard | 5 | 4 days | ⏳ Todo | Player |
+| Feature                                   | Phase | Priority | Difficulty | Impact (1-10) | Est. Time | Status  | Dependencies |
+| ----------------------------------------- | ----- | -------- | ---------- | ------------- | --------- | ------- | ------------ |
+| **Core Foundation**                       |
+| Jamendo API Integration                   | 1     | High     | Easy       | 10            | 2 days    | ✅ Done | -            |
+| Basic Player (Play/Pause)                 | 1     | High     | Easy       | 10            | 2 days    | ✅ Done | API          |
+| Song Metadata Display                     | 1     | High     | Easy       | 9             | 1 day     | ✅ Done | API          |
+| Loading States & Skeletons                | 1     | High     | Easy       | 8             | 2 days    | ⏳ Todo | -            |
+| Error Handling & Fallbacks                | 1     | High     | Easy       | 8             | 1 day     | ⏳ Todo | -            |
+| Search Functionality                      | 1     | High     | Medium     | 9             | 3 days    | ⏳ Todo | API          |
+| Genre/Mood Filters                        | 1     | High     | Medium     | 8             | 3 days    | ⏳ Todo | API          |
+| Popular/New Release Tabs                  | 1     | Medium   | Easy       | 7             | 2 days    | ⏳ Todo | API          |
+| **Playback Experience**                   |
+| Next/Previous Track Controls              | 2     | High     | Easy       | 9             | 2 days    | ⏳ Todo | Player       |
+| Seek Bar (Progress + Time)                | 2     | High     | Medium     | 9             | 3 days    | ⏳ Todo | Player       |
+| Volume Slider                             | 2     | High     | Easy       | 7             | 2 days    | ⏳ Todo | Player       |
+| Shuffle & Repeat Modes                    | 2     | Medium   | Medium     | 6             | 2 days    | ⏳ Todo | Player       |
+| Mini Floating Player                      | 2     | Medium   | Medium     | 8             | 3 days    | ⏳ Todo | Player       |
+| Keyboard Shortcuts                        | 2     | Low      | Easy       | 5             | 1 day     | ⏳ Todo | Player       |
+| **UI/UX Polish**                          |
+| Responsive Design (Mobile/Tablet/Desktop) | 2     | High     | Medium     | 10            | 4 days    | ⏳ Todo | -            |
+| Smooth Animations (Framer Motion)         | 2     | Medium   | Medium     | 8             | 3 days    | ⏳ Todo | -            |
+| Glassmorphism UI Design                   | 2     | Low      | Easy       | 7             | 2 days    | ⏳ Todo | Tailwind     |
+| Dynamic Blurred Background                | 2     | Medium   | Medium     | 9             | 2 days    | ⏳ Todo | Album Art    |
+| Dark/Light Mode Toggle                    | 2     | Medium   | Easy       | 8             | 2 days    | ⏳ Todo | Tailwind     |
+| Album Art Fallback Images                 | 1     | Medium   | Easy       | 6             | 1 day     | ⏳ Todo | -            |
+| **Personalization**                       |
+| Recently Played (localStorage)            | 3     | High     | Easy       | 8             | 2 days    | ⏳ Todo | -            |
+| Favorite/Like Songs (localStorage)        | 3     | High     | Easy       | 9             | 2 days    | ⏳ Todo | -            |
+| Create & Manage Playlists                 | 3     | High     | Medium     | 9             | 4 days    | ⏳ Todo | Storage      |
+| User Authentication (Optional)            | 3     | Low      | Hard       | 7             | 5 days    | ⏳ Todo | Backend      |
+| Profile Settings Page                     | 3     | Low      | Easy       | 5             | 2 days    | ⏳ Todo | Auth         |
+| **Discovery & Social**                    |
+| Trending Songs Section                    | 4     | High     | Easy       | 8             | 2 days    | ⏳ Todo | API          |
+| Mood-Based Radio (Chill/Focus/Workout)    | 4     | Medium   | Medium     | 8             | 3 days    | ⏳ Todo | API          |
+| Artist Profile Pages                      | 4     | Medium   | Medium     | 7             | 4 days    | ⏳ Todo | API          |
+| Share Song (Copy Link/Social)             | 4     | Low      | Easy       | 6             | 2 days    | ⏳ Todo | -            |
+| Related Artists/Songs                     | 4     | Low      | Medium     | 6             | 3 days    | ⏳ Todo | API          |
+| **Backend (Optional)**                    |
+| Express.js / ASP.NET Core Setup           | 5     | Medium   | Medium     | 7             | 3 days    | ⏳ Todo | -            |
+| MongoDB / PostgreSQL Integration          | 5     | Medium   | Medium     | 7             | 3 days    | ⏳ Todo | Backend      |
+| User API (Signup/Login/JWT)               | 5     | Medium   | Hard       | 8             | 5 days    | ⏳ Todo | DB           |
+| Playlists API (CRUD)                      | 5     | Medium   | Medium     | 8             | 3 days    | ⏳ Todo | DB, Auth     |
+| Favorites API                             | 5     | Medium   | Easy       | 7             | 2 days    | ⏳ Todo | DB, Auth     |
+| Listening History API                     | 5     | Low      | Easy       | 6             | 2 days    | ⏳ Todo | DB, Auth     |
+| **Advanced Features**                     |
+| PWA Support (Installable)                 | 6     | Medium   | Medium     | 8             | 3 days    | ⏳ Todo | Vite Config  |
+| Offline Mode (Service Workers)            | 6     | Low      | Hard       | 6             | 5 days    | ⏳ Todo | PWA          |
+| Music Visualizer (Web Audio API)          | 7     | Low      | Hard       | 7             | 5 days    | ⏳ Todo | Player       |
+| Lyrics Integration (Lyrics.ovh)           | 7     | Low      | Medium     | 7             | 3 days    | ⏳ Todo | API          |
+| AI Mood Playlist Generator                | 7     | Low      | Hard       | 8             | 7 days    | ⏳ Todo | Backend, AI  |
+| Recommendation System                     | 7     | Low      | Hard       | 8             | 7 days    | ⏳ Todo | Backend, ML  |
+| Queue Management                          | 2     | Medium   | Medium     | 8             | 3 days    | ⏳ Todo | Player       |
+| Crossfade Between Songs                   | 7     | Low      | Hard       | 5             | 4 days    | ⏳ Todo | Player       |
 
 **Legend:**
+
 - ✅ Done | ⏳ Todo | 🚧 In Progress | ❌ Blocked
 
 ---
@@ -74,6 +75,7 @@ A comprehensive development plan for building VMusic — a professional-grade mu
 **Goal:** Build a solid, working music player with API integration and basic discovery.
 
 **Features:**
+
 - ✅ Jamendo API integration with real songs
 - ✅ Basic play/pause functionality
 - ✅ Song metadata display (title, artist, album art)
@@ -84,12 +86,14 @@ A comprehensive development plan for building VMusic — a professional-grade mu
 - ⏳ Popular & New Releases tabs
 
 **Tech Tasks:**
+
 - Set up Vite + React + Tailwind CSS ✅
 - Create reusable UI components (SongCard, SearchBar, FilterChips)
 - Implement Jamendo API service layer with error handling
 - Add loading skeletons using Tailwind animations
 
 **Deliverables:**
+
 - Functional search + browse + play experience
 - Clean, modern UI with proper loading/error states
 
@@ -100,6 +104,7 @@ A comprehensive development plan for building VMusic — a professional-grade mu
 **Goal:** Make the player feel professional, smooth, and delightful.
 
 **Features:**
+
 - Next/Previous track controls
 - Seek bar with current time / total duration
 - Volume slider with mute toggle
@@ -113,6 +118,7 @@ A comprehensive development plan for building VMusic — a professional-grade mu
 - Dark/Light mode toggle
 
 **Tech Tasks:**
+
 - Build custom Audio Player hook with full controls
 - Implement Framer Motion for page transitions & animations
 - Add Tailwind dark mode with `darkMode: 'class'`
@@ -120,6 +126,7 @@ A comprehensive development plan for building VMusic — a professional-grade mu
 - Optimize performance (lazy loading, code splitting)
 
 **Deliverables:**
+
 - Fully functional player with all standard controls
 - Beautiful, responsive UI with smooth animations
 - Both dark and light themes
@@ -131,6 +138,7 @@ A comprehensive development plan for building VMusic — a professional-grade mu
 **Goal:** Let users save preferences and create their own music collections.
 
 **Features:**
+
 - Recently Played history (last 20-30 songs)
 - Favorite/Like songs with heart icon
 - Create custom playlists
@@ -140,6 +148,7 @@ A comprehensive development plan for building VMusic — a professional-grade mu
 - Optional: Profile settings page
 
 **Tech Tasks:**
+
 - Implement localStorage for favorites, history, playlists
 - Create Context/Redux for global state management
 - Build playlist management UI (modal/sidebar)
@@ -147,6 +156,7 @@ A comprehensive development plan for building VMusic — a professional-grade mu
 - Sync data to backend if auth is added
 
 **Deliverables:**
+
 - Users can save and organize their favorite music
 - Persistent state across sessions (localStorage or DB)
 - Optional login/signup flow
@@ -158,6 +168,7 @@ A comprehensive development plan for building VMusic — a professional-grade mu
 **Goal:** Help users discover new music and share their favorites.
 
 **Features:**
+
 - Trending songs section (by popularity)
 - Mood-based radio stations (Chill, Focus, Workout, Party, Romantic)
 - Artist profile pages (bio, albums, top tracks)
@@ -167,12 +178,14 @@ A comprehensive development plan for building VMusic — a professional-grade mu
 - "Staff Picks" or curated playlists
 
 **Tech Tasks:**
+
 - Use Jamendo API filters: `order=popularity_total`, `datecreated`, `tags`
 - Build artist page component with dynamic routing
 - Implement Web Share API for mobile sharing
 - Create curated mood playlists (manual or API-based)
 
 **Deliverables:**
+
 - Rich discovery experience with multiple browse options
 - Artist pages with full discography
 - Easy social sharing
@@ -184,6 +197,7 @@ A comprehensive development plan for building VMusic — a professional-grade mu
 **Goal:** Add persistence, user accounts, and scalable data storage.
 
 **Features:**
+
 - Backend API with Express.js or ASP.NET Core
 - Database (MongoDB or PostgreSQL)
 - User authentication (JWT + OAuth2)
@@ -195,6 +209,7 @@ A comprehensive development plan for building VMusic — a professional-grade mu
 - Sync localStorage data to cloud for logged-in users
 
 **Tech Tasks:**
+
 - Set up Node.js/Express or ASP.NET Core backend
 - Connect to MongoDB Atlas or PostgreSQL
 - Implement JWT token authentication
@@ -203,6 +218,7 @@ A comprehensive development plan for building VMusic — a professional-grade mu
 - Deploy backend to Render, Railway, or Fly.io
 
 **Deliverables:**
+
 - Fully functional backend API
 - User accounts with cloud sync
 - Secure authentication system
@@ -214,6 +230,7 @@ A comprehensive development plan for building VMusic — a professional-grade mu
 **Goal:** Make VMusic installable and lightning-fast.
 
 **Features:**
+
 - Progressive Web App (PWA) support
 - Installable app icon (Add to Home Screen)
 - Offline mode with service workers
@@ -225,6 +242,7 @@ A comprehensive development plan for building VMusic — a professional-grade mu
   - CDN integration
 
 **Tech Tasks:**
+
 - Add Vite PWA plugin (`vite-plugin-pwa`)
 - Create `manifest.json` with app icons
 - Implement service worker for offline caching
@@ -233,6 +251,7 @@ A comprehensive development plan for building VMusic — a professional-grade mu
 - Set up Vercel/Netlify for edge caching
 
 **Deliverables:**
+
 - Installable PWA on mobile & desktop
 - Fast load times (<2s initial load)
 - Offline playback capability
@@ -244,6 +263,7 @@ A comprehensive development plan for building VMusic — a professional-grade mu
 **Goal:** Differentiate VMusic with unique, cutting-edge features.
 
 **Features:**
+
 - **Lyrics Integration:** Display synced lyrics using Lyrics.ovh or Musixmatch API
 - **Music Visualizer:** Real-time frequency bars using Web Audio API
 - **AI Mood Playlist:** Generate playlists from text prompts ("Relaxing jazz for study")
@@ -252,6 +272,7 @@ A comprehensive development plan for building VMusic — a professional-grade mu
 - **Equalizer:** Custom audio EQ settings (Bass, Treble, etc.)
 
 **Tech Tasks:**
+
 - Integrate lyrics API with search/sync
 - Build audio visualizer with Canvas/WebGL
 - Optional: Add AI backend (OpenAI API or local model)
@@ -259,6 +280,7 @@ A comprehensive development plan for building VMusic — a professional-grade mu
 - Use Web Audio API for advanced audio features
 
 **Deliverables:**
+
 - Unique features that set VMusic apart from competitors
 - AI-powered music discovery
 - Pro-level audio controls
@@ -438,6 +460,7 @@ VMusic/
 ### **1. Layout Components**
 
 #### `Navbar.jsx`
+
 - Logo + App name
 - Search bar (global)
 - Dark/light mode toggle
@@ -445,6 +468,7 @@ VMusic/
 - Navigation links (Home, Browse, Library, Discover)
 
 #### `Sidebar.jsx`
+
 - Navigation menu (Home, Search, Library)
 - Recently Played section
 - My Playlists
@@ -452,6 +476,7 @@ VMusic/
 - Collapsible on mobile
 
 #### `Footer.jsx` / `Player.jsx`
+
 - Fixed bottom player bar
 - Album art thumbnail
 - Song info (title, artist)
@@ -466,19 +491,21 @@ VMusic/
 ### **2. Player Components**
 
 #### `Player.jsx` (Main Player)
+
 ```jsx
 <Player>
-  <PlayerArt />          {/* Large album art with blur effect */}
-  <SongInfo />           {/* Title, artist, album */}
-  <Controls />           {/* Play/pause, next, prev, shuffle, repeat */}
-  <SeekBar />            {/* Progress bar + time stamps */}
-  <VolumeSlider />       {/* Volume control */}
-  <ActionButtons />      {/* Like, add to playlist, share */}
-  <Visualizer />         {/* Optional: audio visualizer */}
+  <PlayerArt /> {/* Large album art with blur effect */}
+  <SongInfo /> {/* Title, artist, album */}
+  <Controls /> {/* Play/pause, next, prev, shuffle, repeat */}
+  <SeekBar /> {/* Progress bar + time stamps */}
+  <VolumeSlider /> {/* Volume control */}
+  <ActionButtons /> {/* Like, add to playlist, share */}
+  <Visualizer /> {/* Optional: audio visualizer */}
 </Player>
 ```
 
 #### `MiniPlayer.jsx`
+
 - Compact floating player (stays visible on all pages)
 - Shows current song
 - Basic play/pause control
@@ -489,6 +516,7 @@ VMusic/
 ### **3. Music Components**
 
 #### `SongCard.jsx`
+
 ```jsx
 Props: { song, onPlay, onLike, showAlbum }
 - Album art image
@@ -501,6 +529,7 @@ Props: { song, onPlay, onLike, showAlbum }
 ```
 
 #### `SongList.jsx`
+
 ```jsx
 Props: { songs, currentSong, onSongSelect }
 - Table/list view of songs
@@ -514,6 +543,7 @@ Props: { songs, currentSong, onSongSelect }
 ### **4. Search & Filter Components**
 
 #### `SearchBar.jsx`
+
 ```jsx
 Props: { onSearch, placeholder }
 - Input field with icon
@@ -523,6 +553,7 @@ Props: { onSearch, placeholder }
 ```
 
 #### `FilterChips.jsx`
+
 ```jsx
 Props: { filters, activeFilter, onFilterChange }
 - Genre chips (Rock, Pop, Jazz, Electronic, etc.)
@@ -536,6 +567,7 @@ Props: { filters, activeFilter, onFilterChange }
 ### **5. Feature Components**
 
 #### `Playlists.jsx`
+
 ```jsx
 - Grid of playlist cards
 - "Create New Playlist" button
@@ -547,6 +579,7 @@ Props: { filters, activeFilter, onFilterChange }
 ```
 
 #### `MoodRadio.jsx`
+
 ```jsx
 Props: { mood }
 - Large mood cards (Chill, Focus, Workout, etc.)
@@ -560,6 +593,7 @@ Props: { mood }
 ## 🎯 UI/UX Best Practices
 
 ### **Design Principles**
+
 1. **Minimalism:** Clean, uncluttered interface
 2. **Accessibility:** WCAG 2.1 AA compliant (keyboard nav, ARIA labels)
 3. **Consistency:** Uniform spacing, colors, typography
@@ -567,6 +601,7 @@ Props: { mood }
 5. **Performance:** Lazy loading, optimized images, code splitting
 
 ### **Color Palette (Suggested)**
+
 ```css
 /* Dark Mode */
 --bg-primary: #0a0a0a;
@@ -588,11 +623,13 @@ Props: { mood }
 ```
 
 ### **Typography**
+
 - **Headings:** Inter, Poppins, or Montserrat (bold, modern)
 - **Body:** System fonts for performance
 - **Scale:** 12px, 14px, 16px, 20px, 24px, 32px, 48px
 
 ### **Spacing System**
+
 - Use Tailwind's spacing scale: 4px increments (0, 1, 2, 3, 4, 6, 8, 12, 16, 20, 24, 32, 40, 48, 64)
 
 ---
@@ -903,6 +940,7 @@ Track these metrics to measure VMusic's success:
    - Targets users looking for alternative/indie music
 
 **Bonus:**
+
 - "Pure Music. Pure Joy. Zero Ads."
 - "The Indie Music Revolution Starts Here."
 - "Listen Different. Discover Better."
@@ -914,6 +952,7 @@ Track these metrics to measure VMusic's success:
 ### **Week 1 Action Plan (Starting Nov 12, 2025)**
 
 **Day 1-2: Setup & Infrastructure**
+
 ```bash
 # Install dependencies
 npm install tailwindcss @tailwindcss/vite autoprefixer -D
@@ -926,18 +965,21 @@ npm install lucide-react  # For icons
 ```
 
 **Day 3-4: API Integration**
+
 - Complete Jamendo API service layer
 - Add error handling & retries
 - Test all API endpoints
 - Create loading skeleton components
 
 **Day 5-7: Search & Browse**
+
 - Implement search bar with debouncing
 - Add genre/mood filter chips
 - Create Popular & New Releases tabs
 - Build responsive song grid/list views
 
 **Week 2: Polish & Testing**
+
 - Add loading states everywhere
 - Error boundaries for crash prevention
 - Responsive design testing (mobile/tablet/desktop)
@@ -968,6 +1010,7 @@ npm install lucide-react  # For icons
 ```
 
 **Why these libraries?**
+
 - **React Router:** Client-side routing for SPAs
 - **Framer Motion:** Smooth, declarative animations
 - **Lucide React:** Beautiful, customizable icons
@@ -979,22 +1022,27 @@ npm install lucide-react  # For icons
 ## 🎓 Learning Resources
 
 ### **React + Vite**
+
 - [Vite Official Guide](https://vitejs.dev/guide/)
 - [React Official Docs](https://react.dev/)
 
 ### **Tailwind CSS**
+
 - [Tailwind CSS Docs](https://tailwindcss.com/docs)
 - [Tailwind UI Components](https://tailwindui.com/)
 
 ### **Framer Motion**
+
 - [Framer Motion Docs](https://www.framer.com/motion/)
 - [Motion Layout Animations](https://www.framer.com/motion/layout-animations/)
 
 ### **Audio APIs**
+
 - [Web Audio API MDN](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API)
 - [HTML5 Audio Element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio)
 
 ### **PWA**
+
 - [PWA Builder](https://www.pwabuilder.com/)
 - [Vite PWA Plugin](https://vite-pwa-org.netlify.app/)
 
@@ -1020,21 +1068,25 @@ For each feature to be considered "complete":
 ## 🚢 Deployment Strategy
 
 ### **Frontend Hosting (Free Tier)**
+
 - **Vercel** (Recommended) — Best for Vite/React
 - **Netlify** — Great CI/CD integration
 - **Cloudflare Pages** — Fast global CDN
 
 ### **Backend Hosting (Free Tier)**
+
 - **Render** — Easy Node.js deployment
 - **Railway** — Great for databases + API
 - **Fly.io** — Global edge deployment
 
 ### **Database Hosting (Free Tier)**
+
 - **MongoDB Atlas** — 512MB free
 - **Supabase** — PostgreSQL with real-time
 - **PlanetScale** — Serverless MySQL
 
 ### **CI/CD Pipeline**
+
 ```yaml
 # .github/workflows/deploy.yml
 name: Deploy to Vercel
@@ -1066,6 +1118,7 @@ VMusic has the potential to become a **premier destination for indie music lover
 You'll create something truly special. Start with Phase 1 to build a solid foundation, then iteratively add features based on user feedback.
 
 **Remember:**
+
 - 🚀 Launch early, iterate often
 - 📊 Measure everything (analytics are key)
 - 💬 Listen to user feedback
@@ -1075,6 +1128,7 @@ You'll create something truly special. Start with Phase 1 to build a solid found
 ---
 
 **Ready to build?** Start with:
+
 ```bash
 npm install tailwindcss @tailwindcss/vite autoprefixer -D
 npm run dev

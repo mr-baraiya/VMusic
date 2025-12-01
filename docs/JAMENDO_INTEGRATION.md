@@ -9,6 +9,7 @@ I've successfully integrated the **Jamendo API** with your VMusic landing page. 
 ## 📦 Files Created/Modified
 
 ### **New Files:**
+
 1. **`src/api/jamendo.js`** — Complete Jamendo API service
    - 10+ API methods
    - Error handling
@@ -19,6 +20,7 @@ I've successfully integrated the **Jamendo API** with your VMusic landing page. 
    - `VITE_JAMENDO_CLIENT_ID=your_jamendo_client_id_here`
 
 ### **Updated Files:**
+
 3. **`src/components/landing/Explore.jsx`** — Now fetches real tracks
    - Loading skeletons while fetching
    - Real album art from Jamendo
@@ -33,6 +35,7 @@ I've successfully integrated the **Jamendo API** with your VMusic landing page. 
 ## 🎯 What's Working Right Now
 
 ### **Live Features:**
+
 - ✅ **Real Music Data** — Fetches trending tracks from Jamendo
 - ✅ **Working Audio Player** — Click play to hear real songs!
 - ✅ **Album Art** — Real album covers from artists
@@ -47,11 +50,13 @@ I've successfully integrated the **Jamendo API** with your VMusic landing page. 
 ## 🚀 How to Test
 
 ### **View the Landing Page:**
+
 ```
 http://localhost:5173/
 ```
 
 ### **What You'll See:**
+
 1. Scroll down to the **"Trending Now"** section
 2. You'll see **8 real tracks** from Jamendo
 3. **Hover over any track** to see the play button
@@ -66,6 +71,7 @@ http://localhost:5173/
 The `jamendoAPI` service provides these methods:
 
 ### **Track Methods:**
+
 ```javascript
 import { jamendoAPI } from './api/jamendo';
 
@@ -83,6 +89,7 @@ await jamendoAPI.getTracksByTag('rock', 20);
 ```
 
 ### **Artist & Album Methods:**
+
 ```javascript
 // Get artist info
 await jamendoAPI.getArtist('artistId');
@@ -95,6 +102,7 @@ await jamendoAPI.getAlbum('albumId');
 ```
 
 ### **Radio & Playlist Methods:**
+
 ```javascript
 // Get available radios
 await jamendoAPI.getRadios();
@@ -107,6 +115,7 @@ await jamendoAPI.getPlaylists(20);
 ```
 
 ### **Utility Methods:**
+
 ```javascript
 // Format duration (seconds to MM:SS)
 jamendoAPI.formatDuration(245); // Returns "4:05"
@@ -117,6 +126,7 @@ jamendoAPI.formatDuration(245); // Returns "4:05"
 ## 📊 Response Structure
 
 ### **Successful Response:**
+
 ```json
 {
   "headers": {
@@ -154,24 +164,24 @@ import { jamendoAPI } from '../api/jamendo';
 function SearchTracks() {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
-  
+
   const handleSearch = async () => {
     const data = await jamendoAPI.searchTracks(query);
     if (data.headers.status === 'success') {
       setResults(data.results);
     }
   };
-  
+
   return (
     <div>
-      <input 
-        value={query} 
+      <input
+        value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Search for tracks..."
       />
       <button onClick={handleSearch}>Search</button>
-      
-      {results.map(track => (
+
+      {results.map((track) => (
         <div key={track.id}>
           <h3>{track.name}</h3>
           <p>{track.artist_name}</p>
@@ -190,17 +200,17 @@ const genreTags = ['rock', 'pop', 'jazz', 'electronic', 'chill'];
 
 function GenreFilter() {
   const [tracks, setTracks] = useState([]);
-  
+
   const loadGenre = async (tag) => {
     const data = await jamendoAPI.getTracksByTag(tag, 20);
     if (data.headers.status === 'success') {
       setTracks(data.results);
     }
   };
-  
+
   return (
     <div>
-      {genreTags.map(tag => (
+      {genreTags.map((tag) => (
         <button key={tag} onClick={() => loadGenre(tag)}>
           {tag}
         </button>
@@ -216,11 +226,13 @@ function GenreFilter() {
 ## 🔑 API Key Configuration
 
 ### **Current Setup:**
+
 - Get your own API key from [Jamendo DevPortal](https://devportal.jamendo.com/)
 - Stored in `.env` file
 - Fallback in code if env var missing
 
 ### **Get Your Own Key:**
+
 1. Visit: https://devportal.jamendo.com/
 2. Create free account
 3. Get your personal client ID
@@ -230,6 +242,7 @@ function GenreFilter() {
    ```
 
 ### **Why Get Your Own Key?**
+
 - Higher rate limits
 - Usage analytics
 - Production-ready
@@ -240,15 +253,15 @@ function GenreFilter() {
 ## ⚡ Performance Features
 
 ### **1. Loading States**
+
 ```jsx
-{loading ? (
-  <SkeletonLoader />
-) : (
-  <TrackList tracks={tracks} />
-)}
+{
+  loading ? <SkeletonLoader /> : <TrackList tracks={tracks} />;
+}
 ```
 
 ### **2. Error Handling**
+
 ```javascript
 try {
   const data = await jamendoAPI.getTrendingTracks();
@@ -260,9 +273,10 @@ try {
 ```
 
 ### **3. Image Fallbacks**
+
 ```jsx
-<img 
-  src={track.image} 
+<img
+  src={track.image}
   onError={(e) => {
     e.target.src = 'fallback-image.jpg';
   }}
@@ -274,12 +288,14 @@ try {
 ## 🎯 Next Steps to Enhance
 
 ### **1. Add Search Functionality**
+
 - Create search bar component
 - Debounce input (300ms)
 - Display search results
 - Clear search button
 
 ### **2. Build Full Music Player**
+
 - Sticky bottom player
 - Queue management
 - Next/Previous track
@@ -287,40 +303,39 @@ try {
 - Seek bar
 
 ### **3. Create Genre Pages**
+
 ```javascript
 // pages/Genre.jsx
 const genres = ['rock', 'pop', 'jazz', 'electronic'];
 
-genres.map(genre => (
-  <Link to={`/genre/${genre}`}>
-    {genre}
-  </Link>
-))
+genres.map((genre) => <Link to={`/genre/${genre}`}>{genre}</Link>);
 ```
 
 ### **4. Artist Profile Pages**
+
 ```javascript
 // pages/Artist.jsx
 const { artistId } = useParams();
 
 useEffect(() => {
-  jamendoAPI.getArtist(artistId).then(data => {
+  jamendoAPI.getArtist(artistId).then((data) => {
     setArtist(data.results[0]);
   });
-  
-  jamendoAPI.getArtistTracks(artistId).then(data => {
+
+  jamendoAPI.getArtistTracks(artistId).then((data) => {
     setTracks(data.results);
   });
 }, [artistId]);
 ```
 
 ### **5. Create Mood-Based Playlists**
+
 ```javascript
 const moods = {
   chill: 'chill+relaxing',
   focus: 'instrumental+ambient',
   workout: 'energetic+upbeat',
-  party: 'dance+electronic'
+  party: 'dance+electronic',
 };
 
 // Fetch tracks for each mood
@@ -332,23 +347,27 @@ jamendoAPI.getTracksByTag(moods.chill);
 ## 🐛 Troubleshooting
 
 ### **Tracks not loading?**
+
 - Check console for errors
 - Verify `.env` file exists
 - Restart dev server: `npm run dev`
 - Check network tab for API calls
 
 ### **Audio not playing?**
+
 - Browser may block autoplay
 - Check track has valid `audio` URL
 - Look for CORS errors in console
 - Try different browser
 
 ### **Images broken?**
+
 - Fallback image should load
 - Check `track.image` or `track.album_image`
 - Network issue with Jamendo CDN
 
 ### **API returns empty results?**
+
 - Check API key is valid
 - Try different endpoint (getTrendingTracks)
 - Check rate limits
@@ -368,6 +387,7 @@ jamendoAPI.getTracksByTag(moods.chill);
 ## 🎉 Success!
 
 Your VMusic app now has:
+
 - ✅ Real music streaming from Jamendo
 - ✅ 500,000+ royalty-free tracks available
 - ✅ Working audio player

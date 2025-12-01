@@ -4,7 +4,16 @@ import { motion } from 'framer-motion';
 import { ListMusic, Plus, Play, Trash2, Edit3, Music2, Youtube } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { usePlayer } from '../contexts/PlayerContext';
-import { collection, query, where, getDocs, addDoc, deleteDoc, doc, serverTimestamp } from 'firebase/firestore';
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  addDoc,
+  deleteDoc,
+  doc,
+  serverTimestamp,
+} from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { playlistsAPI } from '../api/playlists';
 
@@ -28,10 +37,7 @@ const Playlists = () => {
 
   const loadPlaylists = async () => {
     try {
-      const q = query(
-        collection(db, 'playlists'),
-        where('userId', '==', currentUser.uid)
-      );
+      const q = query(collection(db, 'playlists'), where('userId', '==', currentUser.uid));
       const querySnapshot = await getDocs(q);
       const playlistsData = [];
       querySnapshot.forEach((doc) => {
@@ -73,7 +79,7 @@ const Playlists = () => {
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
-      
+
       setNewPlaylistName('');
       setShowCreateModal(false);
       loadPlaylists();
@@ -89,7 +95,7 @@ const Playlists = () => {
 
     try {
       await deleteDoc(doc(db, 'playlists', playlistId));
-      setPlaylists(prev => prev.filter(p => p.id !== playlistId));
+      setPlaylists((prev) => prev.filter((p) => p.id !== playlistId));
     } catch (error) {
       console.error('Error deleting playlist:', error);
     }
@@ -100,7 +106,7 @@ const Playlists = () => {
       {/* Header */}
       <div className="relative overflow-hidden bg-gradient-to-r from-purple-900/40 via-indigo-900/40 to-blue-900/40 border-b border-white/10">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDI1NSwgMjU1LCAyNTUsIDAuMDUpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-30"></div>
-        
+
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -113,9 +119,7 @@ const Playlists = () => {
                 <ListMusic size={32} className="text-white" />
               </div>
               <div>
-                <h1 className="text-4xl md:text-5xl font-bold text-white">
-                  My Playlists
-                </h1>
+                <h1 className="text-4xl md:text-5xl font-bold text-white">My Playlists</h1>
                 <p className="text-gray-300 text-lg mt-1">
                   {playlists.length} playlist{playlists.length !== 1 ? 's' : ''}
                 </p>
@@ -153,7 +157,7 @@ const Playlists = () => {
                   animate={{ opacity: 1, scale: 1 }}
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.98 }}
-                  transition={{ type: "spring", stiffness: 200, delay: index * 0.05 }}
+                  transition={{ type: 'spring', stiffness: 200, delay: index * 0.05 }}
                   onClick={() => navigate(`/playlist/${playlist._id}`)}
                   className="group relative bg-gradient-to-b from-[#1b0c2d] to-[#090e16] rounded-2xl p-4 border border-pink-500/20 hover:border-pink-500/60 shadow-lg hover:shadow-pink-500/30 backdrop-blur-lg overflow-hidden cursor-pointer"
                 >
@@ -162,14 +166,14 @@ const Playlists = () => {
                     {/* Background Thumbnail - Blurred */}
                     {playlist.tracks && playlist.tracks[0]?.thumbnail ? (
                       <>
-                        <img 
-                          src={playlist.tracks[0].thumbnail} 
+                        <img
+                          src={playlist.tracks[0].thumbnail}
                           alt={playlist.name}
                           className="absolute inset-0 w-full h-full object-cover scale-110 blur-sm opacity-40"
                         />
                         {/* Main Thumbnail - Sharp */}
-                        <img 
-                          src={playlist.tracks[0].thumbnail} 
+                        <img
+                          src={playlist.tracks[0].thumbnail}
                           alt={playlist.name}
                           className="relative w-full h-full object-cover scale-110 group-hover:scale-100 transition-all duration-500 opacity-80"
                         />
@@ -179,12 +183,12 @@ const Playlists = () => {
                         <Youtube size={64} className="text-red-400 opacity-50" />
                       </div>
                     )}
-                    
+
                     {/* Dark Overlay */}
                     <div className="absolute inset-0 bg-black/50 group-hover:bg-black/40 transition-all duration-300" />
-                    
+
                     {/* Center Play Button */}
-                    <button 
+                    <button
                       onClick={() => {
                         if (playlist.tracks && playlist.tracks.length > 0) {
                           const track = playlist.tracks[0];
@@ -194,9 +198,9 @@ const Playlists = () => {
                                 videoId: track.videoId,
                                 title: track.title,
                                 channelTitle: track.artist || track.channelTitle,
-                                thumbnail: track.thumbnail
-                              }
-                            }
+                                thumbnail: track.thumbnail,
+                              },
+                            },
                           });
                         }
                       }}
@@ -205,9 +209,9 @@ const Playlists = () => {
                     >
                       <Play size={24} className="text-white ml-1" fill="white" />
                     </button>
-                    
+
                     {/* Delete Button - Top Right */}
-                    <button 
+                    <button
                       onClick={async (e) => {
                         e.stopPropagation();
                         if (window.confirm(`Delete "${playlist.name}"? This cannot be undone.`)) {
@@ -297,7 +301,7 @@ const Playlists = () => {
                 <div className="relative mb-4 overflow-hidden rounded-lg bg-gradient-to-br from-purple-600/20 to-indigo-600/20 aspect-square flex items-center justify-center">
                   <ListMusic size={64} className="text-purple-400" />
                   <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <button 
+                    <button
                       onClick={() => {
                         // Play all tracks in playlist when tracks are implemented
                         if (playlist.tracks && playlist.tracks.length > 0) {
@@ -350,9 +354,7 @@ const Playlists = () => {
             <div className="inline-flex items-center justify-center w-24 h-24 bg-white/5 rounded-full mb-6">
               <ListMusic size={48} className="text-gray-600" />
             </div>
-            <h3 className="text-2xl font-semibold text-white mb-2">
-              No playlists yet
-            </h3>
+            <h3 className="text-2xl font-semibold text-white mb-2">No playlists yet</h3>
             <p className="text-gray-400 mb-8 max-w-md mx-auto">
               Create your first playlist to organize your favorite tracks
             </p>

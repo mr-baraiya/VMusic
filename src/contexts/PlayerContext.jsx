@@ -12,7 +12,7 @@ export const usePlayer = () => {
 
 export const PlayerProvider = ({ children }) => {
   const audioRef = useRef(new Audio());
-  
+
   const [currentTrack, setCurrentTrack] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -27,10 +27,10 @@ export const PlayerProvider = ({ children }) => {
     if (currentTrack?.audio) {
       audioRef.current.src = currentTrack.audio;
       audioRef.current.volume = volume;
-      
+
       // Update music source
       setMusicSource(currentTrack.source || 'jamendo');
-      
+
       // Auto-play when track loads
       const playPromise = audioRef.current.play();
       if (playPromise !== undefined) {
@@ -41,7 +41,7 @@ export const PlayerProvider = ({ children }) => {
           .catch((error) => {
             console.error('Playback error:', error);
             setIsPlaying(false);
-            
+
             // If Spotify preview not available, show message
             if (currentTrack.source === 'spotify' && !currentTrack.audio) {
               console.warn('Spotify preview not available for this track');
@@ -93,11 +93,11 @@ export const PlayerProvider = ({ children }) => {
 
   const playTrack = (track, trackQueue = []) => {
     setCurrentTrack(track);
-    
+
     // If queue is provided, set it up
     if (trackQueue.length > 0) {
       setQueue(trackQueue);
-      const index = trackQueue.findIndex(t => t.id === track.id);
+      const index = trackQueue.findIndex((t) => t.id === track.id);
       setCurrentIndex(index >= 0 ? index : 0);
     } else {
       // Single track play
@@ -126,7 +126,7 @@ export const PlayerProvider = ({ children }) => {
 
   const playNext = () => {
     if (queue.length === 0) return;
-    
+
     const nextIndex = (currentIndex + 1) % queue.length;
     setCurrentIndex(nextIndex);
     setCurrentTrack(queue[nextIndex]);
@@ -134,13 +134,13 @@ export const PlayerProvider = ({ children }) => {
 
   const playPrevious = () => {
     if (queue.length === 0) return;
-    
+
     // If more than 3 seconds played, restart current track
     if (currentTime > 3) {
       audioRef.current.currentTime = 0;
       return;
     }
-    
+
     const prevIndex = currentIndex === 0 ? queue.length - 1 : currentIndex - 1;
     setCurrentIndex(prevIndex);
     setCurrentTrack(queue[prevIndex]);
@@ -157,13 +157,13 @@ export const PlayerProvider = ({ children }) => {
   };
 
   const addToQueue = (track) => {
-    setQueue(prev => [...prev, track]);
+    setQueue((prev) => [...prev, track]);
   };
 
   const removeFromQueue = (index) => {
-    setQueue(prev => prev.filter((_, i) => i !== index));
+    setQueue((prev) => prev.filter((_, i) => i !== index));
     if (index < currentIndex) {
-      setCurrentIndex(prev => prev - 1);
+      setCurrentIndex((prev) => prev - 1);
     }
   };
 
@@ -192,11 +192,7 @@ export const PlayerProvider = ({ children }) => {
     clearQueue,
   };
 
-  return (
-    <PlayerContext.Provider value={value}>
-      {children}
-    </PlayerContext.Provider>
-  );
+  return <PlayerContext.Provider value={value}>{children}</PlayerContext.Provider>;
 };
 
 export default PlayerContext;

@@ -26,17 +26,17 @@ const Favorites = () => {
   const loadFavorites = async () => {
     try {
       setLoading(true);
-      
+
       // Load Jamendo favorites from Firestore
       try {
         const userRef = doc(db, 'users', currentUser.uid);
         const userSnap = await getDoc(userRef);
-        
+
         if (userSnap.exists()) {
           const userData = userSnap.data();
           const likedTrackIds = userData.likedTracks || [];
           setFavorites(likedTrackIds);
-          
+
           // Load each liked track by ID
           if (likedTrackIds.length > 0) {
             const trackPromises = likedTrackIds.map(async (trackId) => {
@@ -48,9 +48,9 @@ const Favorites = () => {
                 return null;
               }
             });
-            
+
             const loadedTracks = await Promise.all(trackPromises);
-            setTracks(loadedTracks.filter(track => track !== null));
+            setTracks(loadedTracks.filter((track) => track !== null));
           } else {
             setTracks([]);
           }
@@ -85,9 +85,9 @@ const Favorites = () => {
       await updateDoc(userRef, {
         likedTracks: arrayRemove(trackId),
       });
-      
-      setFavorites(prev => prev.filter(id => id !== trackId));
-      setTracks(prev => prev.filter(track => track.id !== trackId));
+
+      setFavorites((prev) => prev.filter((id) => id !== trackId));
+      setTracks((prev) => prev.filter((track) => track.id !== trackId));
     } catch (error) {
       console.error('Error removing favorite:', error);
     }
@@ -96,7 +96,7 @@ const Favorites = () => {
   const removeYoutubeFavorite = async (videoId) => {
     try {
       await favoritesAPI.removeFromFavorites(currentUser.uid, videoId);
-      setYoutubeFavorites(prev => prev.filter(track => track.videoId !== videoId));
+      setYoutubeFavorites((prev) => prev.filter((track) => track.videoId !== videoId));
       console.log('✅ Removed YouTube favorite');
     } catch (error) {
       console.error('Error removing YouTube favorite:', error);
@@ -110,7 +110,7 @@ const Favorites = () => {
       {/* Header */}
       <div className="relative overflow-hidden bg-gradient-to-r from-pink-900/40 via-rose-900/40 to-red-900/40 border-b border-white/10">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDI1NSwgMjU1LCAyNTUsIDAuMDUpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-30"></div>
-        
+
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -122,15 +122,13 @@ const Favorites = () => {
                 <Heart size={32} className="text-white" fill="white" />
               </div>
               <div>
-                <h1 className="text-4xl md:text-5xl font-bold text-white">
-                  My Favorites
-                </h1>
+                <h1 className="text-4xl md:text-5xl font-bold text-white">My Favorites</h1>
                 <p className="text-gray-300 text-lg mt-1">
                   {displayedTracks.length} track{displayedTracks.length !== 1 ? 's' : ''}
                 </p>
               </div>
             </div>
-            
+
             {/* Tabs */}
             <div className="flex gap-2 mt-6">
               <button
@@ -165,7 +163,10 @@ const Favorites = () => {
           // Loading State
           <div className="space-y-4">
             {[...Array(5)].map((_, i) => (
-              <div key={i} className="bg-white/5 rounded-xl p-4 animate-pulse flex items-center gap-4">
+              <div
+                key={i}
+                className="bg-white/5 rounded-xl p-4 animate-pulse flex items-center gap-4"
+              >
                 <div className="w-16 h-16 bg-white/10 rounded-lg"></div>
                 <div className="flex-1">
                   <div className="h-4 bg-white/10 rounded w-1/3 mb-2"></div>
@@ -187,9 +188,11 @@ const Favorites = () => {
               const trackId = isYouTube ? track.videoId : track.id;
               const trackName = isYouTube ? track.title : track.name;
               const artistName = isYouTube ? track.channelTitle : track.artist_name;
-              const trackImage = isYouTube ? track.thumbnail : (track.image || 'https://via.placeholder.com/100');
+              const trackImage = isYouTube
+                ? track.thumbnail
+                : track.image || 'https://via.placeholder.com/100';
               const trackDuration = track.duration || 0;
-              
+
               return (
                 <motion.div
                   key={trackId}
@@ -208,7 +211,7 @@ const Favorites = () => {
                       />
                       {!isYouTube && (
                         <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-lg">
-                          <button 
+                          <button
                             onClick={() => playTrack(track, displayedTracks)}
                             className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center hover:bg-green-600 hover:scale-110 transition-all"
                           >
@@ -239,7 +242,9 @@ const Favorites = () => {
                     {/* Actions */}
                     <div className="flex items-center gap-2">
                       <button
-                        onClick={() => isYouTube ? removeYoutubeFavorite(trackId) : removeFavorite(trackId)}
+                        onClick={() =>
+                          isYouTube ? removeYoutubeFavorite(trackId) : removeFavorite(trackId)
+                        }
                         className="p-2 text-pink-500 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all"
                         title="Remove from favorites"
                       >
@@ -268,9 +273,7 @@ const Favorites = () => {
             <div className="inline-flex items-center justify-center w-24 h-24 bg-white/5 rounded-full mb-6">
               <Heart size={48} className="text-gray-600" />
             </div>
-            <h3 className="text-2xl font-semibold text-white mb-2">
-              No favorites yet
-            </h3>
+            <h3 className="text-2xl font-semibold text-white mb-2">No favorites yet</h3>
             <p className="text-gray-400 mb-8 max-w-md mx-auto">
               Start exploring music and click the heart icon to save your favorite tracks here
             </p>

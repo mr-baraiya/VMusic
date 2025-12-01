@@ -19,27 +19,30 @@ const ForgotPassword = () => {
 
     try {
       console.log('Sending password reset email to:', email);
-      
+
       // Send password reset email without custom action code settings
       // Firebase will use the default URL structure which we'll handle in Landing.jsx
       await sendPasswordResetEmail(auth, email);
-      
+
       console.log('Password reset email sent successfully');
       console.log('✅ Email should arrive within 5-10 minutes');
       console.log('⚠️ Check your spam/junk folder!');
-      
-      setMessage(`Password reset email sent to ${email}! Please check your inbox and spam folder. The link expires in 1 hour.`);
+
+      setMessage(
+        `Password reset email sent to ${email}! Please check your inbox and spam folder. The link expires in 1 hour.`
+      );
       setEmail('');
     } catch (err) {
       console.error('❌ Password reset error:', err);
       console.error('Error code:', err.code);
       console.error('Error message:', err.message);
       console.error('Full error:', JSON.stringify(err, null, 2));
-      
+
       let errorMessage = 'Failed to send reset email. Please try again.';
-      
+
       if (err.code === 'auth/user-not-found') {
-        errorMessage = 'No account found with this email address. Please check the email or sign up.';
+        errorMessage =
+          'No account found with this email address. Please check the email or sign up.';
       } else if (err.code === 'auth/invalid-email') {
         errorMessage = 'Invalid email address format.';
       } else if (err.code === 'auth/too-many-requests') {
@@ -51,7 +54,7 @@ const ForgotPassword = () => {
       } else if (err.message) {
         errorMessage = err.message;
       }
-      
+
       setError(errorMessage);
     } finally {
       setLoading(false);
@@ -135,11 +138,12 @@ const ForgotPassword = () => {
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Email Input */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                Email Address
-              </label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Email Address</label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                <Mail
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                  size={20}
+                />
                 <input
                   type="email"
                   value={email}
@@ -166,7 +170,10 @@ const ForgotPassword = () => {
           <div className="mt-6 text-center">
             <p className="text-gray-400 text-sm">
               Remember your password?{' '}
-              <Link to="/" className="text-purple-400 hover:text-purple-300 font-semibold transition-colors">
+              <Link
+                to="/"
+                className="text-purple-400 hover:text-purple-300 font-semibold transition-colors"
+              >
                 Sign In
               </Link>
             </p>

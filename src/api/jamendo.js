@@ -185,7 +185,7 @@ export const jamendoAPI = {
   getArtists: async ({ limit = 50, order = 'popularity_total', hasImage } = {}) => {
     try {
       let url = `${BASE_URL}/artists/?client_id=${CLIENT_ID}&format=json&limit=${limit}&order=${order}`;
-      
+
       if (hasImage) {
         url += '&hasimage=true';
       }
@@ -263,9 +263,7 @@ export const jamendoAPI = {
    */
   getRadios: async () => {
     try {
-      const response = await fetch(
-        `${BASE_URL}/radios/?client_id=${CLIENT_ID}&format=json`
-      );
+      const response = await fetch(`${BASE_URL}/radios/?client_id=${CLIENT_ID}&format=json`);
       const data = await response.json();
       return data;
     } catch (error) {
@@ -322,11 +320,11 @@ export const jamendoAPI = {
   getArtistsByLocation: async ({ country, city, limit = 50 }) => {
     try {
       let url = `${BASE_URL}/artists/locations/?client_id=${CLIENT_ID}&format=json&limit=${limit}&haslocation=true`;
-      
+
       if (country) {
         url += `&location_country=${country}`;
       }
-      
+
       if (city) {
         url += `&location_city=${encodeURIComponent(city)}`;
       }
@@ -362,25 +360,25 @@ export const jamendoAPI = {
    * @param {string} options.album_datebetween - Filter by album release date (format: yyyy-mm-dd_yyyy-mm-dd)
    * @returns {Promise<Object>} API response with artists and their albums
    */
-  getArtistsWithAlbums: async ({ 
-    limit = 50, 
+  getArtistsWithAlbums: async ({
+    limit = 50,
     offset = 0,
     order = 'popularity_total',
     hasImage = false,
     datebetween = null,
-    album_datebetween = null
+    album_datebetween = null,
   }) => {
     try {
       let url = `${BASE_URL}/artists/albums?client_id=${CLIENT_ID}&format=json&limit=${limit}&offset=${offset}&order=${order}&imagesize=200`;
-      
+
       if (hasImage) {
         url += `&hasimage=true`;
       }
-      
+
       if (datebetween) {
         url += `&datebetween=${datebetween}`;
       }
-      
+
       if (album_datebetween) {
         url += `&album_datebetween=${album_datebetween}`;
       }
@@ -406,15 +404,15 @@ export const jamendoAPI = {
    * @param {string} options.order - Sort order
    * @returns {Promise<Object>} API response with artists and their albums
    */
-  searchArtistsWithAlbums: async ({ 
-    query, 
-    limit = 50, 
+  searchArtistsWithAlbums: async ({
+    query,
+    limit = 50,
     offset = 0,
-    order = 'popularity_total'
+    order = 'popularity_total',
   }) => {
     try {
       const url = `${BASE_URL}/artists/albums?client_id=${CLIENT_ID}&format=json&limit=${limit}&offset=${offset}&order=${order}&namesearch=${encodeURIComponent(query)}&imagesize=200`;
-      
+
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -439,11 +437,11 @@ export const jamendoAPI = {
   getArtistsByLocationWithAlbums: async ({ country, city, limit = 50, offset = 0 }) => {
     try {
       let url = `${BASE_URL}/artists/albums?client_id=${CLIENT_ID}&format=json&limit=${limit}&offset=${offset}&order=popularity_total&imagesize=200`;
-      
+
       if (country) {
         url += `&location_country=${country}`;
       }
-      
+
       if (city) {
         url += `&location_city=${encodeURIComponent(city)}`;
       }
@@ -471,25 +469,25 @@ export const jamendoAPI = {
    * @param {string} options.namesearch - Search by artist name
    * @returns {Promise<Object>} API response with artists and music info
    */
-  getArtistsMusicInfo: async ({ 
-    limit = 50, 
+  getArtistsMusicInfo: async ({
+    limit = 50,
     offset = 0,
     order = 'popularity_total',
     hasImage = false,
     tag = null,
-    namesearch = null
+    namesearch = null,
   }) => {
     try {
       let url = `${BASE_URL}/artists/musicinfo/?client_id=${CLIENT_ID}&format=json&limit=${limit}&offset=${offset}&order=${order}`;
-      
+
       if (hasImage) {
         url += `&hasimage=true`;
       }
-      
+
       if (tag) {
         url += `&tag=${encodeURIComponent(tag)}`;
       }
-      
+
       if (namesearch) {
         url += `&namesearch=${encodeURIComponent(namesearch)}`;
       }
@@ -534,25 +532,25 @@ export const jamendoAPI = {
    * @param {string} options.type - Filter by type (single, album)
    * @returns {Promise<Object>} API response with albums
    */
-  getAlbums: async ({ 
-    limit = 50, 
+  getAlbums: async ({
+    limit = 50,
     offset = 0,
     order = 'popularity_total',
     artist_id = null,
     namesearch = null,
-    type = null
+    type = null,
   }) => {
     try {
       let url = `${BASE_URL}/albums/?client_id=${CLIENT_ID}&format=json&limit=${limit}&offset=${offset}&order=${order}&imagesize=200&audioformat=mp32`;
-      
+
       if (artist_id) {
         url += `&artist_id=${artist_id}`;
       }
-      
+
       if (namesearch) {
         url += `&namesearch=${encodeURIComponent(namesearch)}`;
       }
-      
+
       if (type) {
         url += `&type=${type}`;
       }
@@ -617,7 +615,7 @@ export const jamendoAPI = {
         return {
           allowed: data.results[0].zip_allowed || false,
           zipUrl: data.results[0].zip || null,
-          album: data.results[0]
+          album: data.results[0],
         };
       }
       return { allowed: false, zipUrl: null, album: null };

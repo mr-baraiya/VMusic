@@ -66,20 +66,20 @@ class MusicAPI {
       const playlists = await spotifyAPI.getFeaturedPlaylists(5);
       if (playlists.items.length > 0) {
         const tracks = await spotifyAPI.getPlaylistTracks(playlists.items[0].id, limit);
-        return { 
-          results: tracks.items, 
+        return {
+          results: tracks.items,
           source: 'spotify',
-          message: 'Spotify Previews (30s)' 
+          message: 'Spotify Previews (30s)',
         };
       }
     }
-    
+
     // Fallback to Jamendo
     const data = await jamendoAPI.getTrendingTracks(limit);
-    return { 
-      results: data.results || [], 
+    return {
+      results: data.results || [],
       source: 'jamendo',
-      message: 'Full Tracks' 
+      message: 'Full Tracks',
     };
   }
 
@@ -89,18 +89,18 @@ class MusicAPI {
   async getNewReleases(limit = 20) {
     if (this.useSpotify && this.spotifyEnabled) {
       const data = await spotifyAPI.getNewReleases(limit);
-      return { 
-        results: data.items, 
+      return {
+        results: data.items,
         source: 'spotify',
-        message: 'Spotify Previews (30s)' 
+        message: 'Spotify Previews (30s)',
       };
     }
-    
+
     const data = await jamendoAPI.getNewReleases(limit);
-    return { 
-      results: data.results || [], 
+    return {
+      results: data.results || [],
       source: 'jamendo',
-      message: 'Full Tracks' 
+      message: 'Full Tracks',
     };
   }
 
@@ -110,18 +110,18 @@ class MusicAPI {
   async searchTracks(query, limit = 20) {
     if (this.useSpotify && this.spotifyEnabled) {
       const data = await spotifyAPI.searchTracks(query, limit);
-      return { 
-        results: data.items, 
+      return {
+        results: data.items,
         source: 'spotify',
-        message: 'Spotify Previews (30s)' 
+        message: 'Spotify Previews (30s)',
       };
     }
-    
+
     const data = await jamendoAPI.searchTracks(query, limit);
-    return { 
-      results: data.results || [], 
+    return {
+      results: data.results || [],
       source: 'jamendo',
-      message: 'Full Tracks' 
+      message: 'Full Tracks',
     };
   }
 
@@ -131,12 +131,12 @@ class MusicAPI {
   async getTrackById(trackId, source = 'jamendo') {
     if (source === 'spotify' && this.spotifyEnabled) {
       const track = await spotifyAPI.getTrack(trackId);
-      return { 
-        results: track ? [track] : [], 
-        source: 'spotify' 
+      return {
+        results: track ? [track] : [],
+        source: 'spotify',
       };
     }
-    
+
     return await jamendoAPI.getTrackById(trackId);
   }
 
@@ -146,10 +146,10 @@ class MusicAPI {
   async getTracksByTag(tag, limit = 20) {
     // Only Jamendo supports tags
     const data = await jamendoAPI.getTracksByTag(tag, limit);
-    return { 
-      results: data.results || [], 
+    return {
+      results: data.results || [],
       source: 'jamendo',
-      message: 'Full Tracks' 
+      message: 'Full Tracks',
     };
   }
 
@@ -160,7 +160,7 @@ class MusicAPI {
     if (source === 'spotify' && this.spotifyEnabled) {
       return await spotifyAPI.getArtist(artistId);
     }
-    
+
     return await jamendoAPI.getArtist(artistId);
   }
 
@@ -170,16 +170,16 @@ class MusicAPI {
   async getArtistTracks(artistId, source = 'jamendo', limit = 20) {
     if (source === 'spotify' && this.spotifyEnabled) {
       const data = await spotifyAPI.getArtistTopTracks(artistId);
-      return { 
-        results: data.items, 
-        source: 'spotify' 
+      return {
+        results: data.items,
+        source: 'spotify',
       };
     }
-    
+
     const data = await jamendoAPI.getArtistTracks(artistId, limit);
-    return { 
-      results: data.results || [], 
-      source: 'jamendo' 
+    return {
+      results: data.results || [],
+      source: 'jamendo',
     };
   }
 
@@ -189,13 +189,13 @@ class MusicAPI {
   async getRecommendations(seedTracks = [], seedArtists = [], limit = 20) {
     if (this.spotifyEnabled) {
       const data = await spotifyAPI.getRecommendations(seedTracks, seedArtists, limit);
-      return { 
-        results: data.items, 
+      return {
+        results: data.items,
         source: 'spotify',
-        message: 'Personalized Recommendations' 
+        message: 'Personalized Recommendations',
       };
     }
-    
+
     // Fallback to Jamendo trending
     return this.getTrendingTracks(limit);
   }
@@ -206,12 +206,12 @@ class MusicAPI {
   async getSavedTracks(limit = 20, offset = 0) {
     if (spotifyAPI.isUserAuthenticated()) {
       const data = await spotifyAPI.getSavedTracks(limit, offset);
-      return { 
-        results: data.items, 
-        source: 'spotify' 
+      return {
+        results: data.items,
+        source: 'spotify',
       };
     }
-    
+
     return { results: [], source: 'none', message: 'Login with Spotify to access your library' };
   }
 
@@ -221,12 +221,12 @@ class MusicAPI {
   async getUserTopTracks(timeRange = 'medium_term', limit = 20) {
     if (spotifyAPI.isUserAuthenticated()) {
       const data = await spotifyAPI.getUserTopTracks(timeRange, limit);
-      return { 
-        results: data.items, 
-        source: 'spotify' 
+      return {
+        results: data.items,
+        source: 'spotify',
       };
     }
-    
+
     return { results: [], source: 'none', message: 'Login with Spotify to see your top tracks' };
   }
 
@@ -235,15 +235,16 @@ class MusicAPI {
    */
   async getCombinedTracks(type = 'trending', limit = 20) {
     const halfLimit = Math.floor(limit / 2);
-    
+
     let jamendoTracks = [];
     let spotifyTracks = [];
 
     // Get Jamendo tracks
     try {
-      const jamendoData = type === 'trending' 
-        ? await jamendoAPI.getTrendingTracks(halfLimit)
-        : await jamendoAPI.getNewReleases(halfLimit);
+      const jamendoData =
+        type === 'trending'
+          ? await jamendoAPI.getTrendingTracks(halfLimit)
+          : await jamendoAPI.getNewReleases(halfLimit);
       jamendoTracks = jamendoData.results || [];
     } catch (error) {
       console.error('Error fetching Jamendo tracks:', error);
@@ -252,9 +253,10 @@ class MusicAPI {
     // Get Spotify tracks if enabled
     if (this.spotifyEnabled) {
       try {
-        const spotifyData = type === 'trending'
-          ? await this.getTrendingTracks(halfLimit)
-          : await spotifyAPI.getNewReleases(halfLimit);
+        const spotifyData =
+          type === 'trending'
+            ? await this.getTrendingTracks(halfLimit)
+            : await spotifyAPI.getNewReleases(halfLimit);
         spotifyTracks = spotifyData.results || spotifyData.items || [];
       } catch (error) {
         console.error('Error fetching Spotify tracks:', error);
@@ -266,7 +268,7 @@ class MusicAPI {
     return {
       results: this.shuffleArray(combined),
       source: 'combined',
-      message: 'Jamendo + Spotify'
+      message: 'Jamendo + Spotify',
     };
   }
 

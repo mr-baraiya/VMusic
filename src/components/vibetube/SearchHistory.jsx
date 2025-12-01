@@ -13,7 +13,7 @@ const SearchHistory = ({ userId, onSelectQuery, onClose }) => {
 
   const loadHistory = async () => {
     if (!userId) return;
-    
+
     setLoading(true);
     try {
       const data = await searchHistoryAPI.getSearchHistory(userId, 20);
@@ -31,10 +31,11 @@ const SearchHistory = ({ userId, onSelectQuery, onClose }) => {
     try {
       await searchHistoryAPI.clearHistory(userId);
       setHistory([]);
-      
+
       // Show toast
       const toast = document.createElement('div');
-      toast.className = 'fixed top-4 right-4 z-50 bg-green-600 text-white px-6 py-3 rounded-xl shadow-2xl';
+      toast.className =
+        'fixed top-4 right-4 z-50 bg-green-600 text-white px-6 py-3 rounded-xl shadow-2xl';
       toast.textContent = 'Search history cleared';
       document.body.appendChild(toast);
       setTimeout(() => toast.remove(), 2000);

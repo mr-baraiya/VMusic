@@ -2,7 +2,14 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Loader, Filter, Clock, Youtube } from 'lucide-react';
 
-const SearchBar = ({ onSearch, isLoading, onShowHistory, showHistoryButton = false, onShowYouTubePlaylists, showYouTubeButton = false }) => {
+const SearchBar = ({
+  onSearch,
+  isLoading,
+  onShowHistory,
+  showHistoryButton = false,
+  onShowYouTubePlaylists,
+  showYouTubeButton = false,
+}) => {
   const [query, setQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
 
@@ -37,9 +44,15 @@ const SearchBar = ({ onSearch, isLoading, onShowHistory, showHistoryButton = fal
             disabled={isLoading}
             aria-label="Search YouTube videos"
           />
-          <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-red-400 group-hover:scale-110 transition-transform" size={24} />
+          <Search
+            className="absolute left-5 top-1/2 -translate-y-1/2 text-red-400 group-hover:scale-110 transition-transform"
+            size={24}
+          />
           {isLoading && (
-            <Loader className="absolute right-5 top-1/2 -translate-y-1/2 text-red-400 animate-spin" size={24} />
+            <Loader
+              className="absolute right-5 top-1/2 -translate-y-1/2 text-red-400 animate-spin"
+              size={24}
+            />
           )}
           <div className="absolute right-16 top-1/2 -translate-y-1/2 flex items-center gap-2">
             {showYouTubeButton && (

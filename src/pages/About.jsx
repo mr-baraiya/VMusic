@@ -25,9 +25,7 @@ const About = () => {
             <Music2 size={40} className="text-white" />
           </div>
           <h1 className="text-5xl font-bold text-white mb-4">About VMusic</h1>
-          <p className="text-xl text-gray-400">
-            Free, independent music for everyone
-          </p>
+          <p className="text-xl text-gray-400">Free, independent music for everyone</p>
         </motion.div>
 
         {/* Mission */}
@@ -42,13 +40,15 @@ const About = () => {
             <h2 className="text-2xl font-bold text-white">Our Mission</h2>
           </div>
           <p className="text-gray-300 leading-relaxed mb-4">
-            VMusic was built to celebrate independent artists and provide free access to incredible music. 
-            We believe music should be accessible to everyone, and artists deserve to be discovered. 
-            Powered by Jamendo API, we offer over 500,000 royalty-free tracks from talented musicians worldwide.
+            VMusic was built to celebrate independent artists and provide free access to incredible
+            music. We believe music should be accessible to everyone, and artists deserve to be
+            discovered. Powered by Jamendo API, we offer over 500,000 royalty-free tracks from
+            talented musicians worldwide.
           </p>
           <p className="text-gray-300 leading-relaxed">
-            Whether you're a music lover discovering new sounds or an artist looking to share your work, 
-            VMusic provides a platform that connects passionate creators with engaged listeners around the globe.
+            Whether you're a music lover discovering new sounds or an artist looking to share your
+            work, VMusic provides a platform that connects passionate creators with engaged
+            listeners around the globe.
           </p>
         </motion.div>
 
@@ -153,29 +153,29 @@ const About = () => {
             <div>
               <h3 className="text-lg font-semibold text-white mb-2">100% Legal & Free</h3>
               <p className="text-gray-400 text-sm">
-                All tracks on VMusic are licensed under Creative Commons, ensuring 
-                you can enjoy music without any legal concerns or subscription fees.
+                All tracks on VMusic are licensed under Creative Commons, ensuring you can enjoy
+                music without any legal concerns or subscription fees.
               </p>
             </div>
             <div>
               <h3 className="text-lg font-semibold text-white mb-2">Support Artists</h3>
               <p className="text-gray-400 text-sm">
-                By using VMusic, you help independent artists gain exposure and 
-                grow their audience worldwide.
+                By using VMusic, you help independent artists gain exposure and grow their audience
+                worldwide.
               </p>
             </div>
             <div>
               <h3 className="text-lg font-semibold text-white mb-2">No Ads, No Interruptions</h3>
               <p className="text-gray-400 text-sm">
-                Enjoy uninterrupted music streaming without annoying advertisements 
-                or forced breaks in your listening experience.
+                Enjoy uninterrupted music streaming without annoying advertisements or forced breaks
+                in your listening experience.
               </p>
             </div>
             <div>
               <h3 className="text-lg font-semibold text-white mb-2">Discover Hidden Gems</h3>
               <p className="text-gray-400 text-sm">
-                Find unique tracks and talented artists you won't hear on mainstream 
-                platforms. Explore diverse genres and styles.
+                Find unique tracks and talented artists you won't hear on mainstream platforms.
+                Explore diverse genres and styles.
               </p>
             </div>
           </div>
@@ -193,13 +193,13 @@ const About = () => {
             Start discovering amazing music from independent artists around the world
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button 
+            <button
               onClick={() => navigate('/explore')}
               className="px-8 py-3 bg-linear-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all shadow-lg"
             >
               Browse Music
             </button>
-            <button 
+            <button
               onClick={() => navigate('/contact')}
               className="px-8 py-3 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-lg border border-white/20 transition-all"
             >

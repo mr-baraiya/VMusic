@@ -44,9 +44,9 @@ export default async function handler(req, res) {
       }
 
       const userFavorites = await favoritesCollection.findOne({ userId });
-      
+
       return res.status(200).json({
-        favorites: userFavorites?.tracks || []
+        favorites: userFavorites?.tracks || [],
       });
     }
 
@@ -61,13 +61,13 @@ export default async function handler(req, res) {
       // Check if track already exists in favorites
       const existingFavorite = await favoritesCollection.findOne({
         userId,
-        'tracks.videoId': track.videoId
+        'tracks.videoId': track.videoId,
       });
 
       if (existingFavorite) {
         return res.status(200).json({
           message: 'Track already in favorites',
-          alreadyExists: true
+          alreadyExists: true,
         });
       }
 
@@ -78,20 +78,20 @@ export default async function handler(req, res) {
           $push: {
             tracks: {
               ...track,
-              addedAt: new Date().toISOString()
-            }
+              addedAt: new Date().toISOString(),
+            },
           },
           $setOnInsert: {
             userId,
-            createdAt: new Date().toISOString()
-          }
+            createdAt: new Date().toISOString(),
+          },
         },
         { upsert: true }
       );
 
       return res.status(200).json({
         message: 'Track added to favorites',
-        success: true
+        success: true,
       });
     }
 
@@ -107,19 +107,18 @@ export default async function handler(req, res) {
         { userId },
         {
           $pull: {
-            tracks: { videoId }
-          }
+            tracks: { videoId },
+          },
         }
       );
 
       return res.status(200).json({
         message: 'Track removed from favorites',
-        success: true
+        success: true,
       });
     }
 
     return res.status(405).json({ error: 'Method not allowed' });
-
   } catch (error) {
     console.error('Database error:', error);
     return res.status(500).json({ error: 'Internal server error', details: error.message });

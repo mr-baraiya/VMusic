@@ -6,7 +6,8 @@ const steps = [
     icon: UserPlus,
     number: '01',
     title: 'Sign Up / Log In',
-    description: 'Create your free account with email or Google. Connect Spotify for enhanced features and personalized recommendations.',
+    description:
+      'Create your free account with email or Google. Connect Spotify for enhanced features and personalized recommendations.',
     gradient: 'from-purple-500 to-pink-500',
     badge: 'Free Forever',
   },
@@ -14,7 +15,8 @@ const steps = [
     icon: SearchIcon,
     number: '02',
     title: 'Discover Music',
-    description: 'Browse 500,000+ royalty-free tracks from Jamendo. Access millions of Spotify previews (30s) as guest or full library when logged in.',
+    description:
+      'Browse 500,000+ royalty-free tracks from Jamendo. Access millions of Spotify previews (30s) as guest or full library when logged in.',
     gradient: 'from-blue-500 to-cyan-500',
     badge: 'Dual Source',
   },
@@ -22,7 +24,8 @@ const steps = [
     icon: ListMusic,
     number: '03',
     title: 'Save & Create Playlists',
-    description: 'Like your favorites, create custom playlists, and sync across all your devices. Get AI-powered recommendations.',
+    description:
+      'Like your favorites, create custom playlists, and sync across all your devices. Get AI-powered recommendations.',
     gradient: 'from-green-500 to-emerald-500',
     badge: 'Smart Playlists',
   },
@@ -44,7 +47,8 @@ const HowItWorks = () => {
             How It Works
           </h2>
           <p className="text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-            Get started with VMusic in three simple steps. Access millions of tracks and discover your next favorite song.
+            Get started with VMusic in three simple steps. Access millions of tracks and discover
+            your next favorite song.
           </p>
         </motion.div>
 
@@ -68,7 +72,9 @@ const HowItWorks = () => {
                   {/* Card */}
                   <div className="relative bg-gray-50 dark:bg-gray-800 rounded-3xl p-8 border-2 border-gray-200 dark:border-gray-700 hover:border-transparent hover:shadow-2xl transition-all duration-300 group">
                     {/* Gradient Border Effect */}
-                    <div className={`absolute inset-0 bg-gradient-to-r ${step.gradient} rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 blur-xl`}></div>
+                    <div
+                      className={`absolute inset-0 bg-gradient-to-r ${step.gradient} rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 blur-xl`}
+                    ></div>
 
                     {/* Step Number */}
                     <div className="absolute -top-6 -left-6 w-16 h-16 bg-gradient-to-br from-white to-gray-100 dark:from-gray-800 dark:to-gray-900 rounded-2xl flex items-center justify-center text-3xl font-bold text-gray-300 dark:text-gray-600 border-4 border-gray-200 dark:border-gray-700 shadow-lg">

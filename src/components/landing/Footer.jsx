@@ -1,6 +1,15 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Play, Github, Twitter, Linkedin, Instagram, Mail, CheckCircle, AlertCircle } from 'lucide-react';
+import {
+  Play,
+  Github,
+  Twitter,
+  Linkedin,
+  Instagram,
+  Mail,
+  CheckCircle,
+  AlertCircle,
+} from 'lucide-react';
 import { Link } from 'react-router-dom';
 import emailjs from '@emailjs/browser';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
@@ -20,9 +29,7 @@ const Footer = () => {
       { name: 'Playlists', href: '/playlists' },
       { name: 'About', href: '/about' },
     ],
-    company: [
-      { name: 'Contact Us', href: '/contact' },
-    ],
+    company: [{ name: 'Contact Us', href: '/contact' }],
     legal: [
       { name: 'Privacy Policy', href: '/privacy-policy' },
       { name: 'Terms of Service', href: '/terms-of-service' },
@@ -45,7 +52,7 @@ const Footer = () => {
 
   const handleNewsletterSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email.trim() || !emailRegex.test(email)) {
@@ -97,7 +104,7 @@ const Footer = () => {
         message: 'Successfully subscribed!',
       });
       setLoading(false);
-      
+
       setTimeout(() => setStatus({ type: '', message: '' }), 5000);
     } catch (error) {
       console.error('Error subscribing to newsletter:', error);
@@ -129,10 +136,10 @@ const Footer = () => {
               <span className="text-2xl font-bold text-white">VMusic</span>
             </motion.div>
             <p className="text-gray-400 mb-6 leading-relaxed">
-              Stream half a million royalty-free tracks from independent artists. 
-              Free, legal, and ad-free forever.
+              Stream half a million royalty-free tracks from independent artists. Free, legal, and
+              ad-free forever.
             </p>
-            
+
             {/* Newsletter */}
             <div className="space-y-3">
               <p className="text-sm font-semibold text-white">Stay updated</p>
@@ -160,7 +167,7 @@ const Footer = () => {
                     )}
                   </motion.button>
                 </div>
-                
+
                 {/* Status Message */}
                 <AnimatePresence>
                   {status.message && (
@@ -192,22 +199,21 @@ const Footer = () => {
             <h3 className="text-white font-semibold mb-4">Product</h3>
             <ul className="space-y-3">
               {footerLinks.product.map((link, index) => (
-                <motion.li
-                  key={index}
-                  whileHover={{ x: 5 }}
-                  transition={{ duration: 0.2 }}
-                >
+                <motion.li key={index} whileHover={{ x: 5 }} transition={{ duration: 0.2 }}>
                   {link.external ? (
-                    <a 
-                      href={link.href} 
-                      target="_blank" 
+                    <a
+                      href={link.href}
+                      target="_blank"
                       rel="noopener noreferrer"
                       className="text-gray-400 hover:text-green-400 transition-colors"
                     >
                       {link.name}
                     </a>
                   ) : (
-                    <Link to={link.href} className="text-gray-400 hover:text-green-400 transition-colors">
+                    <Link
+                      to={link.href}
+                      className="text-gray-400 hover:text-green-400 transition-colors"
+                    >
                       {link.name}
                     </Link>
                   )}
@@ -220,22 +226,21 @@ const Footer = () => {
             <h3 className="text-white font-semibold mb-4">Company</h3>
             <ul className="space-y-3">
               {footerLinks.company.map((link, index) => (
-                <motion.li
-                  key={index}
-                  whileHover={{ x: 5 }}
-                  transition={{ duration: 0.2 }}
-                >
+                <motion.li key={index} whileHover={{ x: 5 }} transition={{ duration: 0.2 }}>
                   {link.external ? (
-                    <a 
-                      href={link.href} 
-                      target="_blank" 
+                    <a
+                      href={link.href}
+                      target="_blank"
                       rel="noopener noreferrer"
                       className="text-gray-400 hover:text-green-400 transition-colors"
                     >
                       {link.name}
                     </a>
                   ) : (
-                    <Link to={link.href} className="text-gray-400 hover:text-green-400 transition-colors">
+                    <Link
+                      to={link.href}
+                      className="text-gray-400 hover:text-green-400 transition-colors"
+                    >
                       {link.name}
                     </Link>
                   )}
@@ -248,22 +253,21 @@ const Footer = () => {
             <h3 className="text-white font-semibold mb-4">Resources</h3>
             <ul className="space-y-3">
               {footerLinks.resources.map((link, index) => (
-                <motion.li
-                  key={index}
-                  whileHover={{ x: 5 }}
-                  transition={{ duration: 0.2 }}
-                >
+                <motion.li key={index} whileHover={{ x: 5 }} transition={{ duration: 0.2 }}>
                   {link.external ? (
-                    <a 
-                      href={link.href} 
-                      target="_blank" 
+                    <a
+                      href={link.href}
+                      target="_blank"
                       rel="noopener noreferrer"
                       className="text-gray-400 hover:text-green-400 transition-colors"
                     >
                       {link.name}
                     </a>
                   ) : (
-                    <Link to={link.href} className="text-gray-400 hover:text-green-400 transition-colors">
+                    <Link
+                      to={link.href}
+                      className="text-gray-400 hover:text-green-400 transition-colors"
+                    >
                       {link.name}
                     </Link>
                   )}
@@ -276,22 +280,21 @@ const Footer = () => {
             <h3 className="text-white font-semibold mb-4">Legal</h3>
             <ul className="space-y-3">
               {footerLinks.legal.map((link, index) => (
-                <motion.li
-                  key={index}
-                  whileHover={{ x: 5 }}
-                  transition={{ duration: 0.2 }}
-                >
+                <motion.li key={index} whileHover={{ x: 5 }} transition={{ duration: 0.2 }}>
                   {link.external ? (
-                    <a 
-                      href={link.href} 
-                      target="_blank" 
+                    <a
+                      href={link.href}
+                      target="_blank"
                       rel="noopener noreferrer"
                       className="text-gray-400 hover:text-green-400 transition-colors"
                     >
                       {link.name}
                     </a>
                   ) : (
-                    <Link to={link.href} className="text-gray-400 hover:text-green-400 transition-colors">
+                    <Link
+                      to={link.href}
+                      className="text-gray-400 hover:text-green-400 transition-colors"
+                    >
                       {link.name}
                     </Link>
                   )}
@@ -307,9 +310,7 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-6">
           {/* Copyright */}
-          <div className="text-gray-500 text-sm">
-            © {currentYear} VMusic. All rights reserved.
-          </div>
+          <div className="text-gray-500 text-sm">© {currentYear} VMusic. All rights reserved.</div>
 
           {/* Social Links */}
           <div className="flex items-center gap-4">

@@ -14,7 +14,7 @@ const FullscreenModal = ({ video, onClose, onPlay }) => {
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.8, opacity: 0 }}
-        transition={{ type: "spring", damping: 25 }}
+        transition={{ type: 'spring', damping: 25 }}
         className="relative w-full max-w-6xl"
         onClick={(e) => e.stopPropagation()}
       >
@@ -24,12 +24,12 @@ const FullscreenModal = ({ video, onClose, onPlay }) => {
         >
           <X size={24} />
         </button>
-        
+
         <div className="bg-gradient-to-br from-gray-900 to-black rounded-3xl overflow-hidden border-2 border-red-500/30 shadow-2xl">
           <div className="aspect-video w-full bg-black relative">
             <div id="fullscreen-player" className="absolute inset-0"></div>
           </div>
-          
+
           <div className="p-6 bg-gradient-to-r from-gray-900 to-black">
             <h2 className="text-2xl font-black text-white mb-2 line-clamp-2">{video.title}</h2>
             <div className="flex items-center justify-between">

@@ -1,12 +1,12 @@
-import React from "react";
+import React from 'react';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { 
+    this.state = {
       hasError: false,
       error: null,
-      errorInfo: null 
+      errorInfo: null,
     };
   }
 
@@ -15,13 +15,13 @@ class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, errorInfo) {
-    console.error("🔥 Error Boundary Caught:", error);
-    console.error("🔥 Error Info:", errorInfo);
-    console.error("🔥 Component Stack:", errorInfo.componentStack);
-    
+    console.error('🔥 Error Boundary Caught:', error);
+    console.error('🔥 Error Info:', errorInfo);
+    console.error('🔥 Component Stack:', errorInfo.componentStack);
+
     this.setState({
       error: error,
-      errorInfo: errorInfo
+      errorInfo: errorInfo,
     });
   }
 
@@ -30,10 +30,8 @@ class ErrorBoundary extends React.Component {
       return (
         <div className="min-h-screen bg-gray-900 flex items-center justify-center p-8">
           <div className="max-w-2xl w-full bg-red-900/20 border-2 border-red-500 rounded-xl p-8">
-            <h1 className="text-3xl font-bold text-red-400 mb-4">
-              ⚠️ Something went wrong
-            </h1>
-            
+            <h1 className="text-3xl font-bold text-red-400 mb-4">⚠️ Something went wrong</h1>
+
             <div className="bg-black/50 rounded-lg p-4 mb-4">
               <h2 className="text-xl font-semibold text-white mb-2">Error:</h2>
               <pre className="text-red-300 text-sm overflow-auto">

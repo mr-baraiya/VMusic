@@ -1,19 +1,19 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { 
-  Play, 
-  Pause, 
-  SkipForward, 
-  SkipBack, 
-  Volume2, 
+import {
+  Play,
+  Pause,
+  SkipForward,
+  SkipBack,
+  Volume2,
   VolumeX,
   Heart,
   ListMusic,
   Shuffle,
   Repeat,
   X,
-  ExternalLink
+  ExternalLink,
 } from 'lucide-react';
 import { usePlayer } from '../../contexts/PlayerContext';
 import jamendoAPI from '../../api/jamendo';
@@ -104,7 +104,7 @@ const FloatingPlayer = () => {
             {/* Track Info */}
             <div className="flex items-center gap-4 min-w-0 flex-1">
               {/* Album Art - Increased Size - Clickable */}
-              <motion.div 
+              <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => navigate(`/track/${currentTrack.id}`)}
@@ -129,15 +129,18 @@ const FloatingPlayer = () => {
 
               {/* Track Details - Clickable */}
               <div className="min-w-0 flex-1">
-                <motion.h4 
+                <motion.h4
                   whileHover={{ x: 3 }}
                   onClick={() => navigate(`/track/${currentTrack.id}`)}
                   className="text-white font-semibold truncate text-sm md:text-base hover:text-green-400 transition-colors cursor-pointer flex items-center gap-2 w-fit group"
                 >
                   {currentTrack.name}
-                  <ExternalLink size={14} className="opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
+                  <ExternalLink
+                    size={14}
+                    className="opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
+                  />
                 </motion.h4>
-                <motion.p 
+                <motion.p
                   whileHover={{ x: 3 }}
                   onClick={(e) => {
                     e.stopPropagation();
@@ -180,7 +183,11 @@ const FloatingPlayer = () => {
                 {isPlaying ? (
                   <Pause size={22} className="text-gray-900 md:w-6 md:h-6" fill="currentColor" />
                 ) : (
-                  <Play size={22} className="text-gray-900 ml-0.5 md:w-6 md:h-6" fill="currentColor" />
+                  <Play
+                    size={22}
+                    className="text-gray-900 ml-0.5 md:w-6 md:h-6"
+                    fill="currentColor"
+                  />
                 )}
               </motion.button>
 
@@ -222,11 +229,7 @@ const FloatingPlayer = () => {
                   onClick={toggleMute}
                   className="text-gray-400 hover:text-white transition-colors"
                 >
-                  {isMuted || volume === 0 ? (
-                    <VolumeX size={20} />
-                  ) : (
-                    <Volume2 size={20} />
-                  )}
+                  {isMuted || volume === 0 ? <VolumeX size={20} /> : <Volume2 size={20} />}
                 </button>
 
                 <AnimatePresence>

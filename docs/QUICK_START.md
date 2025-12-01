@@ -3,11 +3,13 @@
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - Node.js 18+ installed
 - MongoDB Atlas account
 - Vercel account (for deployment)
 
 ### API Base URLs
+
 ```
 Production:  https://v-music-gamma.vercel.app/api
 Development: http://localhost:5173/api
@@ -34,6 +36,7 @@ npm run dev
 ## 🔐 Environment Setup
 
 Edit `.env` file:
+
 ```env
 # MongoDB (Already configured)
 MONGODB_URI=mongodb+srv://i_am_vishal_1014:1014@cluster0.r4bt2.mongodb.net
@@ -52,6 +55,7 @@ VITE_YOUTUBE_API_KEY=your_youtube_api_key_here
 ## 📡 API Endpoints Overview
 
 ### 1️⃣ Users API - `/api/users`
+
 ```javascript
 // Sync user after Firebase login
 POST /api/users
@@ -76,6 +80,7 @@ PUT /api/users
 ```
 
 ### 2️⃣ Favorites API - `/api/favorites`
+
 ```javascript
 // Add favorite song
 POST /api/favorites
@@ -102,6 +107,7 @@ DELETE /api/favorites
 ```
 
 ### 3️⃣ Search History API - `/api/search-history`
+
 ```javascript
 // Save search query
 POST /api/search-history
@@ -128,6 +134,7 @@ DELETE /api/search-history
 ### Quick Test with cURL
 
 **1. Test User Sync:**
+
 ```bash
 curl -X POST http://localhost:5173/api/users \
   -H "Content-Type: application/json" \
@@ -135,6 +142,7 @@ curl -X POST http://localhost:5173/api/users \
 ```
 
 **2. Test Add Favorite:**
+
 ```bash
 curl -X POST http://localhost:5173/api/favorites \
   -H "Content-Type: application/json" \
@@ -142,6 +150,7 @@ curl -X POST http://localhost:5173/api/favorites \
 ```
 
 **3. Test Get Favorites:**
+
 ```bash
 curl http://localhost:5173/api/favorites?userId=test123
 ```
@@ -153,11 +162,13 @@ curl http://localhost:5173/api/favorites?userId=test123
 **Database Name:** `vmusic`
 
 **Collections:**
+
 1. **users** - User profiles
-2. **favorites** - User's favorite songs  
+2. **favorites** - User's favorite songs
 3. **search_history** - Search queries
 
 ### View Your Data
+
 1. Go to: https://cloud.mongodb.com
 2. Login: `i_am_vishal_1014` / `1014`
 3. Navigate: Cluster0 → Browse Collections
@@ -168,6 +179,7 @@ curl http://localhost:5173/api/favorites?userId=test123
 ## 💻 Frontend Usage
 
 ### Import API Clients
+
 ```javascript
 import { usersAPI, searchHistoryAPI } from './api/users';
 import { favoritesAPI } from './api/favorites';
@@ -175,6 +187,7 @@ import { useAuth } from './contexts/AuthContext';
 ```
 
 ### Use in Components
+
 ```javascript
 const { currentUser } = useAuth();
 
@@ -184,7 +197,7 @@ const handleAddFavorite = async (track) => {
     alert('Please sign in');
     return;
   }
-  
+
   try {
     await favoritesAPI.addToFavorites(currentUser.uid, track);
     console.log('Added to favorites!');
@@ -205,11 +218,13 @@ const loadHistory = async () => {
 ## 🚢 Deployment to Vercel
 
 ### Automatic Deployment
+
 1. Push to GitHub
 2. Vercel auto-deploys
 3. API routes available at: `https://v-music-gamma.vercel.app/api/`
 
 ### Manual Deployment
+
 ```bash
 # Install Vercel CLI
 npm install -g vercel
@@ -222,6 +237,7 @@ vercel --prod
 ```
 
 ### Environment Variables on Vercel
+
 1. Go to: https://vercel.com/your-project/settings/environment-variables
 2. Add: `MONGODB_URI=mongodb+srv://i_am_vishal_1014:1014@cluster0.r4bt2.mongodb.net`
 3. Redeploy
@@ -231,19 +247,25 @@ vercel --prod
 ## 🐛 Troubleshooting
 
 ### Issue: MongoDB Connection Failed
+
 **Solution:**
+
 1. Check MongoDB Atlas Network Access
 2. Whitelist IP: `0.0.0.0/0` (Allow all)
 3. Verify credentials: `i_am_vishal_1014` / `1014`
 
 ### Issue: CORS Error
+
 **Solution:**
+
 - API routes already have CORS enabled
 - Ensure using correct base URL
 - Check browser console for exact error
 
 ### Issue: API Not Working Locally
+
 **Solution:**
+
 ```bash
 # Restart dev server
 npm run dev
@@ -253,7 +275,9 @@ curl http://localhost:5173/api/users?userId=test
 ```
 
 ### Issue: Data Not Saving
+
 **Solution:**
+
 1. Check browser console for errors
 2. Verify user is logged in
 3. Test API with cURL
@@ -264,6 +288,7 @@ curl http://localhost:5173/api/users?userId=test
 ## 📊 Monitoring
 
 ### Check API Health
+
 ```bash
 # Test users endpoint
 curl http://localhost:5173/api/users?userId=test
@@ -276,17 +301,21 @@ curl http://localhost:5173/api/search-history?userId=test
 ```
 
 ### View Logs
+
 **Local Development:**
+
 - Check terminal output
 - Check browser console
 
 **Production (Vercel):**
+
 1. Go to: https://vercel.com
 2. Select project
 3. Click "Functions" tab
 4. View real-time logs
 
 ### MongoDB Metrics
+
 1. Go to: https://cloud.mongodb.com
 2. Select: Cluster0
 3. View: Metrics tab
@@ -327,6 +356,7 @@ VMusic/
 ## 🎯 Next Steps
 
 ### 1. Test Everything Locally
+
 ```bash
 npm run dev
 # Visit: http://localhost:5173
@@ -337,11 +367,13 @@ npm run dev
 ```
 
 ### 2. Verify MongoDB Data
+
 - Login to MongoDB Atlas
 - Check `users`, `favorites`, `search_history` collections
 - Verify data is being saved
 
 ### 3. Deploy to Production
+
 ```bash
 git push origin main
 # Vercel auto-deploys
@@ -349,6 +381,7 @@ git push origin main
 ```
 
 ### 4. Monitor Performance
+
 - Check Vercel function logs
 - Monitor MongoDB metrics
 - Watch for errors in browser console
@@ -367,6 +400,7 @@ git push origin main
 ## ✅ Current Status
 
 **✓ Backend Completed:**
+
 - [x] MongoDB connection setup
 - [x] Users API (sync, get, update)
 - [x] Favorites API (add, get, remove)
@@ -380,6 +414,7 @@ git push origin main
 **🚀 Ready to Deploy!**
 
 All backend APIs are implemented and tested. You can now:
+
 1. Run `npm run dev` to test locally
 2. Push to GitHub for automatic Vercel deployment
 3. Access APIs at production URL

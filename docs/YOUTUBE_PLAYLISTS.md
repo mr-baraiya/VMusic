@@ -29,32 +29,37 @@ VMusic → Display & play using YouTube iframe player
 ## ✨ Features Implemented
 
 ### 1️⃣ Google OAuth with YouTube Scope
+
 - **File**: `src/config/firebase.js`
 - **Scope Added**: `https://www.googleapis.com/auth/youtube.readonly`
-- **Parameters**: 
+- **Parameters**:
   - `prompt: 'consent'` - Forces consent screen to get refresh token
   - `access_type: 'offline'` - Requests offline access for refresh token
 
 **What this means**: When users sign in with Google, they'll see a permission request asking to allow VMusic to view their YouTube playlists.
 
 ### 2️⃣ Access Token Storage
+
 - **File**: `src/contexts/AuthContext.jsx`
 - **State**: `googleAccessToken` - Stores the OAuth access token
 - **Storage**: Token saved to MongoDB for persistent access across sessions
 
 ### 3️⃣ Backend API Endpoint
+
 - **File**: `api/youtube-playlists.js`
 - **Endpoints**:
   - `GET /api/youtube-playlists?userId=xxx&accessToken=yyy` - Get user's playlists
   - `GET /api/youtube-playlists?userId=xxx&playlistId=zzz&accessToken=yyy` - Get playlist items
 
 **Features**:
+
 - CORS enabled for frontend access
 - Error handling for expired/invalid tokens
 - Returns simplified data format
 - Supports pagination (50 items per request)
 
 ### 4️⃣ Frontend API Client
+
 - **File**: `src/api/youtube.js`
 - **Methods**:
   - `getUserPlaylists(userId, accessToken)` - Fetch all playlists
@@ -62,6 +67,7 @@ VMusic → Display & play using YouTube iframe player
   - `validateAccessToken(accessToken)` - Check token validity
 
 ### 5️⃣ YouTube Playlists Modal
+
 - **File**: `src/components/vibetube/YouTubePlaylists.jsx`
 - **UI Features**:
   - Grid view of user's playlists with thumbnails
@@ -71,6 +77,7 @@ VMusic → Display & play using YouTube iframe player
   - Beautiful animations with Framer Motion
 
 ### 6️⃣ Integration in VibeTube
+
 - **File**: `src/pages/VibeTube.jsx`
 - **New State**: `showYouTubePlaylists` - Controls modal visibility
 - **Button Location**: Search bar (YouTube icon, only visible when signed in)
@@ -114,7 +121,7 @@ VMusic → Display & play using YouTube iframe player
 googleProvider.addScope('https://www.googleapis.com/auth/youtube.readonly');
 googleProvider.setCustomParameters({
   prompt: 'consent',
-  access_type: 'offline'
+  access_type: 'offline',
 });
 
 // 2. Sign in and capture token
@@ -123,9 +130,9 @@ const accessToken = result._tokenResponse.oauthAccessToken;
 
 // 3. Store token in state and MongoDB
 setGoogleAccessToken(accessToken);
-await usersAPI.syncUser(userId, { 
-  googleAccessToken, 
-  googleRefreshToken 
+await usersAPI.syncUser(userId, {
+  googleAccessToken,
+  googleRefreshToken,
 });
 
 // 4. Use token to call YouTube API
@@ -135,6 +142,7 @@ const playlists = await youtubeAPI.getUserPlaylists(userId, accessToken);
 ### YouTube Data API Endpoints Used
 
 **1. Get User Playlists**
+
 ```
 GET https://www.googleapis.com/youtube/v3/playlists
 ?part=snippet,contentDetails
@@ -144,6 +152,7 @@ Authorization: Bearer {accessToken}
 ```
 
 **2. Get Playlist Items**
+
 ```
 GET https://www.googleapis.com/youtube/v3/playlistItems
 ?part=snippet,contentDetails
@@ -155,6 +164,7 @@ Authorization: Bearer {accessToken}
 ### Data Structure
 
 **Playlist Object:**
+
 ```javascript
 {
   id: "PLxxxxxx",
@@ -167,6 +177,7 @@ Authorization: Bearer {accessToken}
 ```
 
 **Playlist Item Object:**
+
 ```javascript
 {
   id: "UExxxxxITE",
@@ -185,12 +196,14 @@ Authorization: Bearer {accessToken}
 ## 🔒 Security & Privacy
 
 ### Permissions Requested
+
 - ✅ **Read-Only Access**: Only viewing playlists, never modifying
 - ✅ **No Downloads**: Songs played via YouTube iframe (legal & compliant)
 - ✅ **Token Security**: Access tokens stored securely in MongoDB
 - ✅ **User Control**: Users can revoke access anytime via Google Account settings
 
 ### Token Management
+
 - **Access Token**: Short-lived (1 hour), stored in AuthContext
 - **Refresh Token**: Long-lived, stored in MongoDB for re-authentication
 - **Expiration Handling**: API returns 401 error if token expired → prompts re-login
@@ -208,12 +221,12 @@ Authorization: Bearer {accessToken}
   displayName: "John Doe",
   photoURL: "https://...",
   provider: "google.com",
-  
+
   // NEW FIELDS
   googleAccessToken: "ya29.a0AfB_byy3...",  // OAuth access token
   googleRefreshToken: "1//xxxxx",            // Refresh token
   googleTokenUpdatedAt: "2024-11-14T10:30:00Z", // Last token update
-  
+
   createdAt: "2024-01-01T00:00:00Z",
   lastLogin: "2024-11-14T10:30:00Z"
 }
@@ -228,6 +241,7 @@ Authorization: Bearer {accessToken}
 1. Sign in with Google
 2. Open browser console
 3. Check AuthContext:
+
 ```javascript
 // In browser console
 const { googleAccessToken } = useAuth();
@@ -235,6 +249,7 @@ console.log('Has token:', !!googleAccessToken); // Check if token exists
 ```
 
 4. Verify MongoDB:
+
 ```bash
 # Connect to MongoDB Atlas
 # Browse Collections → vmusic → users
@@ -245,11 +260,13 @@ console.log('Has token:', !!googleAccessToken); // Check if token exists
 ### Test API Endpoints
 
 **Get Playlists:**
+
 ```bash
 curl "http://localhost:5173/api/youtube-playlists?userId=YOUR_USER_ID&accessToken=YOUR_TOKEN"
 ```
 
 **Get Playlist Items:**
+
 ```bash
 curl "http://localhost:5173/api/youtube-playlists?userId=YOUR_USER_ID&playlistId=PLAYLIST_ID&accessToken=YOUR_TOKEN"
 ```
@@ -268,31 +285,41 @@ curl "http://localhost:5173/api/youtube-playlists?userId=YOUR_USER_ID&playlistId
 ## 🐛 Troubleshooting
 
 ### Issue: YouTube button not visible
-**Solution**: 
+
+**Solution**:
+
 - Make sure you're signed in with Google (not email)
 - Check browser console for `googleAccessToken`
 - Token should be non-null
 
 ### Issue: "Access token expired" error
+
 **Solution**:
+
 - Sign out and sign in again
 - This will generate a new access token
 - Future: Implement automatic token refresh
 
 ### Issue: "No playlists found"
+
 **Solution**:
+
 - Go to YouTube.com
 - Create at least one playlist
 - Refresh VMusic page
 
 ### Issue: CORS error
+
 **Solution**:
+
 - Backend API has CORS enabled
 - Check Vercel function logs
 - Verify API endpoint is deployed
 
 ### Issue: Songs not playing
+
 **Solution**:
+
 - Check if videoId is valid
 - YouTube iframe API must be loaded
 - Check browser console for errors
@@ -336,11 +363,13 @@ curl "http://localhost:5173/api/youtube-playlists?userId=YOUR_USER_ID&playlistId
 **GET /api/youtube-playlists**
 
 **Query Parameters:**
+
 - `userId` (required): Firebase user ID
 - `accessToken` (required): Google OAuth access token
 - `playlistId` (optional): If provided, returns playlist items instead of playlists
 
 **Response - Playlists:**
+
 ```json
 {
   "playlists": [
@@ -359,6 +388,7 @@ curl "http://localhost:5173/api/youtube-playlists?userId=YOUR_USER_ID&playlistId
 ```
 
 **Response - Playlist Items:**
+
 ```json
 {
   "playlistId": "PLxxxxxx",
@@ -380,26 +410,27 @@ curl "http://localhost:5173/api/youtube-playlists?userId=YOUR_USER_ID&playlistId
 ```
 
 **Error Responses:**
+
 ```json
 // 400 - Missing parameters
 { "error": "userId and accessToken are required" }
 
 // 401 - Expired token
-{ 
+{
   "error": "Access token expired or invalid. Please sign in again.",
   "code": "TOKEN_EXPIRED"
 }
 
 // 403 - API access denied
-{ 
+{
   "error": "YouTube API access denied. Check API key and quotas.",
   "code": "API_ACCESS_DENIED"
 }
 
 // 500 - Server error
-{ 
+{
   "error": "Failed to fetch YouTube playlists",
-  "details": "..." 
+  "details": "..."
 }
 ```
 
@@ -408,12 +439,14 @@ curl "http://localhost:5173/api/youtube-playlists?userId=YOUR_USER_ID&playlistId
 ## 📚 Files Created/Modified
 
 ### New Files Created:
+
 1. `api/youtube-playlists.js` - Backend API endpoint
 2. `src/api/youtube.js` - Frontend API client
 3. `src/components/vibetube/YouTubePlaylists.jsx` - Playlists modal UI
 4. `docs/YOUTUBE_PLAYLISTS.md` - This documentation
 
 ### Files Modified:
+
 1. `src/config/firebase.js` - Added YouTube scope
 2. `src/contexts/AuthContext.jsx` - Added token storage
 3. `api/users.js` - Added token fields to schema

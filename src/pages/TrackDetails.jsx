@@ -1,7 +1,20 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Play, Pause, Heart, Plus, Share2, Clock, Music2, User, Users, Calendar, Download, ExternalLink } from 'lucide-react';
+import {
+  Play,
+  Pause,
+  Heart,
+  Plus,
+  Share2,
+  Clock,
+  Music2,
+  User,
+  Users,
+  Calendar,
+  Download,
+  ExternalLink,
+} from 'lucide-react';
 import { usePlayer } from '../contexts/PlayerContext';
 import { useAuth } from '../contexts/AuthContext';
 import { toast } from '../components/Toast';
@@ -14,7 +27,7 @@ const TrackDetails = () => {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
   const { playTrack, currentTrack, isPlaying, togglePlay } = usePlayer();
-  
+
   const [track, setTrack] = useState(null);
   const [artist, setArtist] = useState(null);
   const [relatedTracks, setRelatedTracks] = useState([]);
@@ -31,25 +44,25 @@ const TrackDetails = () => {
   const loadTrackDetails = async () => {
     try {
       setLoading(true);
-      
+
       // Get track details
       const trackData = await jamendoAPI.getTrackById(trackId);
       if (trackData.results && trackData.results.length > 0) {
         const trackInfo = trackData.results[0];
         setTrack(trackInfo);
-        
+
         // Get artist details
         if (trackInfo.artist_id) {
           const artistData = await jamendoAPI.getArtist(trackInfo.artist_id);
           if (artistData.results && artistData.results.length > 0) {
             setArtist(artistData.results[0]);
           }
-          
+
           // Get related tracks from same artist
           const relatedData = await jamendoAPI.getArtistTracks(trackInfo.artist_id, 6);
           if (relatedData.results) {
             // Filter out current track
-            const filtered = relatedData.results.filter(t => t.id !== trackId);
+            const filtered = relatedData.results.filter((t) => t.id !== trackId);
             setRelatedTracks(filtered);
           }
         }
@@ -65,7 +78,7 @@ const TrackDetails = () => {
     try {
       const userRef = doc(db, 'users', currentUser.uid);
       const userSnap = await getDoc(userRef);
-      
+
       if (userSnap.exists()) {
         const userData = userSnap.data();
         const likedTracks = userData.likedTracks || [];
@@ -84,7 +97,7 @@ const TrackDetails = () => {
 
     try {
       const userRef = doc(db, 'users', currentUser.uid);
-      
+
       if (isLiked) {
         await updateDoc(userRef, {
           likedTracks: arrayRemove(trackId),
@@ -242,7 +255,7 @@ const TrackDetails = () => {
             </button>
 
             {/* Add to Playlist */}
-            <button 
+            <button
               onClick={() => {
                 if (!currentUser) {
                   toast.show('Please sign in to add tracks to playlists', 'error');
@@ -314,13 +327,10 @@ const TrackDetails = () => {
             <div className="space-y-6">
               <div className="bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 rounded-xl p-6 backdrop-blur-sm">
                 <h3 className="text-white font-bold text-lg mb-6">About Artist</h3>
-                
+
                 {/* Artist Profile */}
                 <div className="mb-6">
-                  <button
-                    onClick={() => navigate(`/artist/${artist.id}`)}
-                    className="group w-full"
-                  >
+                  <button onClick={() => navigate(`/artist/${artist.id}`)} className="group w-full">
                     <div className="flex items-center gap-4 mb-4">
                       <div className="relative">
                         <img

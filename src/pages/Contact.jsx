@@ -28,7 +28,7 @@ const Contact = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Validation
     if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
       setStatus({
@@ -98,12 +98,11 @@ const Contact = () => {
       // Set success status
       setStatus({
         type: 'success',
-        message: 'Thank you! Your message has been sent successfully. We\'ll get back to you soon.',
+        message: "Thank you! Your message has been sent successfully. We'll get back to you soon.",
       });
 
       // Stop loading
       setLoading(false);
-
     } catch (error) {
       console.error('Error submitting feedback:', error);
       setLoading(false);
@@ -119,7 +118,7 @@ const Contact = () => {
       {/* Header */}
       <div className="relative overflow-hidden bg-linear-to-r from-teal-900/40 via-cyan-900/40 to-blue-900/40 border-b border-white/10">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDI1NSwgMjU1LCAyNTUsIDAuMDUpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-30"></div>
-        
+
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -127,9 +126,7 @@ const Contact = () => {
             transition={{ duration: 0.5 }}
             className="text-center"
           >
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              Get in Touch
-            </h1>
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">Get in Touch</h1>
             <p className="text-gray-300 text-lg">
               Have questions or feedback? We'd love to hear from you!
             </p>
@@ -172,7 +169,10 @@ const Contact = () => {
                 Your Name *
               </label>
               <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                <User
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                  size={20}
+                />
                 <input
                   type="text"
                   id="name"
@@ -192,7 +192,10 @@ const Contact = () => {
                 Email Address *
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                <Mail
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                  size={20}
+                />
                 <input
                   type="email"
                   id="email"
@@ -212,7 +215,10 @@ const Contact = () => {
                 Phone Number (Optional)
               </label>
               <div className="relative">
-                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                <Phone
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                  size={20}
+                />
                 <input
                   type="tel"
                   id="phone"
@@ -259,9 +265,7 @@ const Contact = () => {
                   placeholder="Tell us what's on your mind..."
                 />
               </div>
-              <p className="text-xs text-gray-500 mt-2">
-                Minimum 10 characters
-              </p>
+              <p className="text-xs text-gray-500 mt-2">Minimum 10 characters</p>
             </div>
 
             {/* Submit Button */}

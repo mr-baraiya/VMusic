@@ -8,7 +8,7 @@ import { auth } from '../config/firebase';
 const ResetPassword = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  
+
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -18,7 +18,7 @@ const ResetPassword = () => {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [email, setEmail] = useState('');
-  
+
   const oobCode = searchParams.get('oobCode');
 
   useEffect(() => {
@@ -38,13 +38,13 @@ const ResetPassword = () => {
       } catch (err) {
         console.error('Error verifying reset code:', err);
         let errorMessage = 'Invalid or expired reset link.';
-        
+
         if (err.code === 'auth/expired-action-code') {
           errorMessage = 'This reset link has expired. Please request a new one.';
         } else if (err.code === 'auth/invalid-action-code') {
           errorMessage = 'This reset link is invalid or has already been used.';
         }
-        
+
         setError(errorMessage);
         setVerifying(false);
       }
@@ -74,18 +74,18 @@ const ResetPassword = () => {
     try {
       // Reset the password
       await confirmPasswordReset(auth, oobCode, password);
-      
+
       setMessage('Password reset successful! Redirecting to sign in...');
-      
+
       // Redirect to home page after 2 seconds
       setTimeout(() => {
         navigate('/');
       }, 2000);
     } catch (err) {
       console.error('Password reset error:', err);
-      
+
       let errorMessage = 'Failed to reset password. Please try again.';
-      
+
       if (err.code === 'auth/expired-action-code') {
         errorMessage = 'This reset link has expired. Please request a new one.';
       } else if (err.code === 'auth/invalid-action-code') {
@@ -95,7 +95,7 @@ const ResetPassword = () => {
       } else if (err.message) {
         errorMessage = err.message;
       }
-      
+
       setError(errorMessage);
     } finally {
       setLoading(false);
@@ -108,7 +108,7 @@ const ResetPassword = () => {
         <div className="text-center">
           <motion.div
             animate={{ rotate: 360 }}
-            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+            transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
             className="w-16 h-16 border-4 border-purple-500 border-t-transparent rounded-full mx-auto mb-4"
           />
           <p className="text-white text-lg">Verifying reset link...</p>
@@ -170,7 +170,8 @@ const ResetPassword = () => {
             </motion.div>
             <h2 className="text-3xl font-bold text-white mb-2">Reset Password</h2>
             <p className="text-gray-400 text-sm">
-              Enter your new password for <span className="text-purple-400 font-semibold">{email}</span>
+              Enter your new password for{' '}
+              <span className="text-purple-400 font-semibold">{email}</span>
             </p>
           </div>
 
@@ -202,11 +203,12 @@ const ResetPassword = () => {
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* New Password Input */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                New Password
-              </label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">New Password</label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                <Lock
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                  size={20}
+                />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   value={password}
@@ -234,7 +236,10 @@ const ResetPassword = () => {
                 Confirm Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                <Lock
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                  size={20}
+                />
                 <input
                   type={showConfirmPassword ? 'text' : 'password'}
                   value={confirmPassword}

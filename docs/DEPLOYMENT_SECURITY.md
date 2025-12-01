@@ -59,20 +59,20 @@ Go to: **Site Settings → Environment → Environment Variables**
 
 Add these **backend secrets** (without `VITE_` prefix):
 
-| Variable Name | Value | Scopes |
-|--------------|-------|--------|
-| `SPOTIFY_CLIENT_SECRET` | `your_secret` | Production, Preview, Dev |
-| `MONGODB_URI` | `mongodb+srv://...` | Production, Preview, Dev |
-| `GOOGLE_CLIENT_SECRET` | `your_google_secret` | Production, Preview, Dev |
+| Variable Name           | Value                | Scopes                   |
+| ----------------------- | -------------------- | ------------------------ |
+| `SPOTIFY_CLIENT_SECRET` | `your_secret`        | Production, Preview, Dev |
+| `MONGODB_URI`           | `mongodb+srv://...`  | Production, Preview, Dev |
+| `GOOGLE_CLIENT_SECRET`  | `your_google_secret` | Production, Preview, Dev |
 
 Add these **frontend variables** (with `VITE_` prefix):
 
-| Variable Name | Value | Scopes |
-|--------------|-------|--------|
-| `VITE_SPOTIFY_CLIENT_ID` | `your_client_id` | All |
-| `VITE_YOUTUBE_API_KEY` | `your_youtube_key` | All |
-| `VITE_FIREBASE_API_KEY` | `your_firebase_key` | All |
-| `VITE_API_BASE_URL` | `https://your-app.netlify.app/api` | All |
+| Variable Name            | Value                              | Scopes |
+| ------------------------ | ---------------------------------- | ------ |
+| `VITE_SPOTIFY_CLIENT_ID` | `your_client_id`                   | All    |
+| `VITE_YOUTUBE_API_KEY`   | `your_youtube_key`                 | All    |
+| `VITE_FIREBASE_API_KEY`  | `your_firebase_key`                | All    |
+| `VITE_API_BASE_URL`      | `https://your-app.netlify.app/api` | All    |
 
 ### 2. Disable Secret Scanning (After Cleaning Docs)
 
@@ -102,11 +102,13 @@ git push origin main
 Go to: **Project Settings → Environment Variables**
 
 **Backend Secrets** (no `VITE_` prefix):
+
 - `SPOTIFY_CLIENT_SECRET`
 - `MONGODB_URI`
 - `GOOGLE_CLIENT_SECRET`
 
 **Frontend Variables** (with `VITE_` prefix):
+
 - All the same as Netlify above
 
 ### 2. Deploy
@@ -221,14 +223,14 @@ git push origin --force --all
 
 ## 🎯 Summary
 
-| Action | Status |
-|--------|--------|
-| Remove `VITE_SPOTIFY_CLIENT_SECRET` from `.env` | ✅ Done |
-| Remove `MONGODB_URI` from `.env` | ✅ Done |
-| Use backend API for Spotify tokens | ✅ Done |
-| Sanitize all documentation | ✅ Done |
-| Update `.env.example` | ✅ Done |
-| Add backend-only secrets to Netlify/Vercel | 🔄 You must do |
-| Deploy and test | 🔄 You must do |
+| Action                                          | Status         |
+| ----------------------------------------------- | -------------- |
+| Remove `VITE_SPOTIFY_CLIENT_SECRET` from `.env` | ✅ Done        |
+| Remove `MONGODB_URI` from `.env`                | ✅ Done        |
+| Use backend API for Spotify tokens              | ✅ Done        |
+| Sanitize all documentation                      | ✅ Done        |
+| Update `.env.example`                           | ✅ Done        |
+| Add backend-only secrets to Netlify/Vercel      | 🔄 You must do |
+| Deploy and test                                 | 🔄 You must do |
 
 **Your app is now secure!** 🔒

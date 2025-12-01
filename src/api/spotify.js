@@ -24,7 +24,7 @@ class SpotifyAPI {
   loadTokenFromStorage() {
     const token = localStorage.getItem('spotify_access_token');
     const expiry = localStorage.getItem('spotify_token_expiry');
-    
+
     if (token && expiry && Date.now() < parseInt(expiry)) {
       this.accessToken = token;
       this.tokenExpiry = parseInt(expiry);
@@ -36,7 +36,7 @@ class SpotifyAPI {
    * Save token to localStorage
    */
   saveTokenToStorage(token, expiresIn) {
-    const expiry = Date.now() + (expiresIn * 1000);
+    const expiry = Date.now() + expiresIn * 1000;
     localStorage.setItem('spotify_access_token', token);
     localStorage.setItem('spotify_token_expiry', expiry.toString());
     this.accessToken = token;
@@ -57,7 +57,7 @@ class SpotifyAPI {
       'playlist-read-private',
       'streaming',
       'user-read-playback-state',
-      'user-read-currently-playing'
+      'user-read-currently-playing',
     ];
 
     const params = new URLSearchParams({
@@ -65,7 +65,7 @@ class SpotifyAPI {
       response_type: 'token',
       redirect_uri: REDIRECT_URI,
       scope: scopes.join(' '),
-      show_dialog: 'false'
+      show_dialog: 'false',
     });
 
     return `${AUTH_URL}?${params.toString()}`;
@@ -77,17 +77,17 @@ class SpotifyAPI {
   handleCallback() {
     const hash = window.location.hash.substring(1);
     const params = new URLSearchParams(hash);
-    
+
     const accessToken = params.get('access_token');
     const expiresIn = params.get('expires_in');
-    
+
     if (accessToken && expiresIn) {
       this.saveTokenToStorage(accessToken, parseInt(expiresIn));
       // Clean up URL
       window.history.replaceState({}, document.title, window.location.pathname);
       return true;
     }
-    
+
     return false;
   }
 
@@ -124,7 +124,7 @@ class SpotifyAPI {
    */
   async request(endpoint, options = {}) {
     const token = await this.getAccessToken();
-    
+
     if (!token) {
       throw new Error('Not authenticated. Please login with Spotify.');
     }
@@ -132,10 +132,10 @@ class SpotifyAPI {
     const response = await fetch(`${BASE_URL}${endpoint}`, {
       ...options,
       headers: {
-        'Authorization': `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
-        ...options.headers
-      }
+        ...options.headers,
+      },
     });
 
     if (response.status === 401) {
@@ -173,18 +173,18 @@ class SpotifyAPI {
     try {
       const data = await this.request(`/browse/new-releases?limit=${limit}`);
       // Get tracks from albums
-      const albumIds = data.albums.items.map(album => album.id).join(',');
+      const albumIds = data.albums.items.map((album) => album.id).join(',');
       const albums = await this.request(`/albums?ids=${albumIds}`);
-      
-      const tracks = albums.albums.flatMap(album => 
-        album.tracks.items.map(track => ({
+
+      const tracks = albums.albums.flatMap((album) =>
+        album.tracks.items.map((track) => ({
           ...track,
           album: {
             id: album.id,
             name: album.name,
             images: album.images,
-            release_date: album.release_date
-          }
+            release_date: album.release_date,
+          },
         }))
       );
 
@@ -266,9 +266,9 @@ class SpotifyAPI {
   async getRecommendations(seedTracks = [], seedArtists = [], limit = 20) {
     try {
       const params = new URLSearchParams({
-        limit: limit.toString()
+        limit: limit.toString(),
       });
-      
+
       if (seedTracks.length > 0) {
         params.append('seed_tracks', seedTracks.slice(0, 5).join(','));
       }
@@ -318,7 +318,7 @@ class SpotifyAPI {
       return { items: [], total: 0 };
     }
 
-    const items = data.items.map(item => {
+    const items = data.items.map((item) => {
       // Handle saved tracks format (track is nested in 'track' property)
       const track = item.track || item;
       return this.formatTrack(track);
@@ -326,7 +326,7 @@ class SpotifyAPI {
 
     return {
       items,
-      total: data.total || items.length
+      total: data.total || items.length,
     };
   }
 
@@ -350,7 +350,7 @@ class SpotifyAPI {
       releasedate: track.album?.release_date || '',
       popularity: track.popularity || 0,
       explicit: track.explicit || false,
-      source: 'spotify' // Mark as Spotify track
+      source: 'spotify', // Mark as Spotify track
     };
   }
 

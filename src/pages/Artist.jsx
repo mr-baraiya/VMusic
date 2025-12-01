@@ -33,7 +33,7 @@ const Artist = () => {
     try {
       const userRef = doc(db, 'users', currentUser.uid);
       const userSnap = await getDoc(userRef);
-      
+
       if (userSnap.exists()) {
         const userData = userSnap.data();
         const likedTrackIds = userData.likedTracks || [];
@@ -50,11 +50,11 @@ const Artist = () => {
       // Fetch artist info and tracks from Jamendo
       const artistResponse = await jamendoAPI.getArtist(id);
       const tracksResponse = await jamendoAPI.getArtistTracks(id, 200);
-      
+
       if (artistResponse.results && artistResponse.results.length > 0) {
         setArtist(artistResponse.results[0]);
       }
-      
+
       if (tracksResponse.results) {
         setTracks(tracksResponse.results);
       }
@@ -80,7 +80,7 @@ const Artist = () => {
         await updateDoc(userRef, {
           likedTracks: arrayRemove(trackId),
         });
-        setLikedTracks(prev => {
+        setLikedTracks((prev) => {
           const newSet = new Set(prev);
           newSet.delete(trackId);
           return newSet;
@@ -90,7 +90,7 @@ const Artist = () => {
         await updateDoc(userRef, {
           likedTracks: arrayUnion(trackId),
         });
-        setLikedTracks(prev => {
+        setLikedTracks((prev) => {
           const newSet = new Set(prev);
           newSet.add(trackId);
           return newSet;
@@ -162,7 +162,7 @@ const Artist = () => {
           transition={{
             duration: 8,
             repeat: Infinity,
-            ease: "easeInOut"
+            ease: 'easeInOut',
           }}
           className="absolute -top-40 -right-40 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"
         />
@@ -174,7 +174,7 @@ const Artist = () => {
           transition={{
             duration: 10,
             repeat: Infinity,
-            ease: "easeInOut"
+            ease: 'easeInOut',
           }}
           className="absolute -bottom-40 -left-40 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl"
         />
@@ -211,11 +211,11 @@ const Artist = () => {
               >
                 {/* Glowing border effect */}
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-500 via-pink-500 to-indigo-500 rounded-2xl blur-xl opacity-60 group-hover:opacity-80 transition-opacity"></div>
-                
+
                 <div className="relative w-full h-full rounded-2xl overflow-hidden bg-gradient-to-br from-purple-600/20 to-indigo-600/20 shadow-2xl border-2 border-white/10 group-hover:border-white/30 transition-all">
                   {artist.image ? (
-                    <img 
-                      src={artist.image} 
+                    <img
+                      src={artist.image}
                       alt={artist.name}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     />
@@ -224,7 +224,7 @@ const Artist = () => {
                       <Users size={80} className="text-purple-300" />
                     </div>
                   )}
-                  
+
                   {/* Overlay gradient */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 </div>
@@ -252,7 +252,7 @@ const Artist = () => {
                 >
                   {artist.name}
                 </motion.h1>
-                
+
                 <motion.div
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -261,8 +261,18 @@ const Artist = () => {
                 >
                   {artist.joinDate && (
                     <div className="flex items-center gap-2 px-3 py-1.5 bg-white/5 rounded-full border border-white/10">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                        />
                       </svg>
                       <span className="text-sm">Member since {artist.joinDate}</span>
                     </div>
@@ -274,7 +284,10 @@ const Artist = () => {
                       rel="noopener noreferrer"
                       className="flex items-center gap-2 px-3 py-1.5 bg-white/5 hover:bg-white/10 rounded-full border border-white/10 hover:border-purple-500/50 transition-all group"
                     >
-                      <ExternalLink size={14} className="group-hover:rotate-12 transition-transform" />
+                      <ExternalLink
+                        size={14}
+                        className="group-hover:rotate-12 transition-transform"
+                      />
                       <span className="text-sm">Visit Website</span>
                     </a>
                   )}
@@ -310,14 +323,22 @@ const Artist = () => {
                 className="px-8 pb-8 pt-6 border-t border-white/10"
               >
                 <h3 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
-                  <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <svg
+                    className="w-5 h-5 text-purple-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
                   </svg>
                   About
                 </h3>
-                <p className="text-gray-300 leading-relaxed">
-                  {artist.bio}
-                </p>
+                <p className="text-gray-300 leading-relaxed">{artist.bio}</p>
               </motion.div>
             )}
           </div>
@@ -358,7 +379,7 @@ const Artist = () => {
                     <span className="text-gray-400 font-medium group-hover:opacity-0 transition-opacity">
                       {index + 1}
                     </span>
-                    <button 
+                    <button
                       onClick={() => playTrack(track, tracks)}
                       className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all"
                     >
@@ -371,10 +392,10 @@ const Artist = () => {
                   {/* Album Art */}
                   <div className="w-14 h-14 flex-shrink-0 bg-gradient-to-br from-purple-600/20 to-indigo-600/20 rounded-xl overflow-hidden shadow-lg group-hover:shadow-xl transition-shadow border border-white/10">
                     {track.image ? (
-                      <img 
-                        src={track.image} 
-                        alt={track.name} 
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" 
+                      <img
+                        src={track.image}
+                        alt={track.name}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-purple-500/20 to-indigo-500/20">
@@ -391,7 +412,9 @@ const Artist = () => {
                     <p className="text-gray-400 text-sm truncate flex items-center gap-2">
                       {track.album_name || 'Single'}
                       {track.releasedate && (
-                        <span className="text-gray-500">• {new Date(track.releasedate).getFullYear()}</span>
+                        <span className="text-gray-500">
+                          • {new Date(track.releasedate).getFullYear()}
+                        </span>
                       )}
                     </p>
                   </div>
@@ -399,7 +422,12 @@ const Artist = () => {
                   {/* Duration */}
                   <div className="text-gray-400 text-sm font-medium flex-shrink-0 hidden md:flex items-center gap-2 px-3 py-1.5 bg-white/5 rounded-full border border-white/10">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
                     </svg>
                     {jamendoAPI.formatDuration(track.duration)}
                   </div>

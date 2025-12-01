@@ -9,15 +9,17 @@ Please follow this guide carefully to ensure your contributions are properly tra
 
 1. **Fork** this repository.
 2. **Clone** your fork locally.
-   
-  ```sh
-    git clone https://github.com/mr-baraiya/VMusic.git
-   ```
+
+```sh
+  git clone https://github.com/mr-baraiya/VMusic.git
+```
+
 3. Create a new branch:
 
    ```sh
    git checkout -b feature/my-feature
    ```
+
 4. Make changes and test locally.
 5. Stage and commit:
 
@@ -25,11 +27,13 @@ Please follow this guide carefully to ensure your contributions are properly tra
    git add .
    git commit -m "feat: added new feature"
    ```
+
 6. Push the branch:
 
    ```sh
    git push origin feature/my-feature
    ```
+
 7. Open a **Pull Request** (PR).
 8. **IMPORTANT → Apply required labels before merge**.
 
@@ -75,18 +79,45 @@ docs/update-readme
 
 ## Code Style Guidelines
 
-* Use **React functional components** with hooks.
-* Follow **Tailwind CSS utility-first styling**.
-* Ensure code is clean, readable, and properly commented.
-* Keep component structure modular.
-* Secure credentials using environment variables.
+- Use **React functional components** with hooks.
+- Follow **Tailwind CSS utility-first styling**.
+- Ensure code is clean, readable, and properly commented.
+- Keep component structure modular.
+- Secure credentials using environment variables.
 
 ### Run checks before submitting:
 
 ```sh
 npm run dev         # Test locally
 npm run lint        # ESLint check
+npm run format      # Format code with Prettier
 ```
+
+---
+
+## Code Formatting
+
+This project uses **Prettier** to maintain consistent code formatting across all files.
+
+### Before submitting your PR:
+
+Run the formatting script to ensure your code follows the project's style guidelines:
+
+```sh
+npm run format
+```
+
+This will automatically format all files in the project according to the rules defined in `.prettierrc`.
+
+**Formatting Configuration:**
+
+- Semi-colons: Yes
+- Single quotes: Yes
+- Print width: 100 characters
+- Tab width: 2 spaces
+- Trailing commas: ES5 standard
+
+**Note:** Prettier is configured to ignore `node_modules/`, `build/`, and `dist/` directories automatically.
 
 ---
 
@@ -104,8 +135,8 @@ Before submitting your PR:
 
 ## Review & Merge Policy
 
-| Stage                | Description             |
-| -------------------- | ----------------------- |
+| Stage             | Description             |
+| ----------------- | ----------------------- |
 | Initial Review    | Mentor/Admin reviews PR |
 | Level Assigned    | Correct level tag added |
 | Changes Required  | Contributor updates PR  |
@@ -115,9 +146,9 @@ Before submitting your PR:
 
 ## Communication Channels
 
-* Project discussion on **Discord forum** (link coming soon).
-* For help, tag mentors or the project admin.
-* Use GitHub **Issues** and **PR comments** for technical queries.
+- Project discussion on **Discord forum** (link coming soon).
+- For help, tag mentors or the project admin.
+- Use GitHub **Issues** and **PR comments** for technical queries.
 
 ---
 
@@ -138,5 +169,5 @@ These are beginner-friendly and help you get started easily!
 Your work improves the music experience for indie lovers worldwide!
 Each contribution, no matter how small, brings us closer to the next great feature.
 
-🎵 *Feel the Indie Beat. Free. Forever.*
+🎵 _Feel the Indie Beat. Free. Forever._
 — **Team VMusic**

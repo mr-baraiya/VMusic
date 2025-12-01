@@ -33,19 +33,19 @@ const YouTubePlaylists = ({ isOpen, onClose, userId, accessToken, onPlayVideo, o
       }
     } catch (err) {
       console.error('Error fetching playlists:', err);
-      
+
       // Show user-friendly error message with instructions
       if (err.message.includes('expired') || err.message.includes('TOKEN_EXPIRED')) {
         setError(
-          '🔒 Your Google access token has expired.\n\nDon\'t worry, we can refresh it automatically!'
+          "🔒 Your Google access token has expired.\n\nDon't worry, we can refresh it automatically!"
         );
       } else if (err.message.includes('quotas') || err.message.includes('denied')) {
         setError(
           'YouTube API is not available. To enable this feature:\n\n' +
-          '1. Go to Google Cloud Console\n' +
-          '2. Enable YouTube Data API v3\n' +
-          '3. Configure OAuth consent screen\n\n' +
-          'For now, you can still search and play videos directly!'
+            '1. Go to Google Cloud Console\n' +
+            '2. Enable YouTube Data API v3\n' +
+            '3. Configure OAuth consent screen\n\n' +
+            'For now, you can still search and play videos directly!'
         );
       } else if (err.message.includes('token') || err.message.includes('sign in')) {
         setError('Your session has expired. Please sign out and sign in with Google again.');
@@ -93,7 +93,7 @@ const YouTubePlaylists = ({ isOpen, onClose, userId, accessToken, onPlayVideo, o
         title: item.title,
         channelTitle: item.channelTitle,
         thumbnail: item.thumbnail,
-        duration: 'N/A' // Duration not available from playlistItems endpoint
+        duration: 'N/A', // Duration not available from playlistItems endpoint
       });
     }
   };
@@ -102,19 +102,19 @@ const YouTubePlaylists = ({ isOpen, onClose, userId, accessToken, onPlayVideo, o
     setImporting(true);
     setError(null);
     setSuccessMessage('');
-    
+
     try {
       // Fetch all videos in the playlist
       const data = await youtubeAPI.getPlaylistItems(userId, playlist.id, accessToken);
       const items = data.items || [];
-      
+
       if (items.length === 0) {
         setError('This playlist is empty!');
         return;
       }
 
       // Transform YouTube playlist items to track format
-      const tracks = items.map(item => ({
+      const tracks = items.map((item) => ({
         id: item.videoId,
         videoId: item.videoId,
         title: item.title,
@@ -122,23 +122,18 @@ const YouTubePlaylists = ({ isOpen, onClose, userId, accessToken, onPlayVideo, o
         channelTitle: item.channelTitle,
         thumbnail: item.thumbnail,
         source: 'youtube',
-        duration: 'N/A'
+        duration: 'N/A',
       }));
 
       // Save playlist to database
-      await playlistsAPI.createPlaylist(
-        userId,
-        playlist.title,
-        tracks,
-        'youtube'
-      );
+      await playlistsAPI.createPlaylist(userId, playlist.title, tracks, 'youtube');
 
-      setImportedPlaylists(prev => new Set([...prev, playlist.id]));
+      setImportedPlaylists((prev) => new Set([...prev, playlist.id]));
       setSuccessMessage(`✅ "${playlist.title}" imported successfully! (${tracks.length} tracks)`);
-      
+
       // Auto-hide success message after 3 seconds
       setTimeout(() => setSuccessMessage(''), 3000);
-      
+
       console.log(`✅ Playlist "${playlist.title}" imported with ${tracks.length} tracks`);
     } catch (err) {
       console.error('Error importing playlist:', err);
@@ -152,7 +147,7 @@ const YouTubePlaylists = ({ isOpen, onClose, userId, accessToken, onPlayVideo, o
     setImporting(true);
     setError(null);
     setSuccessMessage('');
-    
+
     try {
       let importedCount = 0;
       let totalTracks = 0;
@@ -166,10 +161,10 @@ const YouTubePlaylists = ({ isOpen, onClose, userId, accessToken, onPlayVideo, o
         try {
           const data = await youtubeAPI.getPlaylistItems(userId, playlist.id, accessToken);
           const items = data.items || [];
-          
+
           if (items.length === 0) continue;
 
-          const tracks = items.map(item => ({
+          const tracks = items.map((item) => ({
             id: item.videoId,
             videoId: item.videoId,
             title: item.title,
@@ -177,20 +172,15 @@ const YouTubePlaylists = ({ isOpen, onClose, userId, accessToken, onPlayVideo, o
             channelTitle: item.channelTitle,
             thumbnail: item.thumbnail,
             source: 'youtube',
-            duration: 'N/A'
+            duration: 'N/A',
           }));
 
-          await playlistsAPI.createPlaylist(
-            userId,
-            playlist.title,
-            tracks,
-            'youtube'
-          );
+          await playlistsAPI.createPlaylist(userId, playlist.title, tracks, 'youtube');
 
-          setImportedPlaylists(prev => new Set([...prev, playlist.id]));
+          setImportedPlaylists((prev) => new Set([...prev, playlist.id]));
           importedCount++;
           totalTracks += tracks.length;
-          
+
           console.log(`✅ Imported "${playlist.title}" (${tracks.length} tracks)`);
         } catch (err) {
           console.error(`Failed to import "${playlist.title}":`, err);
@@ -198,7 +188,9 @@ const YouTubePlaylists = ({ isOpen, onClose, userId, accessToken, onPlayVideo, o
       }
 
       if (importedCount > 0) {
-        setSuccessMessage(`✅ Imported ${importedCount} playlist(s) with ${totalTracks} total tracks!`);
+        setSuccessMessage(
+          `✅ Imported ${importedCount} playlist(s) with ${totalTracks} total tracks!`
+        );
         setTimeout(() => setSuccessMessage(''), 5000);
       } else {
         setError('All playlists are already imported or empty.');
@@ -327,7 +319,11 @@ const YouTubePlaylists = ({ isOpen, onClose, userId, accessToken, onPlayVideo, o
                       className="px-8 py-3 bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white font-semibold rounded-lg transition-all shadow-lg hover:shadow-red-500/50 flex items-center gap-2"
                     >
                       <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clipRule="evenodd" />
+                        <path
+                          fillRule="evenodd"
+                          d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
+                          clipRule="evenodd"
+                        />
                       </svg>
                       Refresh Google Access
                     </button>
@@ -336,7 +332,9 @@ const YouTubePlaylists = ({ isOpen, onClose, userId, accessToken, onPlayVideo, o
                 )}
                 {error.includes('Google Cloud Console') && (
                   <div className="mt-6 text-center">
-                    <p className="text-sm text-gray-500 mb-3">Alternative: Search videos directly instead</p>
+                    <p className="text-sm text-gray-500 mb-3">
+                      Alternative: Search videos directly instead
+                    </p>
                     <button
                       onClick={onClose}
                       className="px-6 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors"
@@ -353,7 +351,7 @@ const YouTubePlaylists = ({ isOpen, onClose, userId, accessToken, onPlayVideo, o
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {playlists.map((playlist) => {
                   const isImported = importedPlaylists.has(playlist.id);
-                  
+
                   return (
                     <motion.div
                       key={playlist.id}
@@ -361,7 +359,7 @@ const YouTubePlaylists = ({ isOpen, onClose, userId, accessToken, onPlayVideo, o
                       animate={{ opacity: 1, y: 0 }}
                       className="bg-white/5 rounded-xl overflow-hidden border border-white/10 hover:border-red-500/50 transition-all"
                     >
-                      <div 
+                      <div
                         className="relative aspect-video cursor-pointer group"
                         onClick={() => handlePlaylistClick(playlist)}
                       >

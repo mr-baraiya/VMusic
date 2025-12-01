@@ -1,6 +1,16 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Users, Search, Music2, TrendingUp, Calendar, Filter, MapPin, Globe, X } from 'lucide-react';
+import {
+  Users,
+  Search,
+  Music2,
+  TrendingUp,
+  Calendar,
+  Filter,
+  MapPin,
+  Globe,
+  X,
+} from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import jamendoAPI from '../api/jamendo';
 
@@ -101,10 +111,10 @@ const Artists = () => {
 
   const loadMoreArtists = async () => {
     if (loadingMore || !hasMore) return;
-    
+
     setLoadingMore(true);
     const newLimit = limit + 50;
-    
+
     try {
       let data;
       if (searchQuery.trim()) {
@@ -127,11 +137,11 @@ const Artists = () => {
           hasImage: hasImage || undefined,
         });
       }
-      
+
       if (data.results) {
         setArtists(data.results);
         setLimit(newLimit);
-        
+
         if (data.results.length < newLimit) {
           setHasMore(false);
         }
@@ -200,7 +210,7 @@ const Artists = () => {
       {/* Header */}
       <div className="relative overflow-hidden bg-gradient-to-r from-indigo-900/40 via-purple-900/40 to-pink-900/40 border-b border-white/10">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDI1NSwgMjU1LCAyNTUsIDAuMDUpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-30"></div>
-        
+
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -212,9 +222,7 @@ const Artists = () => {
                 <Users size={32} className="text-white" />
               </div>
               <div>
-                <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">
-                  Discover Artists
-                </h1>
+                <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">Discover Artists</h1>
                 <p className="text-gray-300 text-lg">
                   Explore talented musicians from around the world
                 </p>
@@ -226,7 +234,10 @@ const Artists = () => {
               {/* Search Bar */}
               <form onSubmit={handleSearch} className="flex-1">
                 <div className="relative">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                  <Search
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+                    size={20}
+                  />
                   <input
                     type="text"
                     value={searchQuery}
@@ -301,8 +312,9 @@ const Artists = () => {
                 <span>Filtering by:</span>
                 {selectedCountry && (
                   <span className="px-3 py-1 bg-green-600/20 border border-green-500/50 rounded-lg text-sm">
-                    {popularCountries.find(c => c.code === selectedCountry)?.flag}{' '}
-                    {popularCountries.find(c => c.code === selectedCountry)?.name || selectedCountry}
+                    {popularCountries.find((c) => c.code === selectedCountry)?.flag}{' '}
+                    {popularCountries.find((c) => c.code === selectedCountry)?.name ||
+                      selectedCountry}
                   </span>
                 )}
                 {selectedCity && (
@@ -418,9 +430,9 @@ const Artists = () => {
                 >
                   {/* Gradient Overlay on Hover */}
                   <div className="absolute inset-0 bg-gradient-to-br from-purple-600/0 via-pink-600/0 to-indigo-600/0 group-hover:from-purple-600/10 group-hover:via-pink-600/10 group-hover:to-indigo-600/10 transition-all duration-500 pointer-events-none" />
-                  
+
                   {/* Artist Header */}
-                  <div 
+                  <div
                     className="relative p-6 cursor-pointer"
                     onClick={() => navigate(`/artist/${artist.id}`)}
                   >
@@ -450,17 +462,22 @@ const Artists = () => {
                       <h3 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white via-purple-200 to-pink-200 mb-2 group-hover:from-purple-300 group-hover:via-pink-300 group-hover:to-indigo-300 transition-all duration-300 line-clamp-2 px-2">
                         {artist.name}
                       </h3>
-                      
+
                       {/* Artist Metadata */}
                       <div className="flex items-center justify-center gap-4 text-gray-400 text-sm">
                         <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 group-hover:border-purple-500/30 transition-colors">
                           <Calendar size={14} className="text-purple-400" />
-                          <span className="font-medium">{new Date(artist.joindate).getFullYear()}</span>
+                          <span className="font-medium">
+                            {new Date(artist.joindate).getFullYear()}
+                          </span>
                         </div>
                         {artist.albums && artist.albums.length > 0 && (
                           <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 group-hover:border-pink-500/30 transition-colors">
                             <Music2 size={14} className="text-pink-400" />
-                            <span className="font-medium">{artist.albums.length} {artist.albums.length !== 1 ? 'albums' : 'album'}</span>
+                            <span className="font-medium">
+                              {artist.albums.length}{' '}
+                              {artist.albums.length !== 1 ? 'albums' : 'album'}
+                            </span>
                           </div>
                         )}
                       </div>
@@ -476,9 +493,11 @@ const Artists = () => {
                       {/* Albums Header */}
                       <div className="flex items-center gap-2 mb-3 pt-1 pb-2 border-t border-white/10">
                         <Music2 size={16} className="text-cyan-400" />
-                        <span className="text-sm font-semibold text-cyan-300">Albums ({artist.albums.length})</span>
+                        <span className="text-sm font-semibold text-cyan-300">
+                          Albums ({artist.albums.length})
+                        </span>
                       </div>
-                      
+
                       {artist.albums.map((album) => (
                         <motion.div
                           key={album.id}
@@ -501,7 +520,10 @@ const Artists = () => {
                               />
                             ) : (
                               <div className="relative w-full h-full flex items-center justify-center">
-                                <Music2 size={20} className="text-white/30 group-hover/album:text-white/50 transition-colors" />
+                                <Music2
+                                  size={20}
+                                  className="text-white/30 group-hover/album:text-white/50 transition-colors"
+                                />
                               </div>
                             )}
                           </div>
@@ -521,8 +543,18 @@ const Artists = () => {
                           {/* Hover Arrow */}
                           <div className="opacity-0 group-hover/album:opacity-100 transition-opacity">
                             <div className="w-6 h-6 rounded-full bg-cyan-500/20 flex items-center justify-center">
-                              <svg className="w-3 h-3 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                              <svg
+                                className="w-3 h-3 text-cyan-400"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M9 5l7 7-7 7"
+                                />
                               </svg>
                             </div>
                           </div>

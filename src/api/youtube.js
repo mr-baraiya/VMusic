@@ -1,6 +1,6 @@
 /**
  * YouTube API Client
- * 
+ *
  * Frontend client for fetching YouTube playlists and playlist items
  * using user's Google OAuth access token.
  */
@@ -32,8 +32,8 @@ export const youtubeAPI = {
       const response = await fetch(url.toString(), {
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'application/json',
+        },
       });
 
       if (!response.ok) {
@@ -70,8 +70,8 @@ export const youtubeAPI = {
       const response = await fetch(url.toString(), {
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'application/json',
+        },
       });
 
       if (!response.ok) {
@@ -104,7 +104,7 @@ export const youtubeAPI = {
       console.error('Token validation error:', error);
       return false;
     }
-  }
+  },
 };
 
 export default youtubeAPI;

@@ -39,12 +39,12 @@ export default async function handler(req, res) {
 
     // Get user's refresh token
     const user = await collection.findOne({ _id: new ObjectId(userId) });
-    
+
     if (!user || !user.googleRefreshToken) {
       await client.close();
-      return res.status(400).json({ 
+      return res.status(400).json({
         error: 'NO_REFRESH_TOKEN',
-        message: 'No refresh token found. Please sign in with Google again.' 
+        message: 'No refresh token found. Please sign in with Google again.',
       });
     }
 
@@ -56,36 +56,36 @@ export default async function handler(req, res) {
         client_id: GOOGLE_CLIENT_ID,
         client_secret: GOOGLE_CLIENT_SECRET,
         refresh_token: user.googleRefreshToken,
-        grant_type: 'refresh_token'
-      })
+        grant_type: 'refresh_token',
+      }),
     });
 
     if (!tokenResponse.ok) {
       const errorData = await tokenResponse.json();
       console.error('Google token refresh failed:', errorData);
       await client.close();
-      
-      return res.status(400).json({ 
+
+      return res.status(400).json({
         error: 'REFRESH_FAILED',
         message: 'Failed to refresh token. Please sign in with Google again.',
-        details: errorData
+        details: errorData,
       });
     }
 
     const tokenData = await tokenResponse.json();
     const newAccessToken = tokenData.access_token;
     const expiresIn = tokenData.expires_in || 3600; // Default 1 hour
-    const expiresAt = Date.now() + (expiresIn * 1000);
+    const expiresAt = Date.now() + expiresIn * 1000;
 
     // Update access token in database
     await collection.updateOne(
       { _id: new ObjectId(userId) },
-      { 
-        $set: { 
+      {
+        $set: {
           googleAccessToken: newAccessToken,
           tokenExpiresAt: expiresAt,
-          lastTokenRefresh: new Date()
-        } 
+          lastTokenRefresh: new Date(),
+        },
       }
     );
 
@@ -93,17 +93,16 @@ export default async function handler(req, res) {
 
     console.log(`✅ Token refreshed for user ${userId}`);
 
-    return res.status(200).json({ 
+    return res.status(200).json({
       success: true,
       accessToken: newAccessToken,
-      expiresAt: expiresAt
+      expiresAt: expiresAt,
     });
-
   } catch (error) {
     console.error('Token refresh error:', error);
-    return res.status(500).json({ 
+    return res.status(500).json({
       error: 'Internal server error',
-      message: error.message 
+      message: error.message,
     });
   }
 }

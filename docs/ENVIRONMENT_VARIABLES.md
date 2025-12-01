@@ -48,24 +48,26 @@ Navigate to: **Vercel Dashboard → Project → Settings → Environment Variabl
 
 Add these variables:
 
-| Variable Name | Value | Environments |
-|--------------|-------|--------------|
-| `SPOTIFY_CLIENT_SECRET` | `your_spotify_secret` | Production, Preview, Development |
+| Variable Name            | Value                    | Environments                     |
+| ------------------------ | ------------------------ | -------------------------------- |
+| `SPOTIFY_CLIENT_SECRET`  | `your_spotify_secret`    | Production, Preview, Development |
 | `VITE_SPOTIFY_CLIENT_ID` | `your_spotify_client_id` | Production, Preview, Development |
 
-**Note:** In production, the backend serverless function uses `SPOTIFY_CLIENT_SECRET` (without VITE_ prefix) from Vercel environment variables.
+**Note:** In production, the backend serverless function uses `SPOTIFY_CLIENT_SECRET` (without VITE\_ prefix) from Vercel environment variables.
 
 ---
 
 ## 🔒 Security Best Practices
 
-### ✅ **Safe to Expose (VITE_ prefix)**
+### ✅ **Safe to Expose (VITE\_ prefix)**
+
 - `VITE_SPOTIFY_CLIENT_ID` - Public client ID
 - `VITE_JAMENDO_CLIENT_ID` - Public client ID
 - `VITE_FIREBASE_*` - Firebase configs (protected by Firebase rules)
 - `VITE_EMAILJS_*` - EmailJS configs (limited by domain restrictions)
 
 ### ⚠️ **MUST Keep Secret**
+
 - `VITE_SPOTIFY_CLIENT_SECRET` (development only)
 - `SPOTIFY_CLIENT_SECRET` (production - backend only)
 
@@ -82,14 +84,14 @@ const isDevelopment = import.meta.env.DEV;
 if (isDevelopment) {
   // Reads from .env file
   const clientSecret = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET;
-  
+
   // Calls Spotify API directly
   const response = await fetch('https://accounts.spotify.com/api/token', {
     method: 'POST',
     headers: {
-      'Authorization': `Basic ${btoa(clientId + ':' + clientSecret)}`
+      Authorization: `Basic ${btoa(clientId + ':' + clientSecret)}`,
     },
-    body: 'grant_type=client_credentials'
+    body: 'grant_type=client_credentials',
   });
 }
 ```
@@ -125,13 +127,14 @@ const clientSecret = process.env.SPOTIFY_CLIENT_SECRET; // From Vercel
 ### **For Deployment**
 
 1. Deploy to Vercel:
+
    ```bash
    vercel
    ```
 
 2. Add environment variables in Vercel Dashboard:
    - Go to Settings → Environment Variables
-   - Add `SPOTIFY_CLIENT_SECRET` (without VITE_ prefix)
+   - Add `SPOTIFY_CLIENT_SECRET` (without VITE\_ prefix)
    - Apply to all environments (Production, Preview, Development)
 
 3. Redeploy:
@@ -176,11 +179,13 @@ curl https://your-app.vercel.app/api/spotify-token
 ### **Error: "VITE_SPOTIFY_CLIENT_SECRET not found"**
 
 **Solution:** Add the variable to your `.env` file:
+
 ```bash
 VITE_SPOTIFY_CLIENT_SECRET=ac0814caa22742a4bf8074e401bc9f36
 ```
 
 Then restart the dev server:
+
 ```bash
 npm run dev
 ```
@@ -188,6 +193,7 @@ npm run dev
 ### **Error: "Failed to get Spotify token from backend" (Production)**
 
 **Solution:** Add `SPOTIFY_CLIENT_SECRET` to Vercel environment variables:
+
 1. Go to Vercel Dashboard → Settings → Environment Variables
 2. Add variable with value
 3. Redeploy the application
@@ -195,6 +201,7 @@ npm run dev
 ### **Changes to .env not reflecting**
 
 **Solution:** Vite doesn't hot-reload environment variables. Restart the dev server:
+
 ```bash
 # Stop the server (Ctrl+C)
 npm run dev

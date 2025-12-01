@@ -12,7 +12,7 @@ const SpotifyConnect = () => {
     // Check if user is already connected to Spotify
     const connected = spotifyAPI.isUserAuthenticated();
     setIsConnected(connected);
-    
+
     if (connected) {
       musicAPI.enableSpotify();
     }
@@ -48,7 +48,9 @@ const SpotifyConnect = () => {
               Spotify Integration
             </h3>
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              {isConnected ? 'Your Spotify account is connected' : 'Connect your Spotify account for enhanced features'}
+              {isConnected
+                ? 'Your Spotify account is connected'
+                : 'Connect your Spotify account for enhanced features'}
             </p>
           </div>
         </div>
@@ -72,19 +74,22 @@ const SpotifyConnect = () => {
           <li className="flex items-start gap-3">
             <CheckCircle className="text-green-500 mt-0.5 flex-shrink-0" size={20} />
             <span className="text-gray-700 dark:text-gray-300">
-              <strong>Millions of Tracks:</strong> Access Spotify's massive music library with 30-second previews
+              <strong>Millions of Tracks:</strong> Access Spotify's massive music library with
+              30-second previews
             </span>
           </li>
           <li className="flex items-start gap-3">
             <CheckCircle className="text-green-500 mt-0.5 flex-shrink-0" size={20} />
             <span className="text-gray-700 dark:text-gray-300">
-              <strong>Your Library:</strong> See your saved tracks, playlists, and top songs (when logged in)
+              <strong>Your Library:</strong> See your saved tracks, playlists, and top songs (when
+              logged in)
             </span>
           </li>
           <li className="flex items-start gap-3">
             <CheckCircle className="text-green-500 mt-0.5 flex-shrink-0" size={20} />
             <span className="text-gray-700 dark:text-gray-300">
-              <strong>Personalized Recommendations:</strong> Get AI-powered music suggestions based on your taste
+              <strong>Personalized Recommendations:</strong> Get AI-powered music suggestions based
+              on your taste
             </span>
           </li>
           <li className="flex items-start gap-3">
@@ -96,7 +101,8 @@ const SpotifyConnect = () => {
           <li className="flex items-start gap-3">
             <CheckCircle className="text-green-500 mt-0.5 flex-shrink-0" size={20} />
             <span className="text-gray-700 dark:text-gray-300">
-              <strong>Combined Experience:</strong> Switch between Jamendo (full tracks) and Spotify seamlessly
+              <strong>Combined Experience:</strong> Switch between Jamendo (full tracks) and Spotify
+              seamlessly
             </span>
           </li>
         </ul>
@@ -105,8 +111,9 @@ const SpotifyConnect = () => {
       {/* Notice */}
       <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4 mb-6">
         <p className="text-sm text-blue-800 dark:text-blue-300">
-          <strong>ℹ️ Note:</strong> Spotify provides 30-second previews for most tracks. Full playback requires Spotify Premium.
-          You'll still have full access to 500,000+ complete tracks from Jamendo.
+          <strong>ℹ️ Note:</strong> Spotify provides 30-second previews for most tracks. Full
+          playback requires Spotify Premium. You'll still have full access to 500,000+ complete
+          tracks from Jamendo.
         </p>
       </div>
 

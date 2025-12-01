@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Music2, 
-  Play, 
-  Pause, 
-  Heart, 
-  ExternalLink, 
+import {
+  Music2,
+  Play,
+  Pause,
+  Heart,
+  ExternalLink,
   Search,
   Volume2,
   VolumeX,
@@ -16,7 +16,7 @@ import {
   AlertCircle,
   ArrowRight,
   Youtube,
-  X
+  X,
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
@@ -26,13 +26,13 @@ import { toast } from '../components/Toast';
 
 /**
  * Vibe Zone - Spotify-powered music discovery focused on Hindi/Bollywood content
- * 
+ *
  * 🔐 SECURE Token Management:
  * - Always calls backend API at /api/spotify-token (Vercel/Netlify serverless function)
  * - Backend uses SPOTIFY_CLIENT_SECRET (stored securely in hosting environment)
  * - ✅ NO secrets exposed to frontend/browser
  * - Token cached for 55 minutes in localStorage
- * 
+ *
  * Features:
  * - 7 music categories (Hindi, Bollywood, Romantic, Trending, Lo-Fi, Party, Chill)
  * - Custom search with market=IN for Indian content
@@ -109,7 +109,7 @@ const VibeZone = () => {
       // Check if we have a valid cached token
       const cachedToken = localStorage.getItem('spotify_token');
       const cachedExpiry = localStorage.getItem('spotify_token_expiry');
-      
+
       if (cachedToken && cachedExpiry && Date.now() < parseInt(cachedExpiry)) {
         setAccessToken(cachedToken);
         setTokenExpiry(parseInt(cachedExpiry));
@@ -117,22 +117,23 @@ const VibeZone = () => {
       }
 
       // Always use backend API for token (secure - no secrets in frontend)
-      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'https://v-music-gamma.vercel.app/api';
+      const apiBaseUrl =
+        import.meta.env.VITE_API_BASE_URL || 'https://v-music-gamma.vercel.app/api';
       const response = await fetch(`${apiBaseUrl}/spotify-token`);
-      
+
       if (!response.ok) {
         throw new Error('Failed to get Spotify token from backend');
       }
-      
+
       const data = await response.json();
-      
+
       if (data.access_token) {
-        const expiryTime = Date.now() + (data.expires_in * 1000) - 60000; // Expire 1 min early
-        
+        const expiryTime = Date.now() + data.expires_in * 1000 - 60000; // Expire 1 min early
+
         // Cache token
         localStorage.setItem('spotify_token', data.access_token);
         localStorage.setItem('spotify_token_expiry', expiryTime.toString());
-        
+
         setAccessToken(data.access_token);
         setTokenExpiry(expiryTime);
       } else {
@@ -147,7 +148,7 @@ const VibeZone = () => {
 
   const fetchTracks = async (currentOffset = offset, append = false) => {
     if (!accessToken) return;
-    
+
     if (append) {
       setLoadingMore(true);
     } else {
@@ -155,15 +156,15 @@ const VibeZone = () => {
     }
 
     try {
-      const category = categories.find(c => c.id === selectedCategory);
+      const category = categories.find((c) => c.id === selectedCategory);
       const searchTerm = searchQuery || category.query;
-      
+
       const url = `https://api.spotify.com/v1/search?q=${encodeURIComponent(searchTerm)}&type=track&limit=20&offset=${currentOffset}&market=IN`;
-      
+
       const response = await fetch(url, {
         headers: {
-          'Authorization': `Bearer ${accessToken}`
-        }
+          Authorization: `Bearer ${accessToken}`,
+        },
       });
 
       if (response.status === 401) {
@@ -180,7 +181,7 @@ const VibeZone = () => {
       }
 
       const data = await response.json();
-      
+
       // Check if there are more tracks
       const newTracks = data.tracks.items;
       if (newTracks.length === 0 || newTracks.length < 20) {
@@ -189,14 +190,14 @@ const VibeZone = () => {
 
       // Append or replace tracks
       if (append) {
-        setTracks(prev => [...prev, ...newTracks]);
+        setTracks((prev) => [...prev, ...newTracks]);
       } else {
         setTracks(newTracks);
       }
-      
+
       // Count tracks with previews
-      const tracksWithPreview = newTracks.filter(track => track.preview_url);
-      
+      const tracksWithPreview = newTracks.filter((track) => track.preview_url);
+
       if (!append && tracksWithPreview.length === 0 && newTracks.length > 0) {
         toast.show('Tracks loaded, but previews may not be available', 'info');
       }
@@ -255,15 +256,15 @@ const VibeZone = () => {
 
       if (isFavorite) {
         await updateDoc(userRef, {
-          spotifyFavorites: arrayRemove(track.id)
+          spotifyFavorites: arrayRemove(track.id),
         });
-        setFavorites(prev => prev.filter(id => id !== track.id));
+        setFavorites((prev) => prev.filter((id) => id !== track.id));
         toast.show('Removed from favorites', 'info');
       } else {
         await updateDoc(userRef, {
-          spotifyFavorites: arrayUnion(track.id)
+          spotifyFavorites: arrayUnion(track.id),
         });
-        setFavorites(prev => [...prev, track.id]);
+        setFavorites((prev) => [...prev, track.id]);
         toast.show('Added to favorites', 'info');
       }
     } catch (error) {
@@ -316,9 +317,10 @@ const VibeZone = () => {
     }
   };
 
-  const filteredTracks = tracks.filter(track =>
-    track.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    track.artists?.some(artist => artist.name.toLowerCase().includes(searchQuery.toLowerCase()))
+  const filteredTracks = tracks.filter(
+    (track) =>
+      track.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      track.artists?.some((artist) => artist.name.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
   const navigate = useNavigate();
@@ -346,24 +348,36 @@ const VibeZone = () => {
               transition={{ type: 'spring', duration: 0.5 }}
               className="fixed inset-0 z-50 flex items-center justify-center p-4"
             >
-              <div className="rounded-3xl shadow-2xl max-w-lg w-full border border-[#522cd5]/30 overflow-hidden" style={{ background: '#0d0f21' }}>
+              <div
+                className="rounded-3xl shadow-2xl max-w-lg w-full border border-[#522cd5]/30 overflow-hidden"
+                style={{ background: '#0d0f21' }}
+              >
                 {/* Header */}
-                <div className="relative border-b border-[#522cd5]/20 p-6" style={{ 
-                  background: 'linear-gradient(135deg, #522cd5 0%, #ff47b5 100%)',
-                  opacity: 0.15
-                }}>
+                <div
+                  className="relative border-b border-[#522cd5]/20 p-6"
+                  style={{
+                    background: 'linear-gradient(135deg, #522cd5 0%, #ff47b5 100%)',
+                    opacity: 0.15,
+                  }}
+                >
                   <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDI1NSwgMjU1LCAyNTUsIDAuMDUpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-30"></div>
                 </div>
-                
+
                 <div className="relative p-6" style={{ background: '#0d0f21' }}>
                   <div className="flex items-start gap-4 mb-6">
-                    <div className="w-14 h-14 rounded-full flex items-center justify-center shrink-0 animate-pulse shadow-lg shadow-[#ff47b5]/50" style={{
-                      background: 'linear-gradient(135deg, #522cd5 0%, #ff47b5 100%)'
-                    }}>
+                    <div
+                      className="w-14 h-14 rounded-full flex items-center justify-center shrink-0 animate-pulse shadow-lg shadow-[#ff47b5]/50"
+                      style={{
+                        background: 'linear-gradient(135deg, #522cd5 0%, #ff47b5 100%)',
+                      }}
+                    >
                       <AlertCircle className="text-white" size={28} />
                     </div>
                     <div className="flex-1">
-                      <h2 className="text-2xl font-bold mb-1 flex items-center gap-2" style={{ color: '#ffffff' }}>
+                      <h2
+                        className="text-2xl font-bold mb-1 flex items-center gap-2"
+                        style={{ color: '#ffffff' }}
+                      >
                         ⚠️ Service Update
                       </h2>
                       <p className="text-sm" style={{ color: '#d1c4ff' }}>
@@ -381,22 +395,34 @@ const VibeZone = () => {
 
                   {/* Content */}
                   <div className="space-y-4 mb-6">
-                    <div className="rounded-2xl p-4 border backdrop-blur-sm" style={{ 
-                      background: '#2a2d43',
-                      borderColor: '#522cd5'
-                    }}>
+                    <div
+                      className="rounded-2xl p-4 border backdrop-blur-sm"
+                      style={{
+                        background: '#2a2d43',
+                        borderColor: '#522cd5',
+                      }}
+                    >
                       <p className="leading-relaxed" style={{ color: '#ffffff' }}>
-                        Due to <span className="font-bold" style={{ color: '#ff47b5' }}>Spotify API limitations</span>, music playback is currently unavailable on this page.
+                        Due to{' '}
+                        <span className="font-bold" style={{ color: '#ff47b5' }}>
+                          Spotify API limitations
+                        </span>
+                        , music playback is currently unavailable on this page.
                       </p>
                     </div>
 
-                    <div className="rounded-2xl p-4 border backdrop-blur-sm" style={{ 
-                      background: 'linear-gradient(135deg, #522cd5 0%, #ff47b5 100%)',
-                      opacity: 0.9,
-                      borderColor: '#ff47b5'
-                    }}>
+                    <div
+                      className="rounded-2xl p-4 border backdrop-blur-sm"
+                      style={{
+                        background: 'linear-gradient(135deg, #522cd5 0%, #ff47b5 100%)',
+                        opacity: 0.9,
+                        borderColor: '#ff47b5',
+                      }}
+                    >
                       <p className="leading-relaxed" style={{ color: '#ffffff' }}>
-                        💡 <span className="font-semibold">Good news!</span> You can enjoy the full music streaming experience with unlimited playback on <span className="font-bold">VibeTube</span>.
+                        💡 <span className="font-semibold">Good news!</span> You can enjoy the full
+                        music streaming experience with unlimited playback on{' '}
+                        <span className="font-bold">VibeTube</span>.
                       </p>
                     </div>
 
@@ -410,9 +436,9 @@ const VibeZone = () => {
                     <button
                       onClick={() => setShowApiLimitModal(false)}
                       className="flex-1 px-6 py-3.5 rounded-xl font-semibold transition-all duration-200 hover:opacity-80"
-                      style={{ 
+                      style={{
                         background: '#2a2d43',
-                        color: '#ffffff'
+                        color: '#ffffff',
                       }}
                     >
                       Stay Here
@@ -420,14 +446,17 @@ const VibeZone = () => {
                     <button
                       onClick={() => navigate('/vibetube')}
                       className="flex-1 px-6 py-3.5 rounded-xl font-semibold transition-all duration-200 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl hover:scale-105"
-                      style={{ 
+                      style={{
                         background: '#ff3f81',
-                        color: '#ffffff'
+                        color: '#ffffff',
                       }}
                     >
                       <Youtube size={20} />
                       <span>Go to VibeTube</span>
-                      <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                      <ArrowRight
+                        size={16}
+                        className="group-hover:translate-x-1 transition-transform"
+                      />
                     </button>
                   </div>
                 </div>
@@ -438,15 +467,12 @@ const VibeZone = () => {
       </AnimatePresence>
 
       {/* Audio Element */}
-      <audio
-        ref={audioRef}
-        onEnded={() => setCurrentlyPlaying(null)}
-      />
+      <audio ref={audioRef} onEnded={() => setCurrentlyPlaying(null)} />
 
       {/* Header */}
       <div className="relative overflow-hidden bg-gradient-to-r from-purple-900/40 via-pink-900/40 to-fuchsia-900/40 border-b border-white/10">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDI1NSwgMjU1LCAyNTUsIDAuMDUpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-30"></div>
-        
+
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -454,33 +480,49 @@ const VibeZone = () => {
             transition={{ duration: 0.5 }}
           >
             {/* API Limitation Banner */}
-            <div className="mb-6 rounded-2xl border overflow-hidden" style={{ 
-              background: '#0d0f21',
-              borderColor: '#522cd5'
-            }}>
+            <div
+              className="mb-6 rounded-2xl border overflow-hidden"
+              style={{
+                background: '#0d0f21',
+                borderColor: '#522cd5',
+              }}
+            >
               <div className="flex flex-col md:flex-row items-start md:items-center gap-4 p-4">
                 <div className="flex items-start gap-3 flex-1">
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 animate-pulse" style={{
-                    background: 'linear-gradient(135deg, #522cd5 0%, #ff47b5 100%)'
-                  }}>
+                  <div
+                    className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 animate-pulse"
+                    style={{
+                      background: 'linear-gradient(135deg, #522cd5 0%, #ff47b5 100%)',
+                    }}
+                  >
                     <AlertCircle className="text-white" size={20} />
                   </div>
                   <div>
-                    <h3 className="font-bold mb-1 flex items-center gap-2" style={{ color: '#ffffff' }}>
+                    <h3
+                      className="font-bold mb-1 flex items-center gap-2"
+                      style={{ color: '#ffffff' }}
+                    >
                       ⚠️ Service Update
                     </h3>
                     <p className="text-sm leading-relaxed" style={{ color: '#d1c4ff' }}>
-                      Due to <span className="font-semibold" style={{ color: '#ff47b5' }}>Spotify API limitations</span>, music playback is currently unavailable. 
-                      Try <span className="font-semibold" style={{ color: '#ff47b5' }}>VibeTube</span> for full streaming experience!
+                      Due to{' '}
+                      <span className="font-semibold" style={{ color: '#ff47b5' }}>
+                        Spotify API limitations
+                      </span>
+                      , music playback is currently unavailable. Try{' '}
+                      <span className="font-semibold" style={{ color: '#ff47b5' }}>
+                        VibeTube
+                      </span>{' '}
+                      for full streaming experience!
                     </p>
                   </div>
                 </div>
                 <button
                   onClick={() => navigate('/vibetube')}
                   className="shrink-0 px-5 py-2.5 rounded-xl font-semibold transition-all duration-200 flex items-center gap-2 hover:scale-105 shadow-lg"
-                  style={{ 
+                  style={{
                     background: '#ff3f81',
-                    color: '#ffffff'
+                    color: '#ffffff',
                   }}
                 >
                   <Youtube size={18} />
@@ -495,18 +537,20 @@ const VibeZone = () => {
                 <Music2 size={32} className="text-white" />
               </div>
               <div>
-                <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">
-                  🎧 Vibe Zone
-                </h1>
+                <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">🎧 Vibe Zone</h1>
                 <p className="text-gray-300 text-lg">
-                  Discover trending <span className="text-pink-400 font-semibold">Hindi</span> tracks and fresh vibes from Spotify
+                  Discover trending <span className="text-pink-400 font-semibold">Hindi</span>{' '}
+                  tracks and fresh vibes from Spotify
                 </p>
               </div>
             </div>
 
             {/* Search Bar */}
             <form onSubmit={handleSearch} className="relative max-w-2xl">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+              <Search
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+                size={20}
+              />
               <input
                 type="text"
                 value={searchQuery}
@@ -557,9 +601,9 @@ const VibeZone = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {loading ? (
           <div className="text-center py-12">
-            <motion.div 
+            <motion.div
               animate={{ rotate: 360 }}
-              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+              transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
               className="w-16 h-16 border-4 border-pink-500 border-t-transparent rounded-full mx-auto mb-4"
             />
             <p className="text-gray-400">Loading vibes...</p>
@@ -568,10 +612,11 @@ const VibeZone = () => {
           <>
             <div className="mb-6 text-center">
               <p className="text-gray-400">
-                Found <span className="text-white font-semibold">{filteredTracks.length}</span> tracks with 30s previews
+                Found <span className="text-white font-semibold">{filteredTracks.length}</span>{' '}
+                tracks with 30s previews
               </p>
             </div>
-            
+
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -605,12 +650,12 @@ const VibeZone = () => {
                           loading="lazy"
                         />
                       </div>
-                      
+
                       {/* Spotify Badge - Click to Open */}
                       <div className="absolute top-3 right-3 bg-green-500 p-1.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
                         <ExternalLink size={14} className="text-white" />
                       </div>
-                      
+
                       {/* Play Button Overlay */}
                       <button
                         onClick={(e) => {
@@ -619,8 +664,8 @@ const VibeZone = () => {
                         }}
                         disabled={!track.preview_url}
                         className={`absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center transition-opacity rounded-xl ${
-                          track.preview_url 
-                            ? 'opacity-0 group-hover:opacity-100' 
+                          track.preview_url
+                            ? 'opacity-0 group-hover:opacity-100'
                             : 'opacity-50 cursor-not-allowed'
                         }`}
                       >
@@ -644,7 +689,7 @@ const VibeZone = () => {
 
                       {/* Playing Indicator */}
                       {isPlaying && (
-                        <motion.div 
+                        <motion.div
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           className="absolute top-3 left-3 bg-black/50 backdrop-blur-sm px-2 py-1 rounded-full"
@@ -664,7 +709,7 @@ const VibeZone = () => {
                         {track.name}
                       </h3>
                       <p className="text-gray-400 text-sm truncate">
-                        {track.artists?.map(artist => artist.name).join(', ')}
+                        {track.artists?.map((artist) => artist.name).join(', ')}
                       </p>
                     </div>
 
@@ -679,7 +724,11 @@ const VibeZone = () => {
                       >
                         <Heart
                           size={20}
-                          className={isFavorite ? 'text-red-500 fill-red-500' : 'text-gray-400 hover:text-red-400'}
+                          className={
+                            isFavorite
+                              ? 'text-red-500 fill-red-500'
+                              : 'text-gray-400 hover:text-red-400'
+                          }
                         />
                       </button>
 
@@ -692,7 +741,10 @@ const VibeZone = () => {
                           className="p-2 hover:bg-white/10 rounded-full transition-all group/link"
                           title="Open in Spotify"
                         >
-                          <ExternalLink size={20} className="text-gray-400 group-hover/link:text-green-400" />
+                          <ExternalLink
+                            size={20}
+                            className="text-gray-400 group-hover/link:text-green-400"
+                          />
                         </a>
                       )}
 
@@ -748,7 +800,7 @@ const VibeZone = () => {
             initial={{ y: 100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 100, opacity: 0 }}
-            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
             className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-full max-w-3xl px-4"
           >
             <div className="bg-gradient-to-r from-purple-900/95 via-pink-900/95 to-fuchsia-900/95 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl shadow-purple-900/50 p-4">
@@ -778,7 +830,7 @@ const VibeZone = () => {
                     {currentlyPlaying.name}
                   </h4>
                   <p className="text-gray-300 text-xs truncate">
-                    {currentlyPlaying.artists?.map(artist => artist.name).join(', ')}
+                    {currentlyPlaying.artists?.map((artist) => artist.name).join(', ')}
                   </p>
                 </div>
 
@@ -822,7 +874,11 @@ const VibeZone = () => {
                 >
                   <Heart
                     size={20}
-                    className={favorites.includes(currentlyPlaying.id) ? 'text-red-500 fill-red-500' : 'text-gray-300'}
+                    className={
+                      favorites.includes(currentlyPlaying.id)
+                        ? 'text-red-500 fill-red-500'
+                        : 'text-gray-300'
+                    }
                   />
                 </button>
               </div>

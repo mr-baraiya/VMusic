@@ -3,7 +3,7 @@
 ## User Flow (Simple)
 
 ```
-1. User clicks "Sign in with Google" 
+1. User clicks "Sign in with Google"
    ↓
 2. Google asks: "Allow VMusic to view your YouTube playlists?"
    ↓
@@ -22,27 +22,29 @@
 
 ## What You Built
 
-| Component | Purpose | Location |
-|-----------|---------|----------|
-| **OAuth Scope** | Request YouTube permission | `src/config/firebase.js` |
-| **Token Storage** | Save access token | `src/contexts/AuthContext.jsx` |
-| **Backend API** | Fetch playlists from YouTube | `api/youtube-playlists.js` |
-| **Frontend Client** | Call backend API | `src/api/youtube.js` |
-| **UI Modal** | Display playlists beautifully | `src/components/vibetube/YouTubePlaylists.jsx` |
-| **Button** | Open playlists modal | `src/components/vibetube/SearchBar.jsx` |
-| **Integration** | Connect everything | `src/pages/VibeTube.jsx` |
+| Component           | Purpose                       | Location                                       |
+| ------------------- | ----------------------------- | ---------------------------------------------- |
+| **OAuth Scope**     | Request YouTube permission    | `src/config/firebase.js`                       |
+| **Token Storage**   | Save access token             | `src/contexts/AuthContext.jsx`                 |
+| **Backend API**     | Fetch playlists from YouTube  | `api/youtube-playlists.js`                     |
+| **Frontend Client** | Call backend API              | `src/api/youtube.js`                           |
+| **UI Modal**        | Display playlists beautifully | `src/components/vibetube/YouTubePlaylists.jsx` |
+| **Button**          | Open playlists modal          | `src/components/vibetube/SearchBar.jsx`        |
+| **Integration**     | Connect everything            | `src/pages/VibeTube.jsx`                       |
 
 ---
 
 ## Key Code Snippets
 
 ### 1. Request YouTube Permission
+
 ```javascript
 // src/config/firebase.js
 googleProvider.addScope('https://www.googleapis.com/auth/youtube.readonly');
 ```
 
 ### 2. Capture Access Token
+
 ```javascript
 // src/contexts/AuthContext.jsx
 const credential = result._tokenResponse;
@@ -50,12 +52,14 @@ setGoogleAccessToken(credential.oauthAccessToken);
 ```
 
 ### 3. Fetch Playlists
+
 ```javascript
 // src/api/youtube.js
 const playlists = await youtubeAPI.getUserPlaylists(userId, accessToken);
 ```
 
 ### 4. Display in UI
+
 ```jsx
 // src/components/vibetube/YouTubePlaylists.jsx
 <YouTubePlaylists
@@ -71,11 +75,13 @@ const playlists = await youtubeAPI.getUserPlaylists(userId, accessToken);
 ## API Endpoints
 
 ### Get User Playlists
+
 ```bash
 GET /api/youtube-playlists?userId=xxx&accessToken=yyy
 ```
 
 **Returns:**
+
 ```json
 {
   "playlists": [
@@ -91,11 +97,13 @@ GET /api/youtube-playlists?userId=xxx&accessToken=yyy
 ```
 
 ### Get Playlist Items
+
 ```bash
 GET /api/youtube-playlists?userId=xxx&playlistId=zzz&accessToken=yyy
 ```
 
 **Returns:**
+
 ```json
 {
   "playlistId": "PLxxxxxx",
@@ -130,18 +138,21 @@ GET /api/youtube-playlists?userId=xxx&playlistId=zzz&accessToken=yyy
 ## Important Notes
 
 ### ✅ Legal & Compliant
+
 - Read-only access (no modifications)
 - Official YouTube iframe player (no downloading)
 - User's own playlists only
 - Follows YouTube TOS
 
 ### 🔐 Security
+
 - Access token expires in 1 hour
 - Refresh token stored for re-auth
 - Tokens stored securely in MongoDB
 - User can revoke access anytime
 
 ### 📊 Quotas
+
 - YouTube API: 10,000 units/day
 - Get playlists: 1 unit
 - Get playlist items: 1 unit
@@ -152,6 +163,7 @@ GET /api/youtube-playlists?userId=xxx&playlistId=zzz&accessToken=yyy
 ## What's Next?
 
 ### Immediate Testing:
+
 1. Run `npm run dev`
 2. Go to `http://localhost:5173/vibetube`
 3. Sign in with Google
@@ -159,6 +171,7 @@ GET /api/youtube-playlists?userId=xxx&playlistId=zzz&accessToken=yyy
 5. Test everything!
 
 ### Future Features:
+
 - Auto-refresh tokens
 - Liked videos integration
 - Add songs to YouTube playlists
@@ -168,13 +181,13 @@ GET /api/youtube-playlists?userId=xxx&playlistId=zzz&accessToken=yyy
 
 ## Troubleshooting
 
-| Problem | Solution |
-|---------|----------|
-| No YouTube button | Sign in with Google (not email) |
-| "Token expired" | Sign out and sign in again |
+| Problem            | Solution                          |
+| ------------------ | --------------------------------- |
+| No YouTube button  | Sign in with Google (not email)   |
+| "Token expired"    | Sign out and sign in again        |
 | No playlists shown | Create playlists on YouTube first |
-| CORS error | Check Vercel deployment |
-| Songs won't play | Check videoId and YouTube API |
+| CORS error         | Check Vercel deployment           |
+| Songs won't play   | Check videoId and YouTube API     |
 
 ---
 
@@ -218,6 +231,7 @@ curl "http://localhost:5173/api/youtube-playlists?userId=test&accessToken=token"
 ## Success Metrics
 
 After implementation, users can:
+
 - ✅ View their YouTube playlists in VMusic
 - ✅ Play songs from their playlists
 - ✅ Browse all playlist contents

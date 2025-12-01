@@ -1,21 +1,30 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { 
-  Music2, 
-  Play, 
-  Heart, 
-  Download, 
-  Share2, 
-  Calendar, 
+import {
+  Music2,
+  Play,
+  Heart,
+  Download,
+  Share2,
+  Calendar,
   User,
   Clock,
-  ArrowLeft
+  ArrowLeft,
 } from 'lucide-react';
 import jamendoAPI from '../api/jamendo';
 import { usePlayer } from '../contexts/PlayerContext';
 import { useAuth } from '../contexts/AuthContext';
-import { doc, updateDoc, arrayUnion, arrayRemove, collection, query, where, getDocs } from 'firebase/firestore';
+import {
+  doc,
+  updateDoc,
+  arrayUnion,
+  arrayRemove,
+  collection,
+  query,
+  where,
+  getDocs,
+} from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { toast } from '../components/Toast';
 
@@ -24,7 +33,7 @@ const Album = () => {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
   const { playTrack, isPlaying, currentTrack } = usePlayer();
-  
+
   const [album, setAlbum] = useState(null);
   const [tracks, setTracks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -42,10 +51,10 @@ const Album = () => {
     try {
       // Get album details
       const albumData = await jamendoAPI.getAlbumById(id);
-      
+
       if (albumData) {
         setAlbum(albumData);
-        
+
         // Get album tracks
         const tracksData = await jamendoAPI.getAlbumTracks(id);
         if (tracksData.results && tracksData.results.length > 0) {
@@ -63,7 +72,9 @@ const Album = () => {
   const loadLikedTracks = async () => {
     if (!currentUser) return;
     try {
-      const userDoc = await getDocs(query(collection(db, 'users'), where('uid', '==', currentUser.uid)));
+      const userDoc = await getDocs(
+        query(collection(db, 'users'), where('uid', '==', currentUser.uid))
+      );
       if (!userDoc.empty) {
         const userData = userDoc.docs[0].data();
         setLikedTracks(userData.likedTracks || []);
@@ -85,15 +96,15 @@ const Album = () => {
 
       if (isLiked) {
         await updateDoc(userRef, {
-          likedTracks: arrayRemove(track.id)
+          likedTracks: arrayRemove(track.id),
         });
-        setLikedTracks(prev => prev.filter(id => id !== track.id));
+        setLikedTracks((prev) => prev.filter((id) => id !== track.id));
         toast.show('Removed from favorites', 'info');
       } else {
         await updateDoc(userRef, {
-          likedTracks: arrayUnion(track.id)
+          likedTracks: arrayUnion(track.id),
         });
-        setLikedTracks(prev => [...prev, track.id]);
+        setLikedTracks((prev) => [...prev, track.id]);
         toast.show('Added to favorites', 'info');
       }
     } catch (error) {
@@ -163,7 +174,7 @@ const Album = () => {
       {/* Header */}
       <div className="relative h-96 overflow-hidden">
         {/* Background Image with Blur */}
-        <div 
+        <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
             backgroundImage: `url(${album.image})`,
@@ -172,7 +183,7 @@ const Album = () => {
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/80 to-gray-900" />
-        
+
         {/* Content */}
         <div className="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-end pb-8">
           <div className="flex items-end gap-6">
@@ -183,11 +194,7 @@ const Album = () => {
               className="w-48 h-48 rounded-lg overflow-hidden shadow-2xl flex-shrink-0"
             >
               {album.image ? (
-                <img 
-                  src={album.image} 
-                  alt={album.name}
-                  className="w-full h-full object-cover"
-                />
+                <img src={album.image} alt={album.name} className="w-full h-full object-cover" />
               ) : (
                 <div className="w-full h-full bg-gradient-to-br from-cyan-600 to-blue-600 flex items-center justify-center">
                   <Music2 size={64} className="text-white/50" />
@@ -209,12 +216,12 @@ const Album = () => {
                 <ArrowLeft size={20} />
                 Back
               </button>
-              
+
               <p className="text-sm font-semibold text-cyan-400 tracking-wider mb-2">ALBUM</p>
               <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 drop-shadow-lg">
                 {album.name}
               </h1>
-              
+
               <div className="flex items-center gap-4 text-gray-300">
                 <button
                   onClick={() => navigate(`/artist/${album.artist_id}`)}
@@ -223,16 +230,18 @@ const Album = () => {
                   <User size={18} />
                   <span className="font-medium">{album.artist_name}</span>
                 </button>
-                
+
                 <div className="flex items-center gap-2">
                   <Calendar size={18} />
                   <span>{new Date(album.releasedate).getFullYear()}</span>
                 </div>
-                
+
                 {tracks.length > 0 && (
                   <div className="flex items-center gap-2">
                     <Music2 size={18} />
-                    <span>{tracks.length} track{tracks.length !== 1 ? 's' : ''}</span>
+                    <span>
+                      {tracks.length} track{tracks.length !== 1 ? 's' : ''}
+                    </span>
                   </div>
                 )}
               </div>
@@ -251,7 +260,7 @@ const Album = () => {
             <Play size={20} fill="white" />
             Play All
           </button>
-          
+
           {album.zip_allowed && album.zip && (
             <a
               href={album.zip}
@@ -263,7 +272,7 @@ const Album = () => {
               <Download size={20} className="text-white" />
             </a>
           )}
-          
+
           <button
             onClick={handleShare}
             className="p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all"
@@ -295,15 +304,13 @@ const Album = () => {
                   >
                     {/* Track Number / Play Button */}
                     <div className="w-8 flex-shrink-0 text-center">
-                      <span className="text-gray-400 group-hover:hidden">
-                        {index + 1}
-                      </span>
+                      <span className="text-gray-400 group-hover:hidden">{index + 1}</span>
                       <button
                         onClick={() => handlePlayTrack(track)}
                         className="hidden group-hover:block"
                       >
-                        <Play 
-                          size={20} 
+                        <Play
+                          size={20}
                           className={isCurrentTrack && isPlaying ? 'text-cyan-400' : 'text-white'}
                           fill={isCurrentTrack && isPlaying ? 'currentColor' : 'none'}
                         />
@@ -312,14 +319,14 @@ const Album = () => {
 
                     {/* Track Info */}
                     <div className="flex-1 min-w-0">
-                      <h3 className={`font-medium truncate ${
-                        isCurrentTrack ? 'text-cyan-400' : 'text-white'
-                      }`}>
+                      <h3
+                        className={`font-medium truncate ${
+                          isCurrentTrack ? 'text-cyan-400' : 'text-white'
+                        }`}
+                      >
                         {track.name}
                       </h3>
-                      <p className="text-sm text-gray-400 truncate">
-                        {track.artist_name}
-                      </p>
+                      <p className="text-sm text-gray-400 truncate">{track.artist_name}</p>
                     </div>
 
                     {/* Duration */}

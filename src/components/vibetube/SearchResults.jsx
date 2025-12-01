@@ -12,63 +12,130 @@ import {
   Heart,
   X,
   FolderPlus,
-  ListPlus
+  ListPlus,
 } from 'lucide-react';
 
-const SearchResults = ({ results, onAdd, onPlayNow, onAddToFavorites, playlists, isLoading, error }) => {
+const SearchResults = ({
+  results,
+  onAdd,
+  onPlayNow,
+  onAddToFavorites,
+  playlists,
+  isLoading,
+  error,
+}) => {
   const [showPlaylistMenu, setShowPlaylistMenu] = useState(null);
   const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
-  
+
   if (error) {
     return (
       <div className="flex flex-col items-center justify-center py-12 text-center px-4">
         <AlertCircle size={48} className="text-red-400 mb-4" />
         <h3 className="text-xl font-bold text-white mb-2">YouTube API Error</h3>
         <p className="text-gray-400 mb-4 max-w-md">{error}</p>
-        
+
         <div className="mt-4 p-6 bg-red-500/10 border border-red-500/30 rounded-xl max-w-3xl text-left">
           <p className="text-sm text-gray-300 mb-3">
             <strong className="text-white text-base">💡 Common Causes & Solutions:</strong>
           </p>
-          
+
           {error.includes('restrictions') ? (
             <div className="space-y-3">
               <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4">
-                <p className="text-yellow-300 font-semibold mb-2">🔧 Most Likely Issue: API Key Restrictions</p>
+                <p className="text-yellow-300 font-semibold mb-2">
+                  🔧 Most Likely Issue: API Key Restrictions
+                </p>
                 <p className="text-sm text-gray-300 mb-3">
-                  Your YouTube API key has restrictions that prevent it from working on localhost. Here's how to fix it:
+                  Your YouTube API key has restrictions that prevent it from working on localhost.
+                  Here's how to fix it:
                 </p>
                 <ol className="text-sm text-gray-300 space-y-2 ml-4 list-decimal">
-                  <li>Open <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer" className="text-yellow-400 hover:text-yellow-300 underline font-semibold">Google Cloud Console → API Credentials</a></li>
-                  <li>Click on your API key (starts with: <code className="bg-black/40 px-2 py-0.5 rounded text-cyan-300 font-mono text-xs">AIza...</code>)</li>
-                  <li>Under <strong className="text-white">"Application restrictions"</strong>: Select <span className="text-green-400 font-semibold">"None"</span></li>
-                  <li>Under <strong className="text-white">"API restrictions"</strong>: Select <span className="text-green-400 font-semibold">"Don't restrict key"</span> (for development)</li>
-                  <li>Click <strong className="text-white">"Save"</strong></li>
+                  <li>
+                    Open{' '}
+                    <a
+                      href="https://console.cloud.google.com/apis/credentials"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-yellow-400 hover:text-yellow-300 underline font-semibold"
+                    >
+                      Google Cloud Console → API Credentials
+                    </a>
+                  </li>
+                  <li>
+                    Click on your API key (starts with:{' '}
+                    <code className="bg-black/40 px-2 py-0.5 rounded text-cyan-300 font-mono text-xs">
+                      AIza...
+                    </code>
+                    )
+                  </li>
+                  <li>
+                    Under <strong className="text-white">"Application restrictions"</strong>: Select{' '}
+                    <span className="text-green-400 font-semibold">"None"</span>
+                  </li>
+                  <li>
+                    Under <strong className="text-white">"API restrictions"</strong>: Select{' '}
+                    <span className="text-green-400 font-semibold">"Don't restrict key"</span> (for
+                    development)
+                  </li>
+                  <li>
+                    Click <strong className="text-white">"Save"</strong>
+                  </li>
                   <li>Wait 1-2 minutes for changes to propagate</li>
                   <li>Refresh this page (F5)</li>
                 </ol>
               </div>
-              
+
               <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
                 <p className="text-blue-300 font-semibold mb-2">🔐 For Production:</p>
                 <p className="text-sm text-gray-300">
-                  Once deployed, you can restrict the API key to your domain (e.g., <code className="bg-black/40 px-2 py-0.5 rounded text-blue-300 font-mono text-xs">yourdomain.com/*</code>) for security.
+                  Once deployed, you can restrict the API key to your domain (e.g.,{' '}
+                  <code className="bg-black/40 px-2 py-0.5 rounded text-blue-300 font-mono text-xs">
+                    yourdomain.com/*
+                  </code>
+                  ) for security.
                 </p>
               </div>
             </div>
           ) : error.includes('quota exceeded') ? (
             <div className="space-y-3">
               <p className="text-sm text-gray-300">
-                Your YouTube API key has reached its daily quota limit. You can either wait until tomorrow or create a new API key:
+                Your YouTube API key has reached its daily quota limit. You can either wait until
+                tomorrow or create a new API key:
               </p>
               <ol className="text-sm text-gray-300 space-y-2 ml-4 list-decimal">
-                <li>Visit <a href="https://console.cloud.google.com/" target="_blank" rel="noopener noreferrer" className="text-red-400 hover:text-red-300 underline font-semibold">Google Cloud Console</a></li>
+                <li>
+                  Visit{' '}
+                  <a
+                    href="https://console.cloud.google.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-red-400 hover:text-red-300 underline font-semibold"
+                  >
+                    Google Cloud Console
+                  </a>
+                </li>
                 <li>Create a new project (or select existing)</li>
-                <li>Enable <strong className="text-white">"YouTube Data API v3"</strong></li>
+                <li>
+                  Enable <strong className="text-white">"YouTube Data API v3"</strong>
+                </li>
                 <li>Go to Credentials → Create Credentials → API Key</li>
                 <li>Copy the new API key</li>
-                <li>Update your <code className="bg-black/40 px-2 py-0.5 rounded text-red-300 font-mono text-xs">.env</code> file: <code className="bg-black/40 px-2 py-0.5 rounded text-green-300 font-mono text-xs">VITE_YOUTUBE_API_KEY=your_new_key</code></li>
-                <li>Restart your dev server: <code className="bg-black/40 px-2 py-0.5 rounded text-cyan-300 font-mono text-xs">npm run dev</code></li>
+                <li>
+                  Update your{' '}
+                  <code className="bg-black/40 px-2 py-0.5 rounded text-red-300 font-mono text-xs">
+                    .env
+                  </code>{' '}
+                  file:{' '}
+                  <code className="bg-black/40 px-2 py-0.5 rounded text-green-300 font-mono text-xs">
+                    VITE_YOUTUBE_API_KEY=your_new_key
+                  </code>
+                </li>
+                <li>
+                  Restart your dev server:{' '}
+                  <code className="bg-black/40 px-2 py-0.5 rounded text-cyan-300 font-mono text-xs">
+                    npm run dev
+                  </code>
+                </li>
               </ol>
             </div>
           ) : error.includes('API key') || error.includes('API Error') ? (
@@ -77,19 +144,44 @@ const SearchResults = ({ results, onAdd, onPlayNow, onAddToFavorites, playlists,
                 There's an issue with your YouTube API key configuration. Common causes:
               </p>
               <ul className="text-sm text-gray-300 space-y-2 ml-4 list-disc">
-                <li><strong className="text-white">API Key Restrictions:</strong> Your key might have HTTP referrer or IP restrictions. For local development, remove all restrictions.</li>
-                <li><strong className="text-white">API Not Enabled:</strong> Make sure "YouTube Data API v3" is enabled in your Google Cloud project.</li>
-                <li><strong className="text-white">Invalid Key:</strong> The API key might be incorrect. Double-check it in your <code className="bg-black/40 px-1.5 py-0.5 rounded text-red-300 font-mono text-xs">.env</code> file.</li>
+                <li>
+                  <strong className="text-white">API Key Restrictions:</strong> Your key might have
+                  HTTP referrer or IP restrictions. For local development, remove all restrictions.
+                </li>
+                <li>
+                  <strong className="text-white">API Not Enabled:</strong> Make sure "YouTube Data
+                  API v3" is enabled in your Google Cloud project.
+                </li>
+                <li>
+                  <strong className="text-white">Invalid Key:</strong> The API key might be
+                  incorrect. Double-check it in your{' '}
+                  <code className="bg-black/40 px-1.5 py-0.5 rounded text-red-300 font-mono text-xs">
+                    .env
+                  </code>{' '}
+                  file.
+                </li>
               </ul>
               <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3 mt-3">
                 <p className="text-sm text-yellow-300">
-                  <strong>🔧 Quick Fix:</strong> Go to <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer" className="text-yellow-400 hover:text-yellow-300 underline font-semibold">API Credentials</a> → Select your API key → Remove all "Application restrictions" and "API restrictions" → Save
+                  <strong>🔧 Quick Fix:</strong> Go to{' '}
+                  <a
+                    href="https://console.cloud.google.com/apis/credentials"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-yellow-400 hover:text-yellow-300 underline font-semibold"
+                  >
+                    API Credentials
+                  </a>{' '}
+                  → Select your API key → Remove all "Application restrictions" and "API
+                  restrictions" → Save
                 </p>
               </div>
             </div>
           ) : (
             <p className="text-sm text-gray-300">
-              Please check your YouTube API configuration in the <code className="bg-black/40 px-2 py-0.5 rounded text-red-300 font-mono">.env</code> file and ensure it's valid.
+              Please check your YouTube API configuration in the{' '}
+              <code className="bg-black/40 px-2 py-0.5 rounded text-red-300 font-mono">.env</code>{' '}
+              file and ensure it's valid.
             </p>
           )}
         </div>
@@ -117,7 +209,7 @@ const SearchResults = ({ results, onAdd, onPlayNow, onAddToFavorites, playlists,
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
-          transition={{ type: "spring", duration: 0.6 }}
+          transition={{ type: 'spring', duration: 0.6 }}
         >
           <Music2 size={64} className="text-red-400 mb-4 mx-auto" />
         </motion.div>
@@ -167,10 +259,13 @@ const SearchResults = ({ results, onAdd, onPlayNow, onAddToFavorites, playlists,
               key={video.videoId}
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: index * 0.03, type: "spring" }}
+              transition={{ delay: index * 0.03, type: 'spring' }}
               className="group bg-gradient-to-br from-white/10 via-white/5 to-transparent backdrop-blur-xl rounded-2xl overflow-visible border border-white/20 hover:border-red-400/60 transition-all shadow-xl hover:shadow-2xl hover:shadow-red-900/30 hover:-translate-y-2"
             >
-              <div className="relative aspect-video overflow-hidden cursor-pointer rounded-t-2xl" onClick={() => onPlayNow(video)}>
+              <div
+                className="relative aspect-video overflow-hidden cursor-pointer rounded-t-2xl"
+                onClick={() => onPlayNow(video)}
+              >
                 <img
                   src={video.thumbnail}
                   alt={video.title}
@@ -202,7 +297,7 @@ const SearchResults = ({ results, onAdd, onPlayNow, onAddToFavorites, playlists,
                   <Youtube size={12} className="text-red-500" />
                   {video.channelTitle}
                 </p>
-                
+
                 <div className="flex gap-2">
                   <button
                     onClick={() => onPlayNow(video)}
@@ -211,7 +306,7 @@ const SearchResults = ({ results, onAdd, onPlayNow, onAddToFavorites, playlists,
                   >
                     <Zap size={20} fill="white" />
                   </button>
-                  
+
                   <button
                     onClick={() => onAddToFavorites(video)}
                     className="flex items-center justify-center w-12 h-12 bg-white/10 hover:bg-pink-500/30 rounded-xl text-white transition-all hover:scale-110"
@@ -219,23 +314,27 @@ const SearchResults = ({ results, onAdd, onPlayNow, onAddToFavorites, playlists,
                   >
                     <Heart size={20} className="text-pink-400" />
                   </button>
-                  
+
                   <div className="relative">
                     <button
-                      onClick={() => setShowPlaylistMenu(showPlaylistMenu === video.videoId ? null : video.videoId)}
+                      onClick={() =>
+                        setShowPlaylistMenu(
+                          showPlaylistMenu === video.videoId ? null : video.videoId
+                        )
+                      }
                       className={`flex items-center justify-center w-12 h-12 rounded-xl text-white transition-all hover:scale-110 ${
-                        showPlaylistMenu === video.videoId 
-                          ? 'bg-red-500/30 border-2 border-red-400' 
+                        showPlaylistMenu === video.videoId
+                          ? 'bg-red-500/30 border-2 border-red-400'
                           : 'bg-white/10 hover:bg-white/20'
                       }`}
                       title="Add to Playlist"
                     >
-                      <ListPlus 
-                        size={20} 
+                      <ListPlus
+                        size={20}
                         className={showPlaylistMenu === video.videoId ? 'text-red-400' : ''}
                       />
                     </button>
-                    
+
                     <AnimatePresence>
                       {showPlaylistMenu === video.videoId && (
                         <motion.div
@@ -272,7 +371,10 @@ const SearchResults = ({ results, onAdd, onPlayNow, onAddToFavorites, playlists,
                                     }}
                                     className="w-full px-4 py-3 text-left text-white hover:bg-red-600/70 bg-white/5 rounded-xl transition-colors text-sm font-medium flex items-center gap-3 group"
                                   >
-                                    <FolderPlus size={18} className="text-red-400 group-hover:scale-110 transition-transform" />
+                                    <FolderPlus
+                                      size={18}
+                                      className="text-red-400 group-hover:scale-110 transition-transform"
+                                    />
                                     <span className="flex-1">{playlist.name}</span>
                                     <span className="text-xs text-gray-400 bg-white/10 px-2 py-1 rounded-full">
                                       {playlist.tracks?.length || 0}
@@ -304,7 +406,10 @@ const SearchResults = ({ results, onAdd, onPlayNow, onAddToFavorites, playlists,
               transition={{ delay: index * 0.02 }}
               className="group flex items-center gap-4 p-4 bg-gradient-to-r from-white/10 to-white/5 backdrop-blur-xl rounded-2xl border border-white/20 hover:border-red-400/60 transition-all shadow-lg hover:shadow-red-900/20"
             >
-              <div className="relative w-32 h-20 flex-shrink-0 rounded-xl overflow-hidden cursor-pointer" onClick={() => onPlayNow(video)}>
+              <div
+                className="relative w-32 h-20 flex-shrink-0 rounded-xl overflow-hidden cursor-pointer"
+                onClick={() => onPlayNow(video)}
+              >
                 <img
                   src={video.thumbnail}
                   alt={video.title}
@@ -319,7 +424,7 @@ const SearchResults = ({ results, onAdd, onPlayNow, onAddToFavorites, playlists,
                   </div>
                 )}
               </div>
-              
+
               <div className="flex-1 min-w-0">
                 <h3 className="text-white font-bold text-sm line-clamp-2 mb-1 group-hover:text-red-400 transition-colors">
                   {video.title}
@@ -329,7 +434,7 @@ const SearchResults = ({ results, onAdd, onPlayNow, onAddToFavorites, playlists,
                   {video.channelTitle}
                 </p>
               </div>
-              
+
               <div className="flex gap-2 flex-shrink-0">
                 <button
                   onClick={() => onPlayNow(video)}
@@ -338,7 +443,7 @@ const SearchResults = ({ results, onAdd, onPlayNow, onAddToFavorites, playlists,
                 >
                   <Zap size={18} fill="white" />
                 </button>
-                
+
                 <button
                   onClick={() => onAddToFavorites(video)}
                   className="p-3 bg-white/10 hover:bg-pink-500/30 rounded-xl text-white transition-all hover:scale-110"
@@ -346,23 +451,25 @@ const SearchResults = ({ results, onAdd, onPlayNow, onAddToFavorites, playlists,
                 >
                   <Heart size={18} className="text-pink-400" />
                 </button>
-                
+
                 <div className="relative">
                   <button
-                    onClick={() => setShowPlaylistMenu(showPlaylistMenu === video.videoId ? null : video.videoId)}
+                    onClick={() =>
+                      setShowPlaylistMenu(showPlaylistMenu === video.videoId ? null : video.videoId)
+                    }
                     className={`p-3 rounded-xl text-white transition-all hover:scale-110 ${
-                      showPlaylistMenu === video.videoId 
-                        ? 'bg-red-500/30 border-2 border-red-400' 
+                      showPlaylistMenu === video.videoId
+                        ? 'bg-red-500/30 border-2 border-red-400'
                         : 'bg-white/10 hover:bg-white/20'
                     }`}
                     title="Add to Playlist"
                   >
-                    <ListPlus 
-                      size={18} 
+                    <ListPlus
+                      size={18}
                       className={showPlaylistMenu === video.videoId ? 'text-red-400' : ''}
                     />
                   </button>
-                  
+
                   <AnimatePresence>
                     {showPlaylistMenu === video.videoId && (
                       <motion.div
@@ -399,7 +506,10 @@ const SearchResults = ({ results, onAdd, onPlayNow, onAddToFavorites, playlists,
                                   }}
                                   className="w-full px-4 py-3 text-left text-white hover:bg-red-600/70 bg-white/5 rounded-xl transition-colors text-sm font-medium flex items-center gap-3 group"
                                 >
-                                  <FolderPlus size={18} className="text-red-400 group-hover:scale-110 transition-transform" />
+                                  <FolderPlus
+                                    size={18}
+                                    className="text-red-400 group-hover:scale-110 transition-transform"
+                                  />
                                   <span className="flex-1">{playlist.name}</span>
                                   <span className="text-xs text-gray-400 bg-white/10 px-2 py-1 rounded-full">
                                     {playlist.tracks?.length || 0}
