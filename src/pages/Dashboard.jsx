@@ -46,14 +46,25 @@ const Dashboard = () => {
         // Fetch real user stats
         if (currentUser) {
           const [playlistsData, favoritesData] = await Promise.all([
-            playlistsAPI.getUserPlaylists(currentUser.uid).catch(() => ({ playlists: [] })),
-            favoritesAPI.getFavorites(currentUser.uid).catch(() => ({ favorites: [] })),
+            playlistsAPI.getUserPlaylists(currentUser.uid).catch((err) => {
+              console.error('Playlists fetch error:', err);
+              return { playlists: [] };
+            }),
+            favoritesAPI.getFavorites(currentUser.uid).catch((err) => {
+              console.error('Favorites fetch error:', err);
+              return { favorites: [] };
+            }),
           ]);
 
           const playlists = playlistsData.playlists || [];
-          const favorites = favoritesData.favorites || [];
-          const ytPlaylists = playlists.filter((p) => p.source === 'youtube').length;
-          const totalTracks = playlists.reduce((sum, p) => sum + (p.tracks?.length || 0), 0);
+          // Handle both array response and object with favorites property
+          const favorites = Array.isArray(favoritesData) 
+            ? favoritesData 
+            : (favoritesData.favorites || []);
+          const ytPlaylists = playlists.filter((p) => p.source === 'youtube' || p.source === 'vibetube').length;
+          const totalTracks = playlists.reduce((sum, p) => sum + (p.tracks?.length || 0), 0) + favorites.length;
+
+          console.log('Dashboard stats:', { playlists: playlists.length, favorites: favorites.length, ytPlaylists, totalTracks });
 
           setStats({
             playlists: playlists.length,
@@ -63,8 +74,8 @@ const Dashboard = () => {
           });
         }
 
-        // Fetch trending tracks
-        const trendingData = await jamendoAPI.getTrendingTracks(6);
+        // Fetch trending tracks - increased to 12
+        const trendingData = await jamendoAPI.getTrendingTracks(12);
         setTrendingTracks(trendingData.results || []);
       } catch (error) {
         console.error('Error fetching dashboard data:', error);
@@ -414,8 +425,8 @@ const Dashboard = () => {
           </div>
 
           {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[...Array(6)].map((_, i) => (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {[...Array(12)].map((_, i) => (
                 <div
                   key={i}
                   className="bg-white/5 rounded-2xl p-5 animate-pulse border border-white/10"
@@ -427,7 +438,7 @@ const Dashboard = () => {
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {trendingTracks.map((track, index) => (
                 <motion.div
                   key={track.id}

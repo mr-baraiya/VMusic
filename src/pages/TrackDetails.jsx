@@ -57,7 +57,9 @@ const TrackDetails = () => {
         if (trackInfo.artist_id) {
           const artistData = await jamendoAPI.getArtist(trackInfo.artist_id);
           if (artistData.results && artistData.results.length > 0) {
-            setArtist(artistData.results[0]);
+            const artistInfo = artistData.results[0];
+            console.log('Artist data:', artistInfo);
+            setArtist(artistInfo);
           }
 
           // Get related tracks from same artist
@@ -360,7 +362,13 @@ const TrackDetails = () => {
                         <p className="text-gray-400 text-xs">Fans</p>
                       </div>
                       <p className="text-white font-bold text-sm">
-                        {artist.stats?.fans ? artist.stats.fans.toLocaleString() : 'N/A'}
+                        {artist.stats?.fans 
+                          ? artist.stats.fans.toLocaleString() 
+                          : artist.fans 
+                          ? artist.fans.toLocaleString()
+                          : artist.joindate 
+                          ? `Since ${new Date(artist.joindate).getFullYear()}`
+                          : 'Member'}
                       </p>
                     </div>
 
@@ -371,7 +379,13 @@ const TrackDetails = () => {
                         <p className="text-gray-400 text-xs">Tracks</p>
                       </div>
                       <p className="text-white font-bold text-sm">
-                        {artist.stats?.tracks || 'N/A'}
+                        {artist.stats?.tracks 
+                          ? artist.stats.tracks.toLocaleString()
+                          : artist.musicinfo?.totaltrack
+                          ? artist.musicinfo.totaltrack.toLocaleString()
+                          : relatedTracks.length > 0
+                          ? `${relatedTracks.length}+`
+                          : 'Multiple'}
                       </p>
                     </div>
                   </div>

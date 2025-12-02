@@ -114,12 +114,12 @@ const Album = () => {
   };
 
   const handlePlayTrack = (track) => {
-    playTrack(track);
+    playTrack(track, tracks);
   };
 
   const handlePlayAll = () => {
     if (tracks.length > 0) {
-      playTrack(tracks[0]);
+      playTrack(tracks[0], tracks);
     }
   };
 
