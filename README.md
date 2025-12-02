@@ -1,5 +1,7 @@
 
-
+<p align="center">
+  <img src="/public/hero_banner.png" alt="VMusic – Feel the Indie Beat. Free. Forever. | Winter of Code Social 2025" width="100%" />
+</p>
 ---
 
 # 🎵 VMusic – Indie Music Streaming Web App
@@ -7,11 +9,11 @@
 ### **"Feel the Indie Beat. Free. Forever."**
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/WinterofCode/Winter-of-Code-Assets/main/WOCS_2025/banner.png" width="800"/>
+  <img src="/public/wocs.png" width="800"/>
 </p>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/mr-baraiya/VMusic/main/docs/hero.png" width="850" alt="VMusic Hero Banner"/>
+  <img src="/public/logo.png" width="850" alt="VMusic Hero"/>
 </p>
 
 <p align="center">
