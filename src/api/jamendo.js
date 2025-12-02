@@ -200,7 +200,7 @@ export const jamendoAPI = {
   getArtist: async (artistId) => {
     try {
       const response = await fetch(
-        `${BASE_URL}/artists/?client_id=${CLIENT_ID}&format=json&id=${artistId}`
+        `${BASE_URL}/artists/?client_id=${CLIENT_ID}&format=json&id=${artistId}&datapie=stats`
       );
       const data = await response.json();
       return data;

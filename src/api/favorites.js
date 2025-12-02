@@ -9,10 +9,11 @@ export const favoritesAPI = {
       const response = await fetch(`${API_BASE_URL}/favorites?userId=${userId}`);
       if (!response.ok) throw new Error('Failed to fetch favorites');
       const data = await response.json();
-      return data.favorites || [];
+      // Return the full response object to maintain consistency
+      return data;
     } catch (error) {
       console.error('Error fetching favorites:', error);
-      return [];
+      return { favorites: [] };
     }
   },
 
