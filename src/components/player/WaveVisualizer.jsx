@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import gsap from 'gsap';
 
 const WaveVisualizer = ({ isPlaying }) => {
@@ -34,13 +34,14 @@ const WaveVisualizer = ({ isPlaying }) => {
     return () => {
       if (animationRef.current) {
         animationRef.current.kill();
+        animationRef.current = null;
       }
     };
   }, [isPlaying]);
 
-  const setWaveRef = (el, index) => {
+  const setWaveRef = useCallback((el, index) => {
     waveRefs.current[index] = el;
-  };
+  }, []);
 
   return (
     <div className="wave-container">
