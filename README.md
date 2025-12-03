@@ -148,51 +148,37 @@ VMusic/
 
 ---
 
-## 🧑‍🏫 Mentor 1 – **Agnik Goswami**
+<table align="center"> <tr>
+<!-- Mentor 1 -->
+<td align="center" width="50%">
+  <img src="https://media.licdn.com/dms/image/v2/D5603AQERYPJ758OR1w/profile-displayphoto-shrink_800_800/B56ZOhfXvpG8Ac-/0/1733581176779?e=1766620800&v=beta&t=Xm42iesEtxR2DdPaA6PNzlnRbHFkJaUa7XWSP3Ciw6o"
+       width="130" style="border-radius:10px;"><br><br>
+  <b>Agnik Goswami</b><br><br>
+  <a href="https://www.linkedin.com/in/agnik-goswami-6ab95a340">
+    <img src="https://img.shields.io/badge/LinkedIn-0A66C2?logo=linkedin&logoColor=white">
+  </a>
+  <a href="mailto:indagnik@gmail.com">
+    <img src="https://img.shields.io/badge/Email-D14836?logo=gmail&logoColor=white">
+  </a>
+</td>
 
-<table>
-  <tr>
-    <td width="150">
-      <img src="https://media.licdn.com/dms/image/v2/D5603AQERYPJ758OR1w/profile-displayphoto-shrink_800_800/B56ZOhfXvpG8Ac-/0/1733581176779?e=1766620800&v=beta&t=Xm42iesEtxR2DdPaA6PNzlnRbHFkJaUa7XWSP3Ciw6o" 
-           width="130" style="border-radius:10px;">
-    </td>
-    <td>
-      <b>Agnik Goswami</b>  
-      <br/>  
-      <a href="https://www.linkedin.com/in/agnik-goswami-6ab95a340">
-        <img src="https://img.shields.io/badge/LinkedIn-0A66C2?logo=linkedin&logoColor=white">
-      </a>
-      <a href="mailto:indagnik@gmail.com">
-        <img src="https://img.shields.io/badge/Email-D14836?logo=gmail&logoColor=white">
-      </a>
-    </td>
-  </tr>
-</table>
+<!-- Mentor 2 -->
+<td align="center" width="50%">
+  <img src="https://media.licdn.com/dms/image/v2/D4D35AQF5XdPOVRbw3Q/profile-framedphoto-shrink_400_400/B4DZgH2eDEHkAc-/0/1752478376420?e=1765386000&v=beta&t=rEOIhN_juEvZjZtpy7m-m99wjl-6jsEW7mUof2BaoD8"
+       width="130" style="border-radius:10px;"><br><br>
+  <b>Tanziha Sheikh</b><br><br>
+  <a href="https://www.linkedin.com/in/sa32b802/">
+    <img src="https://img.shields.io/badge/LinkedIn-0A66C2?logo=linkedin&logoColor=white">
+  </a>
+  <a href="https://github.com/Tanziha-Sheikh">
+    <img src="https://img.shields.io/badge/GitHub-black?logo=github&logoColor=white">
+  </a>
+  <a href="mailto:sheikh.tanziha228899@gmail.com">
+    <img src="https://img.shields.io/badge/Email-D14836?logo=gmail&logoColor=white">
+  </a>
+</td>
 
-## 🧑‍🏫 Mentor 2 – **Tanziha Sheikh**
-
-<table>
-  <tr>
-    <td width="150">
-      <img src="https://media.licdn.com/dms/image/v2/D4D35AQF5XdPOVRbw3Q/profile-framedphoto-shrink_400_400/B4DZgH2eDEHkAc-/0/1752478376420?e=1765386000&v=beta&t=rEOIhN_juEvZjZtpy7m-m99wjl-6jsEW7mUof2BaoD8" 
-           width="130" style="border-radius:10px;">
-    </td>
-    <td>
-      <b>Tanziha Sheikh</b>  
-      <br/>  
-      <a href="https://www.linkedin.com/in/sa32b802/">
-        <img src="https://img.shields.io/badge/LinkedIn-0A66C2?logo=linkedin&logoColor=white">
-      </a>
-      <a href="https://github.com/Tanziha-Sheikh">
-        <img src="https://img.shields.io/badge/GitHub-black?logo=github&logoColor=white">
-      </a>
-      <a href="mailto:sheikh.tanziha228899@gmail.com">
-        <img src="https://img.shields.io/badge/Email-D14836?logo=gmail&logoColor=white">
-      </a>
-    </td>
-  </tr>
-</table>
-
+</tr> </table>
 ---
 
 # 👥 Contributors
