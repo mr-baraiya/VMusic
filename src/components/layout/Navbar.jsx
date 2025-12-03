@@ -33,6 +33,14 @@ const Navbar = () => {
   const { currentUser, logout } = useAuth();
   const navigate = useNavigate();
 
+ 
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
@@ -47,6 +55,7 @@ const Navbar = () => {
     await logout();
     setShowUserMenu(false);
     navigate('/');
+    scrollToTop();
   };
 
   const guestLinks = [
@@ -71,16 +80,21 @@ const Navbar = () => {
       <nav className="fixed top-0 left-0 right-0 z-40 bg-gray-900/80 backdrop-blur-lg border-b border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <Link to="/" className="flex items-center gap-3 group">
+
+            {}
+            <Link
+              to="/"
+              onClick={scrollToTop}
+              className="flex items-center gap-3 group"
+            >
               <motion.div
                 whileHover={{ rotate: 360 }}
                 transition={{ duration: 0.5 }}
-                className="w-14 h-14 flex items-center justify-center"
+                className="w-14 h-14 flex items-center justify-center cursor-pointer"
               >
                 <img src="/logo.png" alt="VMusic Logo" className="w-full h-full object-contain" />
               </motion.div>
-              <span className="text-3xl font-bold text-white hidden sm:block">
+              <span className="text-3xl font-bold text-white hidden sm:block cursor-pointer">
                 V<span className="text-purple-400">Music</span>
               </span>
             </Link>
@@ -99,36 +113,32 @@ const Navbar = () => {
               ))}
             </div>
 
-            {/* Search Icon (when logged in) or Search Bar (when not logged in) */}
+            {}
             <div className="hidden md:flex items-center">
               {currentUser ? (
                 <button
                   onClick={() => setShowSearchBar(!showSearchBar)}
                   className="p-2.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full text-gray-400 hover:text-white transition-all"
-                  title="Search"
                 >
                   <Search size={20} />
                 </button>
               ) : (
                 <form onSubmit={handleSearch} className="flex items-center flex-1 max-w-md mx-8">
                   <div className="relative w-full">
-                    <Search
-                      className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-                      size={18}
-                    />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                     <input
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       placeholder="Search songs, artists..."
-                      className="w-full pl-10 pr-4 py-2 bg-white/5 border border-white/10 rounded-full text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                      className="w-full pl-10 pr-4 py-2 bg-white/5 border border-white/10 rounded-full text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
                     />
                   </div>
                 </form>
               )}
             </div>
 
-            {/* Auth Buttons / User Menu */}
+            {}
             <div className="hidden md:flex items-center gap-3">
               {currentUser ? (
                 <div className="relative">
@@ -150,23 +160,23 @@ const Navbar = () => {
                     </span>
                   </button>
 
-                  {/* User Dropdown Menu */}
                   <AnimatePresence>
                     {showUserMenu && (
                       <motion.div
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
-                        className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-xl border border-white/10 overflow-hidden"
+                        className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg border border-white/10 shadow-xl overflow-hidden"
                       >
                         <Link
                           to="/profile"
                           onClick={() => setShowUserMenu(false)}
-                          className="flex items-center gap-3 px-4 py-3 text-gray-300 hover:bg-white/10 hover:text-white transition-colors"
+                          className="flex items-center gap-3 px-4 py-3 text-gray-300 hover:bg-white/10 transition-colors"
                         >
                           <User size={18} />
                           Profile Settings
                         </Link>
+
                         <button
                           onClick={handleLogout}
                           className="w-full flex items-center gap-3 px-4 py-3 text-red-400 hover:bg-red-500/10 transition-colors"
@@ -196,7 +206,6 @@ const Navbar = () => {
               )}
             </div>
 
-            {/* Mobile Menu Button */}
             <button
               onClick={() => setShowMobileMenu(!showMobileMenu)}
               className="md:hidden text-white p-2 hover:bg-white/10 rounded-lg transition-colors"
@@ -205,46 +214,39 @@ const Navbar = () => {
             </button>
           </div>
 
-          {/* Mobile Search Bar */}
+          {}
           <form onSubmit={handleSearch} className="md:hidden pb-4">
             <div className="relative">
-              <Search
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-                size={18}
-              />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search songs, artists..."
-                className="w-full pl-10 pr-4 py-2 bg-white/5 border border-white/10 rounded-full text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 bg-white/5 border border-white/10 rounded-full text-white"
               />
             </div>
           </form>
         </div>
 
-        {/* Full Width Search Bar (appears below header when logged in) */}
+        {}
         <AnimatePresence>
           {currentUser && showSearchBar && (
             <motion.div
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.3 }}
               className="border-t border-white/10 bg-gray-900/95 backdrop-blur-lg overflow-hidden"
             >
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
                 <form onSubmit={handleSearch} className="relative">
-                  <Search
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-                    size={20}
-                  />
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
                   <input
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Search for songs, artists, albums..."
-                    className="w-full pl-12 pr-12 py-3 bg-white/5 border border-white/20 rounded-full text-white text-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                    className="w-full pl-12 pr-12 py-3 bg-white/5 border border-white/20 rounded-full text-white text-lg"
                     autoFocus
                   />
                   <button
@@ -260,7 +262,7 @@ const Navbar = () => {
           )}
         </AnimatePresence>
 
-        {/* Mobile Menu */}
+        {}
         <AnimatePresence>
           {showMobileMenu && (
             <motion.div
@@ -328,7 +330,6 @@ const Navbar = () => {
         </AnimatePresence>
       </nav>
 
-      {/* Auth Modals */}
       <AnimatePresence>
         {showSignIn && (
           <SignIn
@@ -350,7 +351,6 @@ const Navbar = () => {
         )}
       </AnimatePresence>
 
-      {/* Spacer for fixed navbar */}
       <div className="h-16"></div>
     </>
   );
