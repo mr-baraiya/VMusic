@@ -59,3 +59,35 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Wave Visualizer Styles */
+.wave-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  height: 24px;
+  padding: 0 8px;
+}
+
+.wave {
+  width: 3px;
+  height: 16px;
+  background: linear-gradient(to top, #22c55e, #10b981);
+  border-radius: 2px;
+  transform-origin: bottom;
+}
+
+/* Responsive wave styles for mobile */
+@media (max-width: 768px) {
+  .wave-container {
+    height: 20px;
+    gap: 2px;
+    padding: 0 4px;
+  }
+
+  .wave {
+    width: 2px;
+    height: 12px;
+  }
+}

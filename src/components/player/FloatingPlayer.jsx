@@ -19,6 +19,7 @@ import {
 import { usePlayer } from '../../contexts/PlayerContext';
 import jamendoAPI from '../../api/jamendo';
 import SignIn from '../auth/SignIn';
+import WaveVisualizer from './WaveVisualizer';
 
 const FloatingPlayer = () => {
   const {
@@ -219,6 +220,9 @@ const FloatingPlayer = () => {
               <button className="hidden lg:block text-gray-400 hover:text-white transition-colors">
                 <Repeat size={18} />
               </button>
+
+              {/* Wave Visualizer */}
+              <WaveVisualizer isPlaying={isPlaying} />
 
               {/* Time Display */}
               <div className="hidden md:flex items-center gap-2 text-xs text-gray-400 min-w-20">
