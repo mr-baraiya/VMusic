@@ -1,11 +1,10 @@
-
 <p align="center">
   <img src="/public/hero_banner.png" alt="VMusic – Feel the Indie Beat. Free. Forever. | Winter of Code Social 2025" width="100%" />
 </p>
+
 ---
 
-# 🎵 VMusic – Indie Music Streaming Web App
-
+# 🎵 VMusic – Indie Music Streaming Web App  
 ### **"Feel the Indie Beat. Free. Forever."**
 
 <p align="center">
@@ -13,17 +12,16 @@
 </p>
 
 <p align="center">
-  <img src="/public/logo.png" width="850" alt="VMusic Hero"/>
+  <img src="/public/logo.png" width="850" alt="VMusic Logo"/>
 </p>
 
 <p align="center">
-  <b>A modern Indie Music Streaming Platform built with love, React, and real music APIs.</b>
+  <b>A modern Indie Music Streaming Platform built with love, React, Firebase & real music APIs.</b>
 </p>
 
 ---
 
-
-### 🔧 **Tech Stack**
+## Tech Stack
 
 <p>
   <a href="https://react.dev/"><img src="https://img.shields.io/badge/React-0A7EA4?logo=react&logoColor=white"></a>
@@ -35,30 +33,34 @@
   <a href="https://developer.jamendo.com/v3.0"><img src="https://img.shields.io/badge/Jamendo%20API-AA0066?logo=jamendo&logoColor=white"></a>
 </p>
 
-### ❄️ **Winter of Code Social 2025**
+---
+
+## ❄️ Winter of Code Social 2025
 
 <p>
   <a href="https://github.com/WinterofCode"><img src="https://img.shields.io/badge/🌨️%20Winter%20of%20Code%20Social-2025-blueviolet"></a>
-  <a href="https://discord.com/channels/1049667734025289729/1444724828379811942"><img src="https://img.shields.io/badge/Join%20Discord-5865F2?logo=discord&logoColor=white"></a>
+  <a href="https://discord.com/channels/1049667734025289729/1444724828379811942">
+    <img src="https://img.shields.io/badge/Join%20Discord-5865F2?logo=discord&logoColor=white">
+  </a>
 </p>
 
 ---
 
 ## ✨ Key Features
 
-* 🎶 **Full-length indie music streaming (Jamendo API)**
-* 🎧 **Spotify-powered Vibe Zone** (30s curated previews)
-* 🔍 Smart search (songs, artists, albums)
-* 🔐 Firebase Email + Google Authentication
-* ❤️ Favorites synced to Firestore
-* 🌫️ Smooth glassmorphism UI + animations
-* 📱 Fully responsive modern layout
-* ✉️ Password reset via EmailJS
-* 🎵 Global mini audio player with seamless transitions
+- 🎶 **Full-length indie music streaming via Jamendo API**  
+- 🎧 **Spotify-powered Vibe Zone (30s curated previews)**  
+- 🔍 Smart music search (songs, artists, albums)  
+- 🔐 Firebase Email + Google Authentication  
+- ❤️ Favorites synced to Firestore  
+- 🌫️ Glassmorphism UI + animations  
+- 🎵 Global floating audio player  
+- 📱 Fully responsive modern design  
+- ✉️ Password reset via EmailJS  
 
 ---
 
-## 🧰 Tech Stack Overview
+## 🧰 Tech Layer Overview
 
 | Layer        | Technologies                              |
 | ------------ | ----------------------------------------- |
@@ -69,18 +71,17 @@
 
 ---
 
-## 🛠️ How to Contribute (WOC Social Flow)
+## 🛠️ How to Contribute (WOC Social)
 
-1. **Fork** → **Clone** → **Create Branch**
-2. Use:
-
+1. **Fork → Clone → Create Branch**
+2. Create feature branch:
 ```sh
 git checkout -b feature/my-feature
-```
+````
 
-3. Work on your assigned issue
-4. Submit a PR following templates
-5. Wait for review & merge
+3. Work on your issue
+4. Submit a PR using the template
+5. Wait for review → merge
 
 ---
 
@@ -94,12 +95,12 @@ cp .env.example .env
 npm run dev
 ```
 
-### 🔑 Configure `.env` with:
+### 🔑 Configure `.env`
 
-* Jamendo Client ID
-* Spotify App Credentials
-* Firebase Config
-* EmailJS Keys
+* JAMENDO_CLIENT_ID
+* SPOTIFY_CLIENT_ID & SECRET
+* FIREBASE_CONFIG
+* EMAILJS_PUBLIC_KEY / SERVICE ID
 
 ---
 
@@ -120,7 +121,7 @@ VMusic/
 
 ---
 
-## 📘 Documentation References
+## 📘 Documentation
 
 | File                            | Purpose                 |
 | ------------------------------- | ----------------------- |
@@ -131,10 +132,83 @@ VMusic/
 
 ---
 
-## ❤️ Credits
+# 👨‍💻 Project Admin
 
-Built with passion by **Vishal Baraiya**
-Powered by **Jamendo, Spotify, Firebase, React & Vercel**
+<table align="center">
+  <tr>
+    <td align="center">
+      <img src="https://github.com/mr-baraiya.png" width="120" style="border-radius: 50%;" />
+      <br/>
+      <b>Vishal Baraiya</b>
+      <br/>
+      <a href="https://github.com/mr-baraiya"><img src="https://img.shields.io/badge/GitHub-black?logo=github&logoColor=white"></a>
+      <a href="https://www.linkedin.com/in/vishal-baraiya"><img src="https://img.shields.io/badge/LinkedIn-0A66C2?logo=linkedin&logoColor=white"></a>
+    </td>
+  </tr>
+</table>
+
+---
+
+# 👨‍🏫 Mentors
+
+---
+
+## 🧑‍🏫 Mentor 1 – **Agnik Goswami**
+
+<table>
+  <tr>
+    <td width="150">
+      <img src="https://media.licdn.com/dms/image/D4D03AQFtkxKYe1G6WA/profile-displayphoto-shrink_200_200/0/1693130000000?e=2147483647&v=beta&t=h_placeholder" width="130" style="border-radius:10px;">
+    </td>
+    <td>
+      <b>Agnik Goswami</b>  
+      <br/>  
+      <a href="https://www.linkedin.com/in/agnik-goswami-6ab95a340">
+        <img src="https://img.shields.io/badge/LinkedIn-0A66C2?logo=linkedin&logoColor=white">
+      </a>
+      <a href="mailto:indagnik@gmail.com">
+        <img src="https://img.shields.io/badge/Email-D14836?logo=gmail&logoColor=white">
+      </a>
+    </td>
+  </tr>
+</table>
+
+---
+
+## 🧑‍🏫 Mentor 2 – **Tanziha Sheikh**
+
+<table>
+  <tr>
+    <td width="150">
+      <img src="https://media.licdn.com/dms/image/D4D03AQE1eV9KQpP9CQ/profile-displayphoto-shrink_200_200/0/1693130000000?e=2147483647&v=beta&t=h_placeholder" width="130" style="border-radius:10px;">
+    </td>
+    <td>
+      <b>Tanziha Sheikh</b>  
+      <br/>  
+      <a href="https://www.linkedin.com/in/sa32b802/">
+        <img src="https://img.shields.io/badge/LinkedIn-0A66C2?logo=linkedin&logoColor=white">
+      </a>
+      <a href="https://github.com/Tanziha-Sheikh">
+        <img src="https://img.shields.io/badge/GitHub-black?logo=github&logoColor=white">
+      </a>
+      <a href="mailto:sheikh.tanziha228899@gmail.com">
+        <img src="https://img.shields.io/badge/Email-D14836?logo=gmail&logoColor=white">
+      </a>
+    </td>
+  </tr>
+</table>
+
+---
+
+# 👥 Contributors
+
+### ⭐ Avatar Wall (Auto-updating)
+
+<p align="center">
+  <a href="https://github.com/mr-baraiya/VMusic/graphs/contributors">
+    <img src="https://contrib.rocks/image?repo=mr-baraiya/VMusic" />
+  </a>
+</p>
 
 ---
 
@@ -142,5 +216,3 @@ Powered by **Jamendo, Spotify, Firebase, React & Vercel**
 
 Open an issue for support or queries.
 🎵 *Happy Contributing & Keep the Indie Beat Alive!*
-
----
