@@ -10,11 +10,6 @@
 <p align="center">
   <img src="/public/wocs.png" width="800"/>
 </p>
-
-<p align="center">
-  <img src="/public/logo.png" width="850" alt="VMusic Logo"/>
-</p>
-
 <p align="center">
   <b>A modern Indie Music Streaming Platform built with love, React, Firebase & real music APIs.</b>
 </p>
@@ -153,34 +148,13 @@ VMusic/
 
 ---
 
-## 🧑‍🏫 Mentor 1 – **Agnik Goswami**
-
-<table>
-  <tr>
-    <td width="150">
-      <img src="https://media.licdn.com/dms/image/D4D03AQFtkxKYe1G6WA/profile-displayphoto-shrink_200_200/0/1693130000000?e=2147483647&v=beta&t=h_placeholder" width="130" style="border-radius:10px;">
-    </td>
-    <td>
-      <b>Agnik Goswami</b>  
-      <br/>  
-      <a href="https://www.linkedin.com/in/agnik-goswami-6ab95a340">
-        <img src="https://img.shields.io/badge/LinkedIn-0A66C2?logo=linkedin&logoColor=white">
-      </a>
-      <a href="mailto:indagnik@gmail.com">
-        <img src="https://img.shields.io/badge/Email-D14836?logo=gmail&logoColor=white">
-      </a>
-    </td>
-  </tr>
-</table>
-
----
-
 ## 🧑‍🏫 Mentor 2 – **Tanziha Sheikh**
 
 <table>
   <tr>
     <td width="150">
-      <img src="https://media.licdn.com/dms/image/D4D03AQE1eV9KQpP9CQ/profile-displayphoto-shrink_200_200/0/1693130000000?e=2147483647&v=beta&t=h_placeholder" width="130" style="border-radius:10px;">
+      <img src="https://media.licdn.com/dms/image/v2/D4D35AQF5XdPOVRbw3Q/profile-framedphoto-shrink_400_400/B4DZgH2eDEHkAc-/0/1752478376420?e=1765386000&v=beta&t=rEOIhN_juEvZjZtpy7m-m99wjl-6jsEW7mUof2BaoD8" 
+           width="130" style="border-radius:10px;">
     </td>
     <td>
       <b>Tanziha Sheikh</b>  
