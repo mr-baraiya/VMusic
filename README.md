@@ -6,10 +6,17 @@
 <h3 align="center"><i>"Feel the Indie Beat. Free. Forever."</i></h3>
 
 <p align="center">
-  <a href="[https://vmusic.vercel.app](https://v-music-gamma.vercel.app/)"><img src="https://img.shields.io/badge/🌐%20Live%20Demo-Visit%20Now-brightgreen?style=for-the-badge"></a>
-  <a href="#-key-features"><img src="https://img.shields.io/badge/Features-Explore-blue?style=for-the-badge"></a>
-  <a href="#-how-to-contribute-woc-social"><img src="https://img.shields.io/badge/Contribute-Join%20Us-orange?style=for-the-badge"></a>
+  <a href="https://v-music-gamma.vercel.app/">
+    <img src="https://img.shields.io/badge/🌐%20Live%20Demo-Visit%20Now-brightgreen?style=for-the-badge" />
+  </a>
+  <a href="#-key-features">
+    <img src="https://img.shields.io/badge/Features-Explore-blue?style=for-the-badge" />
+  </a>
+  <a href="#-how-to-contribute-woc-social">
+    <img src="https://img.shields.io/badge/Contribute-Join%20Us-orange?style=for-the-badge" />
+  </a>
 </p>
+
 
 <p align="center">
   <img src="https://img.shields.io/github/stars/mr-baraiya/VMusic?style=social">
@@ -461,8 +468,11 @@ VMusic/
     <!-- Mentor 1 -->
     <td align="center" width="50%">
       <a href="https://www.linkedin.com/in/agnik-goswami-6ab95a340">
-        <img src="https://media.licdn.com/dms/image/v2/D5603AQERYPJ758OR1w/profile-displayphoto-shrink_800_800/B56ZOhfXvpG8Ac-/0/1733581176779?e=1766620800&v=beta&t=Xm42iesEtxR2DdPaA6PNzlnRbHFkJaUa7XWSP3Ciw6o"
-             width="150" style="border-radius:50%;">
+        <img
+          src="https://media.licdn.com/dms/image/v2/D5603AQERYPJ758OR1w/profile-displayphoto-shrink_800_800/B56ZOhfXvpG8Ac-/0/1733581176779?e=1766620800&v=beta&t=Xm42iesEtxR2DdPaA6PNzlnRbHFkJaUa7XWSP3Ciw6o"
+          width="150"
+          style="border-radius:50%;"
+        />
       </a>
       <br/><br/>
       <b>Agnik Goswami</b>
@@ -470,18 +480,20 @@ VMusic/
       <i>Technical Mentor</i>
       <br/><br/>
       <a href="https://www.linkedin.com/in/agnik-goswami-6ab95a340">
-        <img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white">
+        <img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" />
       </a>
       <a href="mailto:indagnik@gmail.com">
-        <img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white">
+        <img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white" />
       </a>
     </td>
-
     <!-- Mentor 2 -->
     <td align="center" width="50%">
       <a href="https://www.linkedin.com/in/sa32b802/">
-        <img src="https://media.licdn.com/dms/image/v2/D4D35AQF5XdPOVRbw3Q/profile-framedphoto-shrink_400_400/B4DZgH2eDEHkAc-/0/1752478376420?e=1765386000&v=beta&t=rEOIhN_juEvZjZtpy7m-m99wjl-6jsEW7mUof2BaoD8"
-             width="150" style="border-radius:50%;">
+        <img
+          src="https://media.licdn.com/dms/image/v2/D4D35AQF5XdPOVRbw3Q/profile-framedphoto-shrink_400_400/B4DZgH2eDEHkAc-/0/1752478376420?e=1765386000&v=beta&t=rEOIhN_juEvZjZtpy7m-m99wjl-6jsEW7mUof2BaoD8"
+          width="150"
+          style="border-radius:50%;"
+        />
       </a>
       <br/><br/>
       <b>Tanziha Sheikh</b>
@@ -489,17 +501,19 @@ VMusic/
       <i>Technical Mentor</i>
       <br/><br/>
       <a href="https://www.linkedin.com/in/sa32b802/">
-        <img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white">
+        <img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" />
       </a>
       <a href="https://github.com/Tanziha-Sheikh">
-        <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white">
+        <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" />
       </a>
       <a href="mailto:sheikh.tanziha228899@gmail.com">
-        <img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white">
+        <img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white" />
       </a>
     </td>
+
   </tr>
 </table>
+
 
 ---
 
