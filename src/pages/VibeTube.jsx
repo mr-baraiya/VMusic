@@ -1,7 +1,22 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { TrendingUp, X, List, Youtube, Sparkles, Music2 } from 'lucide-react';
+import { 
+  TrendingUp, 
+  X, 
+  List, 
+  Youtube, 
+  Sparkles, 
+  Music2,
+  Play,
+  Pause,
+  SkipForward,
+  SkipBack,
+  Shuffle,
+  Repeat,
+  Volume2,
+  VolumeX,
+} from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { favoritesAPI } from '../api/favorites';
 import { searchHistoryAPI } from '../api/users';
@@ -54,6 +69,9 @@ const VibeTube = () => {
   const [loadingMore, setLoadingMore] = useState(false);
   const [currentQuery, setCurrentQuery] = useState('top music 2024');
   const [initialSearchPerformed, setInitialSearchPerformed] = useState(false);
+
+  // Swipe state for mobile
+  const [swipeDirection, setSwipeDirection] = useState(null);
 
   // Hardcoded popular music video IDs to save API quota (avoids 100-unit search call)
   const POPULAR_MUSIC_IDS = [
@@ -822,6 +840,13 @@ const VibeTube = () => {
   };
 
   // Player Controls
+  const formatTime = (seconds) => {
+    if (!seconds || isNaN(seconds)) return '0:00';
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
   const handlePlayPause = () => {
     if (!playerRef.current) return;
 
@@ -893,6 +918,27 @@ const VibeTube = () => {
       } else {
         playerRef.current.mute();
         setIsMuted(true);
+      }
+    }
+  };
+
+  // Mobile Swipe Handlers
+  const handleSwipe = (event, info) => {
+    const swipeThreshold = 50;
+    const { offset, velocity } = info;
+
+    // Horizontal swipe (left/right for prev/next)
+    if (Math.abs(offset.x) > swipeThreshold || Math.abs(velocity.x) > 500) {
+      if (offset.x > 0) {
+        // Swipe right - Previous
+        handlePrevious();
+        setSwipeDirection('right');
+        setTimeout(() => setSwipeDirection(null), 300);
+      } else {
+        // Swipe left - Next
+        handleNext();
+        setSwipeDirection('left');
+        setTimeout(() => setSwipeDirection(null), 300);
       }
     }
   };
@@ -971,105 +1017,362 @@ const VibeTube = () => {
         </div>
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left: Search Results - FULL WIDTH on large screens */}
-          <div className="lg:col-span-2">
-            <div className="mb-6">
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="flex items-center gap-3 mb-4"
-              >
-                <TrendingUp className="text-red-400" size={28} />
-                <h2 className="text-3xl font-black text-white">Discover Music</h2>
-              </motion.div>
-              <SearchResults
-                results={searchResults}
-                onAdd={addToPlaylist}
-                onPlayNow={playVideoDirectly}
-                onAddToFavorites={addToFavorites}
-                playlists={playlists}
-                isLoading={isLoading}
-                error={error}
-              />
-
-              {/* Loading More Indicator */}
-              {loadingMore && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="flex flex-col items-center justify-center py-8"
-                >
-                  <div className="w-12 h-12 border-4 border-red-500/30 border-t-red-500 rounded-full animate-spin mb-3"></div>
-                  <p className="text-gray-400 text-sm">Loading more videos...</p>
-                </motion.div>
-              )}
-
-              {/* No More Videos Indicator */}
-              {!hasMore && searchResults.length > 0 && !isLoading && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="text-center py-8"
-                >
-                  <p className="text-gray-400 text-sm">
-                    🎵 You've reached the end! All videos loaded.
-                  </p>
-                </motion.div>
-              )}
-            </div>
-          </div>
-
-          {/* Right: Player & Playlist */}
-          <div className="lg:col-span-1 space-y-6">
-            {/* Now Playing */}
-            <VideoPlayer
-              currentTrack={currentTrack}
-              isPlaying={isPlaying}
-              currentTime={currentTime}
-              duration={duration}
-              volume={volume}
-              isMuted={isMuted}
-              onPlayPause={handlePlayPause}
-              onNext={handleNext}
-              onPrevious={handlePrevious}
-              onSeek={handleSeek}
-              onVolumeChange={handleVolumeChange}
-              onToggleMute={handleToggleMute}
-              isRepeat={isRepeat}
-              isShuffle={isShuffle}
-              onToggleRepeat={() => {
-                const newRepeat = !isRepeat;
-                setIsRepeat(newRepeat);
-                console.log('🔁 Repeat toggled:', newRepeat ? 'ON' : 'OFF');
-              }}
-              onToggleShuffle={() => {
-                const newShuffle = !isShuffle;
-                setIsShuffle(newShuffle);
-                console.log('🔀 Shuffle toggled:', newShuffle ? 'ON' : 'OFF');
-              }}
-            />
-
-            {/* Playlist Sidebar */}
-            <PlaylistSidebar
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-40">
+        {/* Full Width Content Area */}
+        <div className="space-y-6">
+          {/* Search Results - Full Width */}
+          <div>
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="flex items-center gap-3 mb-4"
+            >
+              <TrendingUp className="text-red-400" size={28} />
+              <h2 className="text-3xl font-black text-white">Discover Music</h2>
+            </motion.div>
+            <SearchResults
+              results={searchResults}
+              onAdd={addToPlaylist}
+              onPlayNow={playVideoDirectly}
+              onAddToFavorites={addToFavorites}
               playlists={playlists}
-              onCreatePlaylist={createPlaylist}
-              onRenamePlaylist={renamePlaylist}
-              onDeletePlaylist={deletePlaylist}
-              currentPlaylistId={currentPlaylistId}
-              onSelectPlaylist={setCurrentPlaylistId}
-              playlist={playlist}
-              currentIndex={currentIndex}
-              onPlay={playVideo}
-              onRemove={removeFromPlaylist}
-              onReorder={reorderPlaylist}
-              showPlaylist={showPlaylist}
-              onTogglePlaylist={() => setShowPlaylist(!showPlaylist)}
+              isLoading={isLoading}
+              error={error}
             />
+
+            {/* Loading More Indicator */}
+            {loadingMore && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="flex flex-col items-center justify-center py-8"
+              >
+                <div className="w-12 h-12 border-4 border-red-500/30 border-t-red-500 rounded-full animate-spin mb-3"></div>
+                <p className="text-gray-400 text-sm">Loading more videos...</p>
+              </motion.div>
+            )}
+
+            {/* No More Videos Indicator */}
+            {!hasMore && searchResults.length > 0 && !isLoading && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="text-center py-8"
+              >
+                <p className="text-gray-400 text-sm">
+                  🎵 You've reached the end! All videos loaded.
+                </p>
+              </motion.div>
+            )}
           </div>
         </div>
       </div>
+
+      {/* Fixed Bottom Player with Embedded Playlist */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="fixed bottom-0 left-0 right-0 z-40 bg-gradient-to-r from-gray-900/98 via-gray-900/98 to-black/98 backdrop-blur-2xl border-t-2 border-white/10 shadow-[0_-10px_40px_rgba(0,0,0,0.8)]"
+      >
+        <div className="max-w-7xl mx-auto">
+          {/* Playlist Toggle Button - Always visible */}
+          <div className="flex justify-end px-4 pt-2">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setShowPlaylist(!showPlaylist)}
+              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-500/20 to-pink-500/20 hover:from-red-500/30 hover:to-pink-500/30 rounded-t-lg text-white text-sm font-semibold transition-all duration-300 border border-white/10 shadow-lg hover:shadow-red-500/20"
+            >
+              <List size={16} />
+              {showPlaylist ? 'Hide' : 'Show'} Playlist ({playlist.length})
+            </motion.button>
+          </div>
+
+          {/* Collapsible Playlist Section */}
+          <AnimatePresence>
+            {showPlaylist && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                className="overflow-hidden border-t border-white/10"
+              >
+                <div className="max-h-64 overflow-y-auto custom-scrollbar px-4">
+                  <PlaylistSidebar
+                    playlists={playlists}
+                    onCreatePlaylist={createPlaylist}
+                    onRenamePlaylist={renamePlaylist}
+                    onDeletePlaylist={deletePlaylist}
+                    currentPlaylistId={currentPlaylistId}
+                    onSelectPlaylist={setCurrentPlaylistId}
+                    playlist={playlist}
+                    currentIndex={currentIndex}
+                    onPlay={playVideo}
+                    onRemove={removeFromPlaylist}
+                    onReorder={reorderPlaylist}
+                    showPlaylist={true}
+                    onTogglePlaylist={() => {}}
+                  />
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Player Controls - Only show when track is playing */}
+          {currentTrack && (
+            <motion.div
+              drag="x"
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={0.2}
+              onDragEnd={handleSwipe}
+              className="px-6 sm:px-8 lg:px-10 py-4 sm:py-5 border-t border-white/10 bg-black/30 relative lg:cursor-default cursor-grab active:cursor-grabbing"
+            >
+              {/* Swipe Indicator */}
+              {swipeDirection && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-50"
+                >
+                  <div className="bg-white/90 text-black px-4 py-2 rounded-full font-bold text-sm shadow-2xl">
+                    {swipeDirection === 'left' ? '⏭️ Next' : '⏮️ Previous'}
+                  </div>
+                </motion.div>
+              )}
+              
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 max-w-7xl mx-auto">
+                {/* Album Art - Larger with glow effect */}
+                <motion.div
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden shrink-0 border-2 border-white/20 shadow-2xl"
+                >
+                  <img
+                    src={currentTrack.thumbnail}
+                    alt={currentTrack.title}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                  {/* Glow effect */}
+                  <div className="absolute -inset-1 bg-gradient-to-r from-red-500/30 to-pink-500/30 blur-xl -z-10 opacity-60"></div>
+                  
+                  {/* Mini Equalizer Animation - Only when playing */}
+                  {isPlaying && (
+                    <div className="absolute bottom-2 right-2 flex items-end gap-0.5 h-4">
+                      {[...Array(4)].map((_, i) => (
+                        <motion.div
+                          key={i}
+                          className="w-1 bg-gradient-to-t from-red-500 to-pink-400 rounded-full"
+                          animate={{
+                            height: ['30%', '100%', '40%', '80%', '30%'],
+                          }}
+                          transition={{
+                            duration: 0.8,
+                            repeat: Infinity,
+                            delay: i * 0.15,
+                            ease: 'easeInOut',
+                          }}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </motion.div>
+
+                {/* Track Info with Equalizer */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-base sm:text-lg font-bold text-white truncate">
+                      {currentTrack.title}
+                    </h3>
+                    {/* Mini Equalizer next to title - Only when playing */}
+                    {isPlaying && (
+                      <div className="flex items-end gap-0.5 h-4">
+                        {[...Array(3)].map((_, i) => (
+                          <motion.div
+                            key={i}
+                            className="w-1 bg-gradient-to-t from-red-500 to-pink-400 rounded-full"
+                            animate={{
+                              height: ['40%', '100%', '60%', '100%', '40%'],
+                            }}
+                            transition={{
+                              duration: 0.6,
+                              repeat: Infinity,
+                              delay: i * 0.1,
+                              ease: 'easeInOut',
+                            }}
+                          />
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  <p className="text-xs sm:text-sm text-gray-400 truncate flex items-center gap-1.5 mt-1">
+                    <Youtube size={14} className="text-red-500 shrink-0" />
+                    {currentTrack.channelTitle}
+                  </p>
+                  
+                  {/* Next Track Preview */}
+                  {playlist.length > 0 && currentIndex < playlist.length - 1 && (
+                    <p className="text-xs text-gray-500 truncate mt-1">
+                      Next: {playlist[currentIndex + 1]?.title || 'Unknown'}
+                    </p>
+                  )}
+                </div>
+
+                {/* Center Controls Group */}
+                <div className="flex flex-col items-center gap-3 w-full sm:w-auto sm:flex-1 max-w-2xl">
+                  {/* Playback Controls */}
+                  <div className="flex items-center justify-center gap-2 sm:gap-3">
+                    <motion.button
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      onClick={() => setIsShuffle(!isShuffle)}
+                      className={`p-2.5 rounded-full transition-all duration-300 ${
+                        isShuffle
+                          ? 'text-red-400 bg-red-400/20 shadow-lg shadow-red-500/30'
+                          : 'text-gray-400 hover:text-white hover:bg-white/10'
+                      }`}
+                      aria-label="Toggle shuffle"
+                    >
+                      <Shuffle size={18} />
+                    </motion.button>
+
+                    <motion.button
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      onClick={handlePrevious}
+                      className="p-2.5 rounded-full hover:bg-white/10 text-white transition-all duration-300 hover:shadow-lg hover:shadow-white/20"
+                      aria-label="Previous track"
+                    >
+                      <SkipBack size={22} />
+                    </motion.button>
+
+                    <motion.button
+                      whileHover={{ scale: 1.1, boxShadow: '0 0 25px rgba(239, 68, 68, 0.6)' }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={handlePlayPause}
+                      className="p-4 rounded-full bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white transition-all duration-300 shadow-xl shadow-red-500/40"
+                      aria-label={isPlaying ? 'Pause' : 'Play'}
+                    >
+                      {isPlaying ? <Pause size={24} /> : <Play size={24} className="ml-0.5" />}
+                    </motion.button>
+
+                    <motion.button
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      onClick={handleNext}
+                      className="p-2.5 rounded-full hover:bg-white/10 text-white transition-all duration-300 hover:shadow-lg hover:shadow-white/20"
+                      aria-label="Next track"
+                    >
+                      <SkipForward size={22} />
+                    </motion.button>
+
+                    <motion.button
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      onClick={() => setIsRepeat(!isRepeat)}
+                      className={`p-2.5 rounded-full transition-all duration-300 ${
+                        isRepeat
+                          ? 'text-red-400 bg-red-400/20 shadow-lg shadow-red-500/30'
+                          : 'text-gray-400 hover:text-white hover:bg-white/10'
+                      }`}
+                      aria-label="Toggle repeat"
+                    >
+                      <Repeat size={18} />
+                    </motion.button>
+                  </div>
+
+                  {/* Progress Bar with Time - Improved visibility */}
+                  <div className="w-full px-2">
+                    <div className="relative group">
+                      <input
+                        type="range"
+                        min="0"
+                        max={duration || 100}
+                        value={currentTime || 0}
+                        onChange={(e) => handleSeek(parseFloat(e.target.value))}
+                        className="w-full h-2 bg-white/10 rounded-full appearance-none cursor-pointer transition-all duration-300 
+                          [&::-webkit-slider-thumb]:appearance-none 
+                          [&::-webkit-slider-thumb]:w-4 
+                          [&::-webkit-slider-thumb]:h-4 
+                          [&::-webkit-slider-thumb]:bg-white 
+                          [&::-webkit-slider-thumb]:rounded-full 
+                          [&::-webkit-slider-thumb]:cursor-pointer 
+                          [&::-webkit-slider-thumb]:shadow-lg
+                          [&::-webkit-slider-thumb]:shadow-red-500/50
+                          [&::-webkit-slider-thumb]:transition-transform
+                          [&::-webkit-slider-thumb]:duration-200
+                          hover:[&::-webkit-slider-thumb]:scale-125
+                          active:[&::-webkit-slider-thumb]:scale-150"
+                        aria-label="Seek"
+                        style={{
+                          background: `linear-gradient(to right, 
+                            rgb(239 68 68) 0%, 
+                            rgb(236 72 153) ${duration > 0 ? (currentTime / duration) * 100 : 0}%, 
+                            rgba(255,255,255,0.1) ${duration > 0 ? (currentTime / duration) * 100 : 0}%, 
+                            rgba(255,255,255,0.1) 100%)`,
+                        }}
+                      />
+                    </div>
+                    <div className="flex justify-between text-xs font-medium text-gray-400 mt-1.5 px-1">
+                      <span>{formatTime(currentTime)}</span>
+                      <span>{formatTime(duration)}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Volume Control - Grouped with controls */}
+                <div className="hidden lg:flex items-center gap-3 shrink-0">
+                  <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    onClick={handleToggleMute}
+                    className="p-2.5 rounded-full hover:bg-white/10 text-white transition-all duration-300 hover:shadow-lg hover:shadow-white/20"
+                    aria-label={isMuted ? 'Unmute' : 'Mute'}
+                  >
+                    {isMuted ? (
+                      <VolumeX size={20} />
+                    ) : volume > 50 ? (
+                      <Volume2 size={20} />
+                    ) : (
+                      <Volume2 size={20} className="opacity-60" />
+                    )}
+                  </motion.button>
+                  <div className="relative group">
+                    <input
+                      type="range"
+                      min="0"
+                      max="100"
+                      value={isMuted ? 0 : volume}
+                      onChange={(e) => handleVolumeChange(parseInt(e.target.value))}
+                      className="w-24 h-1.5 bg-white/10 rounded-full appearance-none cursor-pointer transition-all
+                        [&::-webkit-slider-thumb]:appearance-none 
+                        [&::-webkit-slider-thumb]:w-3.5 
+                        [&::-webkit-slider-thumb]:h-3.5 
+                        [&::-webkit-slider-thumb]:bg-white 
+                        [&::-webkit-slider-thumb]:rounded-full 
+                        [&::-webkit-slider-thumb]:cursor-pointer
+                        [&::-webkit-slider-thumb]:shadow-md
+                        [&::-webkit-slider-thumb]:transition-transform
+                        [&::-webkit-slider-thumb]:duration-200
+                        hover:[&::-webkit-slider-thumb]:scale-125
+                        active:[&::-webkit-slider-thumb]:scale-150"
+                      aria-label="Volume"
+                      style={{
+                        background: `linear-gradient(to right, 
+                          rgb(239 68 68) 0%, 
+                          rgb(239 68 68) ${isMuted ? 0 : volume}%, 
+                          rgba(255,255,255,0.1) ${isMuted ? 0 : volume}%, 
+                          rgba(255,255,255,0.1) 100%)`,
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </div>
+      </motion.div>
 
       {/* Search History Modal */}
       {showSearchHistory && currentUser && (

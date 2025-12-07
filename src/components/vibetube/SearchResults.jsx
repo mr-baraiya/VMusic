@@ -222,10 +222,10 @@ const SearchResults = ({
   return (
     <div className="space-y-4">
       {/* View Mode Toggle */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-wrap gap-2">
         <div className="flex items-center gap-2">
-          <Sparkles className="text-red-400" size={20} />
-          <span className="text-white font-semibold">{results.length} Videos Found</span>
+          <Sparkles className="text-red-400 flex-shrink-0" size={18} />
+          <span className="text-white font-semibold text-sm sm:text-base">{results.length} Videos Found</span>
         </div>
         <div className="flex gap-2">
           <button
@@ -235,8 +235,9 @@ const SearchResults = ({
                 ? 'bg-red-600 text-white'
                 : 'bg-white/10 text-gray-400 hover:text-white'
             }`}
+            aria-label="Grid view"
           >
-            <Grid size={18} />
+            <Grid size={16} className="sm:w-[18px] sm:h-[18px]" />
           </button>
           <button
             onClick={() => setViewMode('list')}
@@ -245,25 +246,26 @@ const SearchResults = ({
                 ? 'bg-red-600 text-white'
                 : 'bg-white/10 text-gray-400 hover:text-white'
             }`}
+            aria-label="List view"
           >
-            <ListMusic size={18} />
+            <ListMusic size={16} className="sm:w-[18px] sm:h-[18px]" />
           </button>
         </div>
       </div>
 
       {/* Grid View */}
       {viewMode === 'grid' && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3 sm:gap-4">
           {results.map((video, index) => (
             <motion.div
               key={video.videoId}
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: index * 0.03, type: 'spring' }}
-              className="group bg-gradient-to-br from-white/10 via-white/5 to-transparent backdrop-blur-xl rounded-2xl overflow-visible border border-white/20 hover:border-red-400/60 transition-all shadow-xl hover:shadow-2xl hover:shadow-red-900/30 hover:-translate-y-2"
+              className="group bg-gradient-to-br from-white/10 via-white/5 to-transparent backdrop-blur-xl rounded-xl sm:rounded-2xl overflow-visible border border-white/20 hover:border-red-400/60 transition-all shadow-xl hover:shadow-2xl hover:shadow-red-900/30 hover:-translate-y-1 sm:hover:-translate-y-2"
             >
               <div
-                className="relative aspect-video overflow-hidden cursor-pointer rounded-t-2xl"
+                className="relative aspect-video overflow-hidden cursor-pointer rounded-t-xl sm:rounded-t-2xl"
                 onClick={() => onPlayNow(video)}
               >
                 <img
@@ -275,44 +277,44 @@ const SearchResults = ({
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                   <motion.div
                     whileHover={{ scale: 1.2 }}
-                    className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center shadow-2xl"
+                    className="w-12 h-12 sm:w-16 sm:h-16 bg-red-600 rounded-full flex items-center justify-center shadow-2xl"
                   >
-                    <Play size={28} className="text-white ml-1" fill="white" />
+                    <Play size={20} className="sm:w-7 sm:h-7 text-white ml-0.5 sm:ml-1" fill="white" />
                   </motion.div>
                 </div>
                 {video.duration && (
-                  <div className="absolute bottom-3 right-3 px-2 py-1 bg-black/90 backdrop-blur-sm rounded-lg text-xs text-white font-bold border border-white/20">
+                  <div className="absolute bottom-2 right-2 sm:bottom-3 sm:right-3 px-1.5 py-0.5 sm:px-2 sm:py-1 bg-black/90 backdrop-blur-sm rounded text-xs sm:text-xs text-white font-bold border border-white/20">
                     {video.duration}
                   </div>
                 )}
-                <div className="absolute top-3 left-3 px-2 py-1 bg-red-600/90 backdrop-blur-sm rounded-lg text-xs text-white font-bold">
+                <div className="absolute top-2 left-2 sm:top-3 sm:left-3 px-1.5 py-0.5 sm:px-2 sm:py-1 bg-red-600/90 backdrop-blur-sm rounded text-xs text-white font-bold">
                   HD
                 </div>
               </div>
-              <div className="p-4">
-                <h3 className="text-white font-bold text-sm line-clamp-2 mb-2 group-hover:text-red-400 transition-colors leading-tight">
+              <div className="p-3 sm:p-4">
+                <h3 className="text-white font-bold text-xs sm:text-sm line-clamp-2 mb-1.5 sm:mb-2 group-hover:text-red-400 transition-colors leading-tight">
                   {video.title}
                 </h3>
-                <p className="text-gray-400 text-xs mb-3 truncate flex items-center gap-1">
-                  <Youtube size={12} className="text-red-500" />
-                  {video.channelTitle}
+                <p className="text-gray-400 text-xs mb-2 sm:mb-3 truncate flex items-center gap-1">
+                  <Youtube size={12} className="text-red-500 flex-shrink-0" />
+                  <span className="truncate">{video.channelTitle}</span>
                 </p>
 
-                <div className="flex gap-2">
+                <div className="flex gap-1.5 sm:gap-2">
                   <button
                     onClick={() => onPlayNow(video)}
-                    className="flex items-center justify-center w-12 h-12 bg-white/10 hover:bg-white/20 rounded-xl text-white transition-all hover:scale-110"
+                    className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-white/10 hover:bg-white/20 rounded-lg sm:rounded-xl text-white transition-all hover:scale-110"
                     title="Play Now"
                   >
-                    <Zap size={20} fill="white" />
+                    <Zap size={18} className="sm:w-5 sm:h-5" fill="white" />
                   </button>
 
                   <button
                     onClick={() => onAddToFavorites(video)}
-                    className="flex items-center justify-center w-12 h-12 bg-white/10 hover:bg-pink-500/30 rounded-xl text-white transition-all hover:scale-110"
+                    className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-white/10 hover:bg-pink-500/30 rounded-lg sm:rounded-xl text-white transition-all hover:scale-110"
                     title="Add to Favorites"
                   >
-                    <Heart size={20} className="text-pink-400" />
+                    <Heart size={18} className="sm:w-5 sm:h-5 text-pink-400" />
                   </button>
 
                   <div className="relative">
@@ -322,7 +324,7 @@ const SearchResults = ({
                           showPlaylistMenu === video.videoId ? null : video.videoId
                         )
                       }
-                      className={`flex items-center justify-center w-12 h-12 rounded-xl text-white transition-all hover:scale-110 ${
+                      className={`flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl text-white transition-all hover:scale-110 ${
                         showPlaylistMenu === video.videoId
                           ? 'bg-red-500/30 border-2 border-red-400'
                           : 'bg-white/10 hover:bg-white/20'
@@ -330,8 +332,8 @@ const SearchResults = ({
                       title="Add to Playlist"
                     >
                       <ListPlus
-                        size={20}
-                        className={showPlaylistMenu === video.videoId ? 'text-red-400' : ''}
+                        size={18}
+                        className={`sm:w-5 sm:h-5 ${showPlaylistMenu === video.videoId ? 'text-red-400' : ''}`}
                       />
                     </button>
 
@@ -341,7 +343,7 @@ const SearchResults = ({
                           initial={{ opacity: 0, scale: 0.9, y: 10 }}
                           animate={{ opacity: 1, scale: 1, y: 0 }}
                           exit={{ opacity: 0, scale: 0.9, y: 10 }}
-                          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+                          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
                           onClick={() => setShowPlaylistMenu(null)}
                         >
                           <motion.div
@@ -349,7 +351,7 @@ const SearchResults = ({
                             animate={{ scale: 1 }}
                             exit={{ scale: 0.8 }}
                             onClick={(e) => e.stopPropagation()}
-                            className="w-80 bg-gray-900 backdrop-blur-xl border-2 border-white/30 rounded-2xl shadow-2xl overflow-hidden"
+                            className="w-full max-w-sm bg-gray-900 backdrop-blur-xl border-2 border-white/30 rounded-2xl shadow-2xl overflow-hidden"
                           >
                             <div className="p-4">
                               <div className="flex items-center justify-between mb-4">
@@ -373,10 +375,10 @@ const SearchResults = ({
                                   >
                                     <FolderPlus
                                       size={18}
-                                      className="text-red-400 group-hover:scale-110 transition-transform"
+                                      className="text-red-400 group-hover:scale-110 transition-transform flex-shrink-0"
                                     />
-                                    <span className="flex-1">{playlist.name}</span>
-                                    <span className="text-xs text-gray-400 bg-white/10 px-2 py-1 rounded-full">
+                                    <span className="flex-1 truncate">{playlist.name}</span>
+                                    <span className="text-xs text-gray-400 bg-white/10 px-2 py-1 rounded-full flex-shrink-0">
                                       {playlist.tracks?.length || 0}
                                     </span>
                                   </button>
