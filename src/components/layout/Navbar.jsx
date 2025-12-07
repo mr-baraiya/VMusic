@@ -20,7 +20,9 @@ import {
   Disc3,
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
-import { SignIn, SignUp } from '../auth';
+import SignIn from "../auth/SignIn.jsx";
+import SignUp from "../auth/SignUp.jsx";
+import ThemeToggle from './ThemeToggle';
 
 const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -33,7 +35,6 @@ const Navbar = () => {
   const { currentUser, logout } = useAuth();
   const navigate = useNavigate();
 
- 
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -77,11 +78,11 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-40 bg-gray-900/80 backdrop-blur-lg border-b border-white/10">
+      <nav className="fixed top-0 left-0 right-0 z-40 bg-gray-900/80 dark:bg-gray-950/90 backdrop-blur-lg border-b border-white/10 dark:border-white/5 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
 
-            {}
+            {/* Logo */}
             <Link
               to="/"
               onClick={scrollToTop}
@@ -113,7 +114,7 @@ const Navbar = () => {
               ))}
             </div>
 
-            {}
+            {/* Search Bar */}
             <div className="hidden md:flex items-center">
               {currentUser ? (
                 <button
@@ -138,8 +139,11 @@ const Navbar = () => {
               )}
             </div>
 
-            {}
+            {/* Right Side - Theme Toggle + User Menu */}
             <div className="hidden md:flex items-center gap-3">
+              {/* 🌟 THEME TOGGLE BUTTON - ADDED HERE */}
+              <ThemeToggle />
+
               {currentUser ? (
                 <div className="relative">
                   <button
@@ -166,7 +170,7 @@ const Navbar = () => {
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
-                        className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg border border-white/10 shadow-xl overflow-hidden"
+                        className="absolute right-0 mt-2 w-48 bg-gray-800 dark:bg-gray-900 rounded-lg border border-white/10 shadow-xl overflow-hidden"
                       >
                         <Link
                           to="/profile"
@@ -206,6 +210,7 @@ const Navbar = () => {
               )}
             </div>
 
+            {/* Mobile Menu Button */}
             <button
               onClick={() => setShowMobileMenu(!showMobileMenu)}
               className="md:hidden text-white p-2 hover:bg-white/10 rounded-lg transition-colors"
@@ -214,7 +219,7 @@ const Navbar = () => {
             </button>
           </div>
 
-          {}
+          {/* Mobile Search Bar */}
           <form onSubmit={handleSearch} className="md:hidden pb-4">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
@@ -229,7 +234,7 @@ const Navbar = () => {
           </form>
         </div>
 
-        {}
+        {/* Desktop Expanded Search */}
         <AnimatePresence>
           {currentUser && showSearchBar && (
             <motion.div
@@ -262,14 +267,14 @@ const Navbar = () => {
           )}
         </AnimatePresence>
 
-        {}
+        {/* Mobile Menu */}
         <AnimatePresence>
           {showMobileMenu && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="md:hidden border-t border-white/10 bg-gray-900"
+              className="md:hidden border-t border-white/10 bg-gray-900 dark:bg-gray-950"
             >
               <div className="px-4 py-4 space-y-2">
                 {navLinks.map((link) => (
@@ -283,6 +288,12 @@ const Navbar = () => {
                     {link.name}
                   </Link>
                 ))}
+
+                {/* 🌟 THEME TOGGLE IN MOBILE MENU */}
+                <div className="flex items-center justify-between px-4 py-3 border-t border-white/10 mt-2 pt-4">
+                  <span className="text-gray-300 font-medium">Theme</span>
+                  <ThemeToggle />
+                </div>
 
                 {currentUser ? (
                   <>

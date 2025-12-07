@@ -4,13 +4,16 @@ import './index.css';
 import App from './App.jsx';
 import { AuthProvider } from './contexts/AuthContext';
 import { PlayerProvider } from './contexts/PlayerContext';
+import { ThemeProvider } from './contexts/ThemeContext.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <AuthProvider>
-      <PlayerProvider>
-        <App />
-      </PlayerProvider>
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <PlayerProvider>
+          <App />
+        </PlayerProvider>
+      </AuthProvider>
+    </ThemeProvider>
   </StrictMode>
 );

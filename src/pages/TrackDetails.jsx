@@ -19,7 +19,7 @@ import { usePlayer } from '../contexts/PlayerContext';
 import { useAuth } from '../contexts/AuthContext';
 import { toast } from '../components/Toast';
 import jamendoAPI from '../api/jamendo';
-import SignIn from '../components/auth/SignIn';
+import SignIn from "../components/auth/SignIn";  // ✅ CORRECT  // ✅ FIXED - Using barrel export
 import { doc, getDoc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { db } from '../config/firebase';
 
