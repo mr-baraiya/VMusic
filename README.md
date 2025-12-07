@@ -6,7 +6,7 @@
 <h3 align="center"><i>"Feel the Indie Beat. Free. Forever."</i></h3>
 
 <p align="center">
-  <a href="https://vmusic.vercel.app"><img src="https://img.shields.io/badge/🌐%20Live%20Demo-Visit%20Now-brightgreen?style=for-the-badge"></a>
+  <a href="[https://vmusic.vercel.app](https://v-music-gamma.vercel.app/)"><img src="https://img.shields.io/badge/🌐%20Live%20Demo-Visit%20Now-brightgreen?style=for-the-badge"></a>
   <a href="#-key-features"><img src="https://img.shields.io/badge/Features-Explore-blue?style=for-the-badge"></a>
   <a href="#-how-to-contribute-woc-social"><img src="https://img.shields.io/badge/Contribute-Join%20Us-orange?style=for-the-badge"></a>
 </p>
