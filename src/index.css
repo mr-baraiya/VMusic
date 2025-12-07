@@ -1,6 +1,43 @@
 /* Tailwind CSS v4 */
 @import 'tailwindcss';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
+/* Light Theme (Default) */
+:root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --bg-tertiary: #e9ecef;
+  --text-primary: #212529;
+  --text-secondary: #6c757d;
+  --border-color: #dee2e6;
+  --accent-color: #FF4B4B;
+  --accent-hover: #FF6B6B;
+  --card-bg: #ffffff;
+  --shadow: rgba(0, 0, 0, 0.1);
+}
+
+/* Dark Theme */
+.dark {
+  --bg-primary: #0e1117;
+  --bg-secondary: #1a1c1f;
+  --bg-tertiary: #262930;
+  --text-primary: #ffffff;
+  --text-secondary: #b3b3b3;
+  --border-color: #30363d;
+  --accent-color: #FF6B6B;
+  --accent-hover: #FF8B8B;
+  --card-bg: #1a1c1f;
+  --shadow: rgba(0, 0, 0, 0.4);
+}
+
+/* Apply theme variables */
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
 /* Base styles */
 :root {
   font-family:
