@@ -202,9 +202,22 @@ wocs + level 1
 
 ---
 
-# ❤️ **Thank You for Contributing**
 
-Your work helps build a smoother and more powerful streaming experience for indie music lovers!
+## 🌟 Contributors 💖
+
+A huge heartfelt **thank you** to all the amazing contributors who make VMusic shine!  
+Whether it’s code, design, docs, or testing, every little effort helps us grow together. 🚀✨
+
+<div align="center">
+
+<a href="https://github.com/mr-baraiya/VMusic/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=mr-baraiya/VMusic" />
+</a>
+
+</div>
+
+> See the full list of contributors on the [Contributor Graph](https://github.com/mr-baraiya/VMusic/graphs/contributors) 💫
+
 
 🎵 *Feel the Indie Beat. Free. Forever.*
 — **Team VMusic**
