@@ -83,7 +83,7 @@ const Search = () => {
       // Save search query to history if user is logged in
       if (currentUser) {
         try {
-          await searchHistoryAPI.addToHistory(currentUser.uid, query, results.length);
+          await searchHistoryAPI.addToHistory(currentUser.uid, query, results.length, 'jamendo');
           console.log('✅ Search query saved to history');
         } catch (error) {
           console.error('Failed to save search history:', error);

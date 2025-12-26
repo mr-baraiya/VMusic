@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, ArrowLeft, CheckCircle, AlertCircle, Info } from 'lucide-react';
+import { Mail, ArrowLeft, CheckCircle, AlertCircle, Info, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { sendPasswordResetEmail } from 'firebase/auth';
 import { auth } from '../config/firebase';
@@ -10,6 +10,7 @@ const ForgotPassword = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+  const [showModal, setShowModal] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,9 +21,15 @@ const ForgotPassword = () => {
     try {
       console.log('Sending password reset email to:', email);
 
-      // Send password reset email without custom action code settings
-      // Firebase will use the default URL structure which we'll handle in Landing.jsx
-      await sendPasswordResetEmail(auth, email);
+      // Get the correct domain for the reset link
+      const domain = window.location.origin;
+      const actionCodeSettings = {
+        url: `${domain}/reset-password`,
+        handleCodeInApp: true,
+      };
+
+      // Send password reset email with custom action URL
+      await sendPasswordResetEmail(auth, email, actionCodeSettings);
 
       console.log('Password reset email sent successfully');
       console.log('✅ Email should arrive within 5-10 minutes');
@@ -31,6 +38,7 @@ const ForgotPassword = () => {
       setMessage(
         `Password reset email sent to ${email}! Please check your inbox and spam folder. The link expires in 1 hour.`
       );
+      setShowModal(true);
       setEmail('');
     } catch (err) {
       console.error('❌ Password reset error:', err);
@@ -105,24 +113,7 @@ const ForgotPassword = () => {
             </p>
           </div>
 
-          {/* Success Message */}
-          {message && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-green-500/10 border border-green-500/50 rounded-lg p-4 mb-6 flex items-start gap-3"
-            >
-              <CheckCircle size={20} className="text-green-400 flex-shrink-0 mt-0.5" />
-              <div>
-                <p className="text-green-400 text-sm font-medium">{message}</p>
-                <p className="text-green-400/70 text-xs mt-1">
-                  If you don't see the email, check your spam folder.
-                </p>
-              </div>
-            </motion.div>
-          )}
-
-          {/* Error Message */}
+          {/* Success Message - Error only */}
           {error && (
             <motion.div
               initial={{ opacity: 0, y: -10 }}
@@ -180,6 +171,61 @@ const ForgotPassword = () => {
           </div>
         </motion.div>
       </motion.div>
+
+      {/* Success Modal */}
+      {showModal && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+          onClick={() => setShowModal(false)}
+        >
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white/10 backdrop-blur-xl rounded-2xl p-8 border border-white/20 max-w-md w-full shadow-2xl"
+          >
+            {/* Close Button */}
+            <button
+              onClick={() => setShowModal(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
+            >
+              <X size={24} />
+            </button>
+
+            {/* Icon */}
+            <div className="flex justify-center mb-4">
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
+                className="bg-green-500/20 rounded-full p-4"
+              >
+                <CheckCircle size={48} className="text-green-400" />
+              </motion.div>
+            </div>
+
+            {/* Content */}
+            <h2 className="text-2xl font-bold text-white text-center mb-3">
+              Email Sent!
+            </h2>
+            <p className="text-gray-300 text-center mb-6">
+              Password reset link has been sent to your email. Please check your inbox and spam folder. The link expires in 1 hour.
+            </p>
+
+            {/* Button */}
+            <button
+              onClick={() => setShowModal(false)}
+              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium py-3 rounded-lg transition-all duration-200 transform hover:scale-105"
+            >
+              Got it
+            </button>
+          </motion.div>
+        </motion.div>
+      )}
     </div>
   );
 };

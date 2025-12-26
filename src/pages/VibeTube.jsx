@@ -473,7 +473,7 @@ const VibeTube = () => {
         // Save search to history (only for user searches, not initial load)
         if (currentUser && query !== 'top music 2024') {
           try {
-            await searchHistoryAPI.addToHistory(currentUser.uid, query, results.length);
+            await searchHistoryAPI.addToHistory(currentUser.uid, query, results.length, 'youtube');
             console.log('✅ Search saved to history');
           } catch (historyError) {
             console.error('Failed to save search history:', historyError);

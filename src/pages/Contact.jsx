@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Send, Mail, User, MessageSquare, CheckCircle, AlertCircle, Phone } from 'lucide-react';
+import { Send, Mail, User, MessageSquare, CheckCircle, AlertCircle, Phone, X } from 'lucide-react';
 import emailjs from '@emailjs/browser';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../config/firebase';
@@ -18,6 +18,7 @@ const Contact = () => {
   });
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState({ type: '', message: '' });
+  const [showModal, setShowModal] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -100,6 +101,7 @@ const Contact = () => {
         type: 'success',
         message: "Thank you! Your message has been sent successfully. We'll get back to you soon.",
       });
+      setShowModal(true);
 
       // Stop loading
       setLoading(false);
@@ -143,8 +145,8 @@ const Contact = () => {
           className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10"
         >
           <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
-            {/* Status Message */}
-            {status.message && (
+            {/* Status Message - Error only */}
+            {status.message && status.type === 'error' && (
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -311,6 +313,61 @@ const Contact = () => {
           </div>
         </motion.div>
       </div>
+
+      {/* Success Modal */}
+      {showModal && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+          onClick={() => setShowModal(false)}
+        >
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white/10 backdrop-blur-xl rounded-2xl p-8 border border-white/20 max-w-md w-full shadow-2xl"
+          >
+            {/* Close Button */}
+            <button
+              onClick={() => setShowModal(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
+            >
+              <X size={24} />
+            </button>
+
+            {/* Icon */}
+            <div className="flex justify-center mb-4">
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
+                className="bg-green-500/20 rounded-full p-4"
+              >
+                <CheckCircle size={48} className="text-green-400" />
+              </motion.div>
+            </div>
+
+            {/* Content */}
+            <h2 className="text-2xl font-bold text-white text-center mb-3">
+              Message Sent Successfully!
+            </h2>
+            <p className="text-gray-300 text-center mb-6">
+              Thank you for reaching out! We've received your message and will get back to you as soon as possible.
+            </p>
+
+            {/* Button */}
+            <button
+              onClick={() => setShowModal(false)}
+              className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-medium py-3 rounded-lg transition-all duration-200 transform hover:scale-105"
+            >
+              Close
+            </button>
+          </motion.div>
+        </motion.div>
+      )}
     </div>
   );
 };

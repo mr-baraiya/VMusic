@@ -37,14 +37,20 @@ export default async function handler(req, res) {
 
     // GET - Fetch user's search history
     if (req.method === 'GET') {
-      const { userId, limit = 20 } = req.query;
+      const { userId, limit = 20, type } = req.query;
 
       if (!userId) {
         return res.status(400).json({ error: 'User ID is required' });
       }
 
+      // Build query filter
+      const filter = { userId };
+      if (type) {
+        filter.type = type;
+      }
+
       const history = await searchHistoryCollection
-        .find({ userId })
+        .find(filter)
         .sort({ timestamp: -1 })
         .limit(parseInt(limit))
         .toArray();
@@ -56,7 +62,7 @@ export default async function handler(req, res) {
 
     // POST - Add search query to history
     if (req.method === 'POST') {
-      const { userId, query, results } = req.body;
+      const { userId, query, results, type = 'jamendo' } = req.body;
 
       if (!userId || !query) {
         return res.status(400).json({ error: 'User ID and query are required' });
@@ -67,6 +73,7 @@ export default async function handler(req, res) {
       const existingQuery = await searchHistoryCollection.findOne({
         userId,
         query: query.toLowerCase().trim(),
+        type: type,
         timestamp: { $gte: oneHourAgo },
       });
 
@@ -93,6 +100,7 @@ export default async function handler(req, res) {
         userId,
         query: query.toLowerCase().trim(),
         originalQuery: query,
+        type: type,
         resultsCount: results || 0,
         timestamp: new Date().toISOString(),
       });
@@ -118,13 +126,19 @@ export default async function handler(req, res) {
 
     // DELETE - Clear search history
     if (req.method === 'DELETE') {
-      const { userId } = req.body;
+      const { userId, type } = req.body;
 
       if (!userId) {
         return res.status(400).json({ error: 'User ID is required' });
       }
 
-      await searchHistoryCollection.deleteMany({ userId });
+      // Build delete filter
+      const filter = { userId };
+      if (type) {
+        filter.type = type;
+      }
+
+      await searchHistoryCollection.deleteMany(filter);
 
       return res.status(200).json({
         message: 'Search history cleared',

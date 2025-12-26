@@ -70,11 +70,13 @@ export const usersAPI = {
 
 export const searchHistoryAPI = {
   // Get user's search history
-  async getSearchHistory(userId, limit = 20) {
+  async getSearchHistory(userId, limit = 20, type = null) {
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/search-history?userId=${userId}&limit=${limit}`
-      );
+      let url = `${API_BASE_URL}/search-history?userId=${userId}&limit=${limit}`;
+      if (type) {
+        url += `&type=${type}`;
+      }
+      const response = await fetch(url);
       if (!response.ok) throw new Error('Failed to fetch search history');
       const data = await response.json();
       return data.history || [];
@@ -85,7 +87,7 @@ export const searchHistoryAPI = {
   },
 
   // Add search query to history
-  async addToHistory(userId, query, resultsCount = 0) {
+  async addToHistory(userId, query, resultsCount = 0, type = 'jamendo') {
     try {
       const response = await fetch(`${API_BASE_URL}/search-history`, {
         method: 'POST',
@@ -96,6 +98,7 @@ export const searchHistoryAPI = {
           userId,
           query,
           results: resultsCount,
+          type: type,
         }),
       });
 
@@ -109,7 +112,7 @@ export const searchHistoryAPI = {
   },
 
   // Clear search history
-  async clearHistory(userId) {
+  async clearHistory(userId, type = null) {
     try {
       const response = await fetch(`${API_BASE_URL}/search-history`, {
         method: 'DELETE',
@@ -118,6 +121,7 @@ export const searchHistoryAPI = {
         },
         body: JSON.stringify({
           userId,
+          type: type,
         }),
       });
 

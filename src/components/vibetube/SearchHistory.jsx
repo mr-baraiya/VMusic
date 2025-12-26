@@ -16,7 +16,7 @@ const SearchHistory = ({ userId, onSelectQuery, onClose }) => {
 
     setLoading(true);
     try {
-      const data = await searchHistoryAPI.getSearchHistory(userId, 20);
+      const data = await searchHistoryAPI.getSearchHistory(userId, 20, 'youtube');
       setHistory(data);
     } catch (error) {
       console.error('Failed to load search history:', error);
@@ -29,7 +29,7 @@ const SearchHistory = ({ userId, onSelectQuery, onClose }) => {
     if (!confirm('Clear all search history?')) return;
 
     try {
-      await searchHistoryAPI.clearHistory(userId);
+      await searchHistoryAPI.clearHistory(userId, 'youtube');
       setHistory([]);
 
       // Show toast
