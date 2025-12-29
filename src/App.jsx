@@ -29,87 +29,92 @@ import {
 } from './pages';
 import './App.css';
 
+import { ThemeProvider } from './context/ThemeContext';
+
 function App() {
   return (
-    <Router>
-      <div className="bg-gray-900 min-h-screen">
-        <Navbar />
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<Landing />} />
-          <Route path="/explore" element={<Explore />} />
-          <Route path="/artists" element={<Artists />} />
-          <Route path="/albums" element={<Albums />} />
-          <Route
-            path="/vibetube"
-            element={
-              <ErrorBoundary>
-                <VibeTube />
-              </ErrorBoundary>
-            }
-          />
-          <Route path="/search" element={<Search />} />
-          <Route path="/artist/:id" element={<Artist />} />
-          <Route path="/album/:id" element={<Album />} />
-          <Route path="/track/:trackId" element={<TrackDetails />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-          <Route path="/terms-of-service" element={<TermsOfService />} />
-          <Route path="/callback" element={<SpotifyCallback />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
 
-          {/* Protected Routes */}
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/favorites"
-            element={
-              <ProtectedRoute>
-                <Favorites />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/playlists"
-            element={
-              <ProtectedRoute>
-                <Playlists />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/playlist/:playlistId"
-            element={
-              <ProtectedRoute>
-                <PlaylistDetail />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
-        </Routes>
+    <ThemeProvider>
+      <Router>
+        <div className="bg-gray-900 min-h-screen">
+          <Navbar />
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<Landing />} />
+            <Route path="/explore" element={<Explore />} />
+            <Route path="/artists" element={<Artists />} />
+            <Route path="/albums" element={<Albums />} />
+            <Route
+              path="/vibetube"
+              element={
+                <ErrorBoundary>
+                  <VibeTube />
+                </ErrorBoundary>
+              }
+            />
+            <Route path="/search" element={<Search />} />
+            <Route path="/artist/:id" element={<Artist />} />
+            <Route path="/album/:id" element={<Album />} />
+            <Route path="/track/:trackId" element={<TrackDetails />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms-of-service" element={<TermsOfService />} />
+            <Route path="/callback" element={<SpotifyCallback />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
 
-        {/* Floating Music Player */}
-        <FloatingPlayer />
+            {/* Protected Routes */}
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/favorites"
+              element={
+                <ProtectedRoute>
+                  <Favorites />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/playlists"
+              element={
+                <ProtectedRoute>
+                  <Playlists />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/playlist/:playlistId"
+              element={
+                <ProtectedRoute>
+                  <PlaylistDetail />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
 
-        {/* Toast Notifications */}
-        <Toast />
-      </div>
-    </Router>
+          {/* Floating Music Player */}
+          <FloatingPlayer />
+
+          {/* Toast Notifications */}
+          <Toast />
+        </div>
+      </Router>
+    </ThemeProvider> 
   );
 }
 
