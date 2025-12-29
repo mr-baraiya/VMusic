@@ -3,12 +3,12 @@ import { createContext, useContext, useEffect, useState } from 'react';
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
-  // Check localStorage or system preference
+
   const [theme, setTheme] = useState(() => {
     const savedTheme = localStorage.getItem('vmusic-theme');
     if (savedTheme) return savedTheme;
     
-    // Check system preference
+
     return window.matchMedia('(prefers-color-scheme: dark)').matches 
       ? 'dark' 
       : 'light';
@@ -17,14 +17,19 @@ export const ThemeProvider = ({ children }) => {
   useEffect(() => {
     const root = window.document.documentElement;
     
-    // Remove old theme class
+
     root.classList.remove('light', 'dark');
-    
-    // Add new theme class
+
     root.classList.add(theme);
     
-    // Save to localStorage
+
     localStorage.setItem('vmusic-theme', theme);
+    
+    if (theme === 'dark') {
+      document.body.classList.add('dark');
+    } else {
+      document.body.classList.remove('dark');
+    }
   }, [theme]);
 
   const toggleTheme = () => {
@@ -38,7 +43,7 @@ export const ThemeProvider = ({ children }) => {
   );
 };
 
-export const useTheme = () => {
+export const useTheme = () => { 
   const context = useContext(ThemeContext);
   if (!context) {
     throw new Error('useTheme must be used within ThemeProvider');
