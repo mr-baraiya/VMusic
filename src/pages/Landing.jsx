@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import {
   Hero,
   Features,
@@ -9,6 +10,7 @@ import {
   Footer,
 } from '../components/landing';
 import { SignIn, SignUp } from '../components/auth';
+import { fadeIn, staggerContainer} from '../utils/motionVariants';
 
 const Landing = () => {
   const [searchParams] = useSearchParams();
@@ -29,14 +31,59 @@ const Landing = () => {
   }, [searchParams, navigate]);
 
   return (
-    <div>
-      <Hero />
-      <Features onOpenSignIn={() => setShowSignIn(true)} />
-      <ExploreLanding />
-      <HowItWorks />
-      <YouTubeSection />
-      <Footer onOpenSignIn={() => setShowSignIn(true)} />
+    <>
+      {/* Main landing content with animations */}
+      <motion.main
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.25 }}
+        variants={staggerContainer}
+        className="min-h-screen w-full overflow-hidden"
+      >
+        {/* Hero Section */}
+        <motion.section variants={fadeIn('up', 'tween', 0.1, 0.7)}>
+          <Hero />
+        </motion.section>
 
+        {/* Features Section */}
+        <motion.section
+          variants={fadeIn('up', 'tween', 0.2, 0.7)}
+          className="py-16 md:py-24"
+        >
+          <Features onOpenSignIn={() => setShowSignIn(true)} />
+        </motion.section>
+
+        {/* Explore Section */}
+        <motion.section
+          variants={fadeIn('up', 'tween', 0.3, 0.7)}
+          className="py-16 md:py-24"
+        >
+          <ExploreLanding />
+        </motion.section>
+
+        {/* How It Works Section */}
+        <motion.section
+          variants={fadeIn('up', 'tween', 0.4, 0.7)}
+          className="py-16 md:py-24"
+        >
+          <HowItWorks />
+        </motion.section>
+
+        {/* YouTube Section */}
+        <motion.section
+          variants={fadeIn('up', 'tween', 0.5, 0.7)}
+          className="py-16 md:py-24"
+        >
+          <YouTubeSection />
+        </motion.section>
+
+        {/* Footer */}
+        <motion.section variants={fadeIn('up', 'tween', 0.6, 0.7)}>
+          <Footer onOpenSignIn={() => setShowSignIn(true)} />
+        </motion.section>
+      </motion.main>
+
+      {/* Auth Modals (outside animation container) */}
       {showSignIn && (
         <SignIn
           onClose={() => setShowSignIn(false)}
@@ -56,7 +103,7 @@ const Landing = () => {
           }}
         />
       )}
-    </div>
+    </>
   );
 };
 
