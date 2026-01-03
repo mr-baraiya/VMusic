@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Play, Music2, Sparkles, Youtube, Download } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { textVariant, hoverScale } from '../../utils/motionVariants';
 
 const Hero = () => {
   return (
@@ -80,14 +81,24 @@ const Hero = () => {
 
         {/* Headline */}
         <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
+          variants={textVariant(0.1)}
+          initial="hidden"
+          animate="show"
           className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6"
         >
-          <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-purple-500 bg-clip-text text-transparent">
+          <motion.span
+            animate={{
+              scale: [1, 1.1, 1],
+              transition: {
+                duration: 3,
+                repeat: Infinity,
+                repeatType: "reverse"
+              }
+            }}
+            className="bg-gradient-to-r from-purple-400 via-pink-400 to-purple-500 bg-clip-text text-transparent"
+          >
             V
-          </span>
+          </motion.span>
           <span className="bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent">
             Music
           </span>
@@ -122,17 +133,33 @@ const Hero = () => {
           transition={{ duration: 0.8, delay: 0.8 }}
           className="flex flex-col sm:flex-row gap-4 justify-center items-center"
         >
+
           <Link to="/explore">
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="group px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-full font-semibold text-lg shadow-lg shadow-green-500/50 hover:shadow-green-500/80 transition-all duration-300 flex items-center gap-2"
+              className="group relative px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-full font-semibold text-lg shadow-lg shadow-green-500/50 hover:shadow-green-500/80 transition-all duration-300 flex items-center gap-2 overflow-hidden"
             >
-              <Play size={20} fill="white" />
-              Start Listening
+              {/* Pulse animation overlay */}
+              <motion.span
+                className="absolute inset-0 bg-white"
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{
+                  opacity: [0, 0.2, 0],
+                  scale: [1, 1.5, 2]
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  repeatDelay: 3
+                }}
+              />
+              <Play size={20} fill="white" className="relative z-10" />
+              <span className="relative z-10">Start Listening</span>
               <motion.span
                 animate={{ x: [0, 5, 0] }}
                 transition={{ duration: 1.5, repeat: Infinity }}
+                className="relative z-10"
               >
                 →
               </motion.span>
@@ -157,7 +184,8 @@ const Hero = () => {
           transition={{ duration: 1, delay: 1 }}
           className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto"
         >
-          <div className="text-center group">
+          {/* Stat 1 - Wrap with motion.div */}
+          <motion.div variants={hoverScale} whileHover="whileHover" className="text-center group">
             <motion.div
               whileHover={{ scale: 1.1 }}
               className="text-3xl md:text-4xl font-bold text-white mb-2 flex items-center justify-center gap-2"
@@ -166,8 +194,10 @@ const Hero = () => {
               500K+
             </motion.div>
             <div className="text-sm md:text-base text-gray-400">Free Tracks</div>
-          </div>
-          <div className="text-center group">
+          </motion.div>
+
+          {/* Stat 2 - Wrap with motion.div */}
+          <motion.div variants={hoverScale} whileHover="whileHover" className="text-center group">
             <motion.div
               whileHover={{ scale: 1.1 }}
               className="text-3xl md:text-4xl font-bold text-white mb-2 flex items-center justify-center gap-2"
@@ -176,8 +206,10 @@ const Hero = () => {
               40K+
             </motion.div>
             <div className="text-sm md:text-base text-gray-400">Artists</div>
-          </div>
-          <div className="text-center group">
+          </motion.div>
+
+          {/* Stat 3 - Wrap with motion.div */}
+          <motion.div variants={hoverScale} whileHover="whileHover" className="text-center group">
             <motion.div
               whileHover={{ scale: 1.1 }}
               className="text-3xl md:text-4xl font-bold text-white mb-2 flex items-center justify-center gap-2"
@@ -185,8 +217,10 @@ const Hero = () => {
               <Youtube className="text-red-400" size={32} />
             </motion.div>
             <div className="text-sm md:text-base text-gray-400">YouTube Import</div>
-          </div>
-          <div className="text-center group">
+          </motion.div>
+
+          {/* Stat 4 - Wrap with motion.div */}
+          <motion.div variants={hoverScale} whileHover="whileHover" className="text-center group">
             <motion.div
               whileHover={{ scale: 1.1 }}
               className="text-3xl md:text-4xl font-bold text-white mb-2 flex items-center justify-center gap-2"
@@ -195,7 +229,7 @@ const Hero = () => {
               100%
             </motion.div>
             <div className="text-sm md:text-base text-gray-400">Free Forever</div>
-          </div>
+          </motion.div>
         </motion.div>
 
         {/* Scroll Indicator */}
