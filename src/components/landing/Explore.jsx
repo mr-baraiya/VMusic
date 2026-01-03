@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { usePlayer } from '../../contexts/PlayerContext';
 import { musicAPI } from '../../api/music';
 import jamendoAPI from '../../api/jamendo';
+import { fadeIn, staggerContainer, hoverScale, hoverTilt } from '../../utils/motionVariants';
 
 // Extract TrackCard outside to prevent re-renders
 const TrackCard = memo(({ track, tracks, onNavigate, onPlay }) => {
@@ -14,7 +15,11 @@ const TrackCard = memo(({ track, tracks, onNavigate, onPlay }) => {
       onClick={() => onNavigate(track.id)}
     >
       {/* Album Art */}
-      <div className="relative overflow-hidden aspect-square">
+      <motion.div
+        variants={hoverTilt}
+        whileHover="whileHover"
+        className="h-full"
+      >
         <img
           src={track.image || track.album_image || 'https://via.placeholder.com/200'}
           alt={track.name}
@@ -52,7 +57,7 @@ const TrackCard = memo(({ track, tracks, onNavigate, onPlay }) => {
             ? '0:30'
             : jamendoAPI.formatDuration(track.duration)}
         </div>
-      </div>
+      </motion.div>
 
       {/* Track Info */}
       <div className="p-3">
@@ -145,14 +150,32 @@ const Explore = () => {
   );
 
   return (
-    <section className="py-20 px-4 bg-gradient-to-b from-black via-blue-950/40 to-black text-white">
+    <motion.section
+      variants={staggerContainer}
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, amount: 0.25 }}
+      className="py-20 px-4 bg-gradient-to-b from-black via-blue-950/40 to-black text-white"
+    >
       <div className="max-w-7xl mx-auto">
+        <motion.div
+          variants={fadeIn('up', 'tween', 0.05, 0.7)}
+          className="flex flex-wrap justify-center gap-3 mb-12"
+        >
+          {['All', 'Pop', 'Rock', 'Indie', 'Electronic', 'Hip Hop', 'Jazz', 'Alternative'].map((genre, index) => (
+            <motion.button
+              key={genre}
+              variants={hoverScale}
+              whileHover="whileHover"
+              className="px-4 py-2 bg-white/5 hover:bg-white/10 rounded-full text-sm font-medium transition-colors"
+            >
+              {genre}
+            </motion.button>
+          ))}
+        </motion.div>
         {/* Popular Songs Section */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          variants={fadeIn('up', 'tween', 0.1, 0.7)}
           className="mb-16"
         >
           {/* Section Header */}
@@ -197,10 +220,7 @@ const Explore = () => {
 
         {/* Latest Songs Section */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
+          variants={fadeIn('up', 'tween', 0.2, 0.7)}
         >
           {/* Section Header */}
           <div className="flex items-center justify-between mb-6">
@@ -244,10 +264,7 @@ const Explore = () => {
 
         {/* Explore Full Library Button */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.4 }}
+          variants={fadeIn('up', 'tween', 0.3, 0.7)}
           className="text-center mt-16"
         >
           <motion.button
@@ -271,7 +288,7 @@ const Explore = () => {
           scrollbar-width: none;
         }
       `}</style>
-    </section>
+    </motion.section>
   );
 };
 
