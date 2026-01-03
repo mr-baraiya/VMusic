@@ -184,7 +184,6 @@ const Hero = () => {
           transition={{ duration: 1, delay: 1 }}
           className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto"
         >
-          {/* Stat 1 - Wrap with motion.div */}
           <motion.div variants={hoverScale} whileHover="whileHover" className="text-center group">
             <motion.div
               whileHover={{ scale: 1.1 }}
@@ -195,8 +194,7 @@ const Hero = () => {
             </motion.div>
             <div className="text-sm md:text-base text-gray-400">Free Tracks</div>
           </motion.div>
-
-          {/* Stat 2 - Wrap with motion.div */}
+          
           <motion.div variants={hoverScale} whileHover="whileHover" className="text-center group">
             <motion.div
               whileHover={{ scale: 1.1 }}
@@ -208,7 +206,6 @@ const Hero = () => {
             <div className="text-sm md:text-base text-gray-400">Artists</div>
           </motion.div>
 
-          {/* Stat 3 - Wrap with motion.div */}
           <motion.div variants={hoverScale} whileHover="whileHover" className="text-center group">
             <motion.div
               whileHover={{ scale: 1.1 }}
@@ -219,7 +216,6 @@ const Hero = () => {
             <div className="text-sm md:text-base text-gray-400">YouTube Import</div>
           </motion.div>
 
-          {/* Stat 4 - Wrap with motion.div */}
           <motion.div variants={hoverScale} whileHover="whileHover" className="text-center group">
             <motion.div
               whileHover={{ scale: 1.1 }}
