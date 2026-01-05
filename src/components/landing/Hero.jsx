@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { Play, Music2, Sparkles, Youtube, Download } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { textVariant, hoverScale } from '../../utils/motionVariants';
+import { textVariant, hoverScale, fadeIn } from '../../utils/motionVariants';
 
 const Hero = () => {
   return (
@@ -106,10 +106,9 @@ const Hero = () => {
 
         {/* Subheadline */}
         <motion.p
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-xl md:text-2xl lg:text-3xl text-gray-200 mb-4 font-light"
+          variants={fadeIn('up', 'tween', 0.4, 0.8)}
+          initial="hidden"
+          animate="show"
         >
           Discover Free Independent Music
         </motion.p>

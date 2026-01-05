@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { UserPlus, Youtube, ListMusic, Play, Sparkles } from 'lucide-react';
+import { fadeIn, staggerContainer, hoverScale } from '../../utils/motionVariants';
 
 const steps = [
   {
@@ -35,17 +36,29 @@ const steps = [
     gradient: 'from-green-500 to-emerald-500',
   },
 ];
+const ConnectingLine = ({ index }) => (
+  <motion.div
+    initial={{ scaleX: 0, opacity: 0 }}
+    whileInView={{ scaleX: 1, opacity: 1 }}
+    viewport={{ once: true }}
+    transition={{ duration: 0.8, delay: index * 0.3 + 0.5 }}
+    className="hidden lg:block absolute top-1/2 -right-16 w-32 h-0.5 bg-gradient-to-r from-transparent via-gray-300 to-transparent dark:via-gray-700"
+  />
+);
 
 const HowItWorks = () => {
   return (
-    <section className="py-20 px-4 bg-gradient-to-b from-black via-blue-950/30 to-black">
+    <motion.section
+      variants={staggerContainer}
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, amount: 0.25 }}
+      className="py-20 px-4 bg-gradient-to-b from-black via-blue-950/30 to-black"
+    >
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          variants={fadeIn('up', 'tween', 0.1, 0.7)}
           className="text-center mb-20"
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-white">
@@ -59,35 +72,66 @@ const HowItWorks = () => {
 
         {/* Steps */}
         <div className="relative">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
+          {/* Horizontal connecting line (for desktop) */}
+          <motion.div
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.5, delay: 0.5 }}
+            className="hidden lg:block absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-blue-500/20 -translate-y-1/2"
+          />
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 relative z-10">
             {steps.map((step, index) => {
               const Icon = step.icon;
+
               return (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, y: 50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.2 }}
+                  variants={fadeIn('up', 'spring', index * 0.2, 0.8)}
                   className="relative"
                 >
-                  {/* Card */}
-                  <div className="relative bg-gray-50 dark:bg-gray-800 rounded-3xl p-8 border-2 border-gray-200 dark:border-gray-700 hover:border-transparent hover:shadow-2xl transition-all duration-300 group">
-                    {/* Gradient Border Effect */}
-                    <div
-                      className={`absolute inset-0 bg-gradient-to-r ${step.gradient} rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 blur-xl`}
-                    ></div>
-
-                    {/* Step Number */}
-                    <div className="absolute -top-6 -left-6 w-16 h-16 bg-gradient-to-br from-white to-gray-100 dark:from-gray-800 dark:to-gray-900 rounded-2xl flex items-center justify-center text-3xl font-bold text-gray-300 dark:text-gray-600 border-4 border-gray-200 dark:border-gray-700 shadow-lg">
+                  {/* Animated step card */}
+                  <motion.div
+                    variants={hoverScale}
+                    whileHover="whileHover"
+                    className="relative bg-gray-50 dark:bg-gray-800 rounded-3xl p-8 border-2 border-gray-200 dark:border-gray-700 hover:border-transparent hover:shadow-2xl transition-all duration-300 group h-full"
+                  >
+                    {/* Pulsing step number */}
+                    <motion.div
+                      animate={{
+                        scale: [1, 1.1, 1],
+                        boxShadow: [
+                          '0 0 0 0 rgba(147, 51, 234, 0)',
+                          '0 0 0 10px rgba(147, 51, 234, 0.3)',
+                          '0 0 0 0 rgba(147, 51, 234, 0)'
+                        ]
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        repeatType: "loop",
+                        delay: index * 0.5
+                      }}
+                      className="absolute -top-6 -left-6 w-16 h-16 bg-gradient-to-br from-white to-gray-100 dark:from-gray-800 dark:to-gray-900 rounded-2xl flex items-center justify-center text-3xl font-bold text-gray-300 dark:text-gray-600 border-4 border-gray-200 dark:border-gray-700 shadow-lg z-20"
+                    >
                       {step.number}
-                    </div>
+                    </motion.div>
 
-                    {/* Icon */}
+                    {/* Icon with rotation */}
                     <div className="relative inline-block">
                       <motion.div
                         whileHover={{ rotate: 360, scale: 1.1 }}
                         transition={{ duration: 0.6 }}
+                        animate={{
+                          rotate: [0, 5, -5, 0],
+                          transition: {
+                            duration: 3,
+                            repeat: Infinity,
+                            repeatType: "reverse",
+                            delay: index * 0.3
+                          }
+                        }}
                         className={`inline-flex p-6 rounded-2xl bg-gradient-to-r ${step.gradient} mb-6 mt-4`}
                       >
                         <Icon className="text-white" size={36} />
@@ -102,38 +146,50 @@ const HowItWorks = () => {
                       {step.description}
                     </p>
 
-                    {/* Arrow for desktop */}
-                    {index < steps.length - 1 && (
-                      <motion.div
-                        className="hidden lg:block absolute top-1/2 -right-12 transform -translate-y-1/2"
-                        animate={{ x: [0, 10, 0] }}
-                        transition={{ duration: 2, repeat: Infinity }}
+                    {/* Gradient border effect */}
+                    <div
+                      className={`absolute inset-0 bg-gradient-to-r ${step.gradient} rounded-3xl opacity-0 group-hover:opacity-20 transition-opacity duration-300 -z-10`}
+                    />
+                  </motion.div>
+
+                  {/* Animated arrow for desktop */}
+                  {index < steps.length - 1 && (
+                    <motion.div
+                      className="hidden lg:block absolute top-1/2 -right-12 transform -translate-y-1/2 z-10"
+                      animate={{
+                        x: [0, 15, 0],
+                        opacity: [0.5, 1, 0.5]
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        delay: index * 0.3
+                      }}
+                    >
+                      <svg
+                        width="48"
+                        height="48"
+                        viewBox="0 0 48 48"
+                        fill="none"
+                        className="text-purple-500 dark:text-purple-400"
                       >
-                        <svg
-                          width="48"
-                          height="48"
-                          viewBox="0 0 48 48"
-                          fill="none"
-                          className="text-gray-300 dark:text-gray-700"
-                        >
-                          <path
-                            d="M20 12L32 24L20 36"
-                            stroke="currentColor"
-                            strokeWidth="3"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      </motion.div>
-                    )}
-                  </div>
+                        <path
+                          d="M20 12L32 24L20 36"
+                          stroke="currentColor"
+                          strokeWidth="3"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </motion.div>
+                  )}
                 </motion.div>
               );
             })}
           </div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 
