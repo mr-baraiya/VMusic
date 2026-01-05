@@ -35,7 +35,7 @@ const Landing = () => {
       {/* Main landing content with animations */}
       <motion.main
         initial="hidden"
-        whileInView="show"
+        animate="show"
         viewport={{ once: true, amount: 0.25 }}
         variants={staggerContainer}
         className="min-h-screen w-full overflow-hidden"

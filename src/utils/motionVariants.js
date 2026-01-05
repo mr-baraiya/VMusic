@@ -1,4 +1,3 @@
-// src/utils/motionVariants.js
 export const fadeIn = (direction, type, delay, duration) => ({
   hidden: {
     x: direction === 'left' ? 100 : direction === 'right' ? -100 : 0,
