@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Youtube, Play, Music2, Headphones } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { fadeIn } from '../../utils/motionVariants';
 
 const YouTubeSection = () => {
   const navigate = useNavigate();
@@ -12,17 +13,19 @@ const YouTubeSection = () => {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-500/10 rounded-full blur-3xl"></div>
 
       <div className="relative max-w-7xl mx-auto">
+        {/* Heading */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          variants={fadeIn('up', 'tween', 0.1, 0.8)}
+          initial="hidden"
+          whileInView="show"
           viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-red-500/10 border border-red-500/30 rounded-full mb-6">
             <Youtube size={20} className="text-red-500" />
             <span className="text-red-400 font-medium">VibeTube Feature</span>
           </div>
+
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
             Play YouTube Music
             <br />
@@ -30,6 +33,7 @@ const YouTubeSection = () => {
               Like Never Before
             </span>
           </h2>
+
           <p className="text-xl text-gray-400 max-w-2xl mx-auto">
             Experience seamless YouTube music playback with our advanced player. Search, play, and
             enjoy millions of songs.
@@ -39,10 +43,10 @@ const YouTubeSection = () => {
         {/* Feature Cards */}
         <div className="grid md:grid-cols-3 gap-6 mb-12">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            variants={fadeIn('up', 'tween', 0.2, 0.6)}
+            initial="hidden"
+            whileInView="show"
             viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
             className="bg-gradient-to-br from-red-900/20 to-pink-900/20 backdrop-blur-xl border border-red-500/20 rounded-2xl p-6 hover:border-red-500/40 transition-all"
           >
             <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-pink-500 rounded-xl flex items-center justify-center mb-4">
@@ -55,10 +59,10 @@ const YouTubeSection = () => {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            variants={fadeIn('up', 'tween', 0.3, 0.6)}
+            initial="hidden"
+            whileInView="show"
             viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
             className="bg-gradient-to-br from-purple-900/20 to-pink-900/20 backdrop-blur-xl border border-purple-500/20 rounded-2xl p-6 hover:border-purple-500/40 transition-all"
           >
             <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center mb-4">
@@ -71,10 +75,10 @@ const YouTubeSection = () => {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            variants={fadeIn('up', 'tween', 0.4, 0.6)}
+            initial="hidden"
+            whileInView="show"
             viewport={{ once: true }}
-            transition={{ delay: 0.3 }}
             className="bg-gradient-to-br from-pink-900/20 to-red-900/20 backdrop-blur-xl border border-pink-500/20 rounded-2xl p-6 hover:border-pink-500/40 transition-all"
           >
             <div className="w-12 h-12 bg-gradient-to-br from-pink-500 to-red-500 rounded-xl flex items-center justify-center mb-4">
@@ -87,12 +91,12 @@ const YouTubeSection = () => {
           </motion.div>
         </div>
 
-        {/* CTA Button */}
+        {/* CTA */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          variants={fadeIn('up', 'tween', 0.5, 0.7)}
+          initial="hidden"
+          whileInView="show"
           viewport={{ once: true }}
-          transition={{ delay: 0.4 }}
           className="text-center"
         >
           <button
@@ -103,6 +107,7 @@ const YouTubeSection = () => {
             <span>Open VibeTube Player</span>
             <Play size={20} className="group-hover:translate-x-1 transition-transform" />
           </button>
+
           <p className="text-gray-500 text-sm mt-4">
             No sign-up required • Free forever • Unlimited playback
           </p>

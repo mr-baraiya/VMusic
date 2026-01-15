@@ -29,7 +29,7 @@ import {
 } from './pages';
 import './App.css';
 
-import { ThemeProvider } from './context/ThemeContext';
+import { ThemeProvider } from './contexts/ThemeContext';
 
 function App() {
   return (
